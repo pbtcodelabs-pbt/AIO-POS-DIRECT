@@ -4,7 +4,7 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>AIO POS DIRECT</title>
+<title>AIO POS — Skeleton</title>
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -1977,7 +1977,7 @@
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIO178MO0802AM</span>
+      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR218FR0337AM</span>
     </div>
   </div>
 
@@ -4554,7 +4554,7 @@
     <div id="packagePlansWrap" style="margin-top:14px;"></div>
     <button class="checkoutBtn" style="margin-top:14px; background:#7c3aed;" onclick="sharePackagePlansPoster()">🖼️ Share as Poster</button>
     <p style="font-size:11px; color:var(--muted); line-height:1.6; margin-top:12px; text-align:center;">
-      💳 Card not working? Try a different card, or buy a <b>Google Play Gift Card</b> from a local shop and redeem it in the Play Store.
+      💳 Payment issue? Tap below and we'll help you complete it manually.
     </p>
     <button class="checkoutBtn" style="margin-top:8px; background:#c2410c;" onclick="sendTroubleSubscribingMessage()">🆘 Still Stuck? Contact Us</button>
     <button class="checkoutBtn" style="margin-top:10px; background:var(--success);" onclick="document.getElementById('packagePlansModal').classList.remove('show'); openDevChat('subscription');">💬 Chat with Developer</button>
@@ -4723,7 +4723,7 @@
     <button class="backupConfirmCloseBtn" style="background:#f1f5f9; color:var(--text); margin-top:8px;" onclick="dismissTrialUrgentModal()">Remind Me Later</button>
     <div style="margin-top:14px; padding-top:12px; border-top:1px dashed #dbe1ea; text-align:left;">
       <p style="font-size:11.5px; color:var(--muted); line-height:1.6; margin-bottom:8px;">
-        💳 Card not working? Try a different card, or buy a <b>Google Play Gift Card</b> from a local shop and redeem it in the Play Store.
+        💳 Payment issue? Tap below and we'll help you complete it manually.
       </p>
       <button class="backupConfirmCloseBtn" style="background:#fff7ed; color:#c2410c; font-size:12.5px; padding:10px;" onclick="sendTroubleSubscribingMessage()">🆘 Still Stuck? Contact Us</button>
     </div>
@@ -5959,8 +5959,9 @@ function handleBusinessLogoUpload(event){
 let devChatContext = 'support';
 function openDevChat(context){
   devChatContext = context;
+  const uid = getOrCreateDeviceUID();
   document.getElementById('devChatTitle').textContent = context === 'subscription' ? '💬 Ask About Subscription' : '💬 Chat with Developer';
-  document.getElementById('devChatUidLine').textContent = '';
+  document.getElementById('devChatUidLine').textContent = `Your Device ID: ${uid}`;
   document.getElementById('devChatPanel').classList.toggle('show');
 }
 
@@ -5985,28 +5986,30 @@ async function shareAppLink(){
 
 
 function buildDevChatMessage(){
+  const uid = getOrCreateDeviceUID();
   if(devChatContext === 'subscription'){
     // ---------- اگر کیلکولیٹر سے دن/قیمت منتخب ہوں تو پیغام میں شامل کریں، ورنہ عام دلچسپی کا پیغام بھیجیں ----------
     if(selectedPlanDays && selectedPlanPrice){
-      return `Sir, I want to subscribe your AIO POS application for ${selectedPlanDays} days at the price of Rs. ${selectedPlanPrice.toLocaleString()} in accordance with your package plan.`;
+      return `Sir, I want to subscribe your AIO POS application for ${selectedPlanDays} days at the price of Rs. ${selectedPlanPrice.toLocaleString()} in accordance with your package plan.\n\nMy Device ID:\n${uid}`;
     }
     return buildAdInquiryMessage();
   }
   // ---------- مسئلہ رپورٹ کرنے کا پیغام — خود بھرنے کے لیے خالی جگہ کے ساتھ ----------
-  return `Dear Developer,\nI am using your beta version of AIO POS. I noticed the following issue and my suggestion is:\n\n\n`;
+  return `Dear Developer,\nI am using your beta version of AIO POS. I noticed the following issue and my suggestion is:\n\n\n\nMy Device ID:\n${uid}`;
 }
 
 // ---------- 🆘 "Trouble Subscribing?" — Trial ختم ہونے کے قریب، یا Package Plans میں، ان لوگوں کے لیے
 // جن کا ڈیبٹ/کریڈٹ کارڈ Google Play پر کام نہیں کر رہا۔ WhatsApp پر ایک تیار (fill-in-the-blank) پیغام کھلتا ہے
 // تاکہ نام/ملک/مسئلہ خود بھر کر بھیج سکیں، اور آپ کو مکمل تفصیل کے ساتھ پیغام ملے —
-// ⚠️ یہاں Device ID جان بوجھ کر شامل نہیں کیا: اس Play Store ورژن میں کوئی مقامی کوڈ ریڈیم نہیں ہوتا،
-// اس لیے Device ID بھیجنے کا کوئی عملی فائدہ نہیں — بلاوجہ Data Safety اعلان کی ضرورت پڑ سکتی تھی ----------
+// ---------- یہ LOCAL فائل ہے — یہاں Device ID ضرور شامل ہوگا تاکہ ڈویلپر UID سے Activation Code بنا سکے ----------
 function sendTroubleSubscribingMessage(){
-  const msg = `Hi, I'm trying to subscribe to AIO POS but I'm having trouble completing the payment through Google Play (e.g., no debit/credit card, or a Google Play Gift Card is not easily available where I live).\n\n` +
+  const uid = getOrCreateDeviceUID();
+  const msg = `Hi, I'm trying to subscribe to AIO POS but I'm having trouble completing the payment.\n\n` +
     `My Name: \n` +
     `My Country/City: \n` +
     `What's the problem: \n\n` +
-    `Please guide me on how I can subscribe.`;
+    `Please guide me on how I can subscribe.\n\n` +
+    `My Device ID:\n${uid}`;
   const contact = getDeveloperContact();
   window.open(`https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
 }
@@ -6014,7 +6017,8 @@ function sendTroubleSubscribingMessage(){
 // ---------- My Ads پوسٹر/اشتہار دیکھ کر رابطہ کرنے والے نئے دلچسپی رکھنے والے کے لیے مختصر، دوستانہ پیغام —
 // "package plan" کا پرانا فرض شدہ حوالہ ہٹا دیا، چونکہ اب کوئی پیڈ پیکج پلان دکھایا نہیں جاتا ----------
 function buildAdInquiryMessage(){
-  return `Sir, I saw your app's advertisement and I like it. Please guide me on how I can get this app and what the subscription charges are — I'd like to subscribe.`;
+  const uid = getOrCreateDeviceUID();
+  return `Sir, I saw your app's advertisement and I like it. Please guide me on how I can get this app and what the subscription charges are — I'd like to subscribe.\n\nMy Device ID:\n${uid}`;
 }
 
 function sendDevChat(channel){
@@ -19867,29 +19871,26 @@ const PLAY_BILLING_PRODUCTS = [
 ];
 
 function isPlayBillingAvailable(){
-  return typeof window.getDigitalGoodsService === 'function';
+  // ---------- 🔒 یہ LOCAL/Direct فائل ہے — Play Store پر نہیں جاتی۔ اس لیے Google Play Billing
+  // کبھی فعال نہ ہو، ہمیشہ Local Package Plans + Activation Code نظام ہی چلے ----------
+  return false;
 }
 
 // ---------- Play Console سے قیمتیں لا کر کیش کر لیں — تاکہ Package Plans میں دکھائی جا سکیں ----------
 let playBillingDetailsCache = null;
 let playBillingLoadFailed = false; // ---------- ناکامی کی صورت میں Loading… ہمیشہ کے لیے اٹکنے کی بجائے خودکار Local/EasyPaisa پر واپس آ جائے ----------
-// ---------- بعض Android Chrome میں window.getDigitalGoodsService کا نام موجود ہوتا ہے چاہے ایپ
-// اصل میں Play Store TWA کے طور پر انسٹال نہ ہو (صرف براؤزر میں کھلی ہو) — اکیلے نام کی موجودگی
-// ناقابلِ اعتبار ہے۔ اس لیے حقیقی کوشش ناکام ہونے پر یہاں مستقل طور پر "Play Billing واقعی دستیاب نہیں"
-// نوٹ کر لیتے ہیں، تاکہ صارف کو غلط Google Play error کی بجائے خاموشی سے Local پلانز دکھائی جائیں ----------
-let playBillingConfirmedUnavailable = false;
 async function loadPlayBillingDetails(){
-  if(!isPlayBillingAvailable() || playBillingConfirmedUnavailable) return null;
+  if(!isPlayBillingAvailable()) return null;
   if(playBillingDetailsCache) return playBillingDetailsCache;
   try{
     const service = await window.getDigitalGoodsService('https://play.google.com/billing');
     const details = await service.getDetails(PLAY_BILLING_PRODUCTS.map(p => p.sku));
-    if(!details || details.length === 0){ playBillingConfirmedUnavailable = true; return null; }
+    if(!details || details.length === 0){ playBillingLoadFailed = true; return null; }
     playBillingDetailsCache = details;
     return details;
   } catch(err){
     console.error('Play Billing details load failed:', err);
-    playBillingConfirmedUnavailable = true; // ---------- حقیقی Play Store ماحول نہیں — خاموشی سے Local پر منتقل ہوں ----------
+    playBillingLoadFailed = true;
     return null;
   }
 }
@@ -19941,10 +19942,10 @@ function openPackagePlansModal(){
   renderPackagePlansView();
   document.getElementById('packagePlansModal').classList.add('show');
   // ---------- Play Store سے نصب شدہ ہو تو تھوڑی دیر بعد قیمتیں لوڈ ہو کر دوبارہ رینڈر ہوں گی — 6 سیکنڈ میں جواب نہ آئے تو خودکار Local/EasyPaisa پر واپس ----------
-  if(isPlayBillingAvailable() && !playBillingConfirmedUnavailable){
+  if(isPlayBillingAvailable()){
     loadPlayBillingDetails().then(() => renderPackagePlansView());
     setTimeout(() => {
-      if(!playBillingDetailsCache && !playBillingConfirmedUnavailable){ playBillingLoadFailed = true; renderPackagePlansView(); }
+      if(!playBillingDetailsCache){ playBillingLoadFailed = true; renderPackagePlansView(); }
     }, 6000);
   }
 }
@@ -20032,10 +20033,8 @@ function renderPackagePlansView(){
 
   // ---------- 💳 Play Store سے نصب شدہ ہو تو یہاں سے صرف اور صرف Google Play کے ذریعے خریداری دکھائیں —
   // Google Play پالیسی کے مطابق TWA/Play Store انسٹال میں کوئی متبادل (EasyPaisa/Local) پیمنٹ کبھی نہیں دکھانی —
-  // اس لیے ناکامی کی صورت میں بھی نیچے دیے گئے Local سیکشن پر گرنا منع ہے؛ صرف "دوبارہ کوشش کریں" دکھائیں —
-  // لیکن یہ صرف اُس وقت جب Play Billing واقعی موجود ہو (نیچے playBillingConfirmedUnavailable چیک سے)،
-  // ورنہ عام براؤزر ٹیسٹنگ میں خاموشی سے Local پلانز دکھائیں ----------
-  if(isPlayBillingAvailable() && !playBillingConfirmedUnavailable){
+  // اس لیے ناکامی کی صورت میں بھی نیچے دیے گئے Local سیکشن پر گرنا منع ہے؛ صرف "دوبارہ کوشش کریں" دکھائیں ----------
+  if(isPlayBillingAvailable()){
     document.getElementById('planCalcWrap').style.display = 'none';
     document.getElementById('devPaymentAccountWrap').style.display = 'none';
     if(playBillingLoadFailed){

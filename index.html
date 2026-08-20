@@ -97,7 +97,7 @@
     border:none; color:#fff; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0;
   }
   /* --- آئیکنز کی قطار — بزنس نیم کی لائن سے الگ، نیچے --- */
-  .hbcIconsRow{display:flex; align-items:center; gap:10px; justify-content:flex-end;}
+  .hbcIconsRow{display:flex; align-items:center; gap:10px; justify-content:center; flex-wrap:wrap;}
   .hbcLastBackupLine{
     text-align:right; font-size:10.5px; font-weight:600; color:rgba(255,255,255,.8);
     background:rgba(0,0,0,.14); border-radius:8px; padding:5px 10px; margin-top:-2px;
@@ -105,8 +105,9 @@
   .hbcLastBackupLine b{color:#fff; font-weight:800;}
   .hbcChatBtn{
     width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,.2); border:none; color:#fff; font-size:19px;
-    flex:0 0 auto; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    flex:0 0 auto; cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1; padding:0;
   }
+  .hbcChatBtn svg{display:block; margin:0 auto;}
 
   /* --- 📅 Subscription Boxes — تین الگ خوبصورت ڈبے، ایک ہی لائن میں، صرف Billing پیج پر --- */
   .subBoxRow{display:flex; gap:6px; margin-bottom:8px; background:#f4f1ea; padding:8px; border-radius:14px;}
@@ -1971,13 +1972,13 @@
          نیچے ایک چھوٹا ٹائم اسٹیمپ بیج بھی ہے — یہ فائل نام کا حصہ نہیں، صرف اس ڈیلیوری کی تازہ ترین بلڈ ڈیٹ/ٹائم بتاتا ہے
          (فارمیٹ: Weekday + HHMM + am/pm + Day + Month + Year) تاکہ نمبر یاد نہ رہے تو بھی تازگی کی تصدیق ہو سکے ---------- -->
     <div style="display:flex; flex-direction:column; align-items:flex-start; gap:1px;">
-      <span id="testBuildLabel" class="mobileBrand testBuildGlow" style="display:inline;">TEST: AIOTEST41</span>
-      <span id="testBuildTimestamp" style="font-size:9.5px; color:rgba(255,255,255,.8); font-weight:800; letter-spacing:.3px;">Wed0710pm19aug26</span>
+      <span id="testBuildLabel" class="mobileBrand testBuildGlow" style="display:inline;">AIO POS Direct</span>
+      <span id="testBuildTimestamp" style="font-size:9.5px; color:rgba(255,255,255,.8); font-weight:800; letter-spacing:.3px;">Fri0433am21aug26</span>
     </div>
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR218FR0337AM</span>
+      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR218FR0433AM</span>
     </div>
   </div>
 
@@ -2061,7 +2062,7 @@
           <button class="hbcChatBtn" id="hbcFontBtn" onclick="toggleHomeFontPanel(event)" title="Font Style">Aa</button>
           <button class="hbcChatBtn" id="hbcThemeBtn" onclick="toggleHomeThemePanel(event)" title="Colour Theme">🎨</button>
           <button class="hbcChatBtn admin-only" onclick="backupToGoogleDrive()" title="Backup to Google Drive">☁️</button>
-          <button class="hbcChatBtn admin-only" onclick="restoreFromGoogleDrive()" title="Restore from Google Drive"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 4 16.3"/><path d="M12 12v9"/><path d="M8 17l4 4 4-4"/></svg></button>
+          <button class="hbcChatBtn admin-only" onclick="restoreFromGoogleDrive()" title="Restore from Google Drive" style="font-size:18px;">📥</button>
           <button class="hbcChatBtn" onclick="shareAppLink()" title="Share This App" style="background:rgba(255,255,255,.9); color:var(--primary-dark);"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" style="display:block;"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg></button>
           <button class="hbcChatBtn" onclick="openDevChat('support')" title="Chat with Developer">💬</button>
         </div>
@@ -6067,6 +6068,13 @@ async function setupLoginScreen(){
     // ---------- ٹرائل کے دوران "Login" کا لفظ خود بھی کنفیوژن پیدا کرتا ہے — چھپا دیں، صرف ٹرائل ختم ہونے پر واپس نظر آئے ----------
     const heading = document.getElementById('loginHeading');
     if(heading) heading.style.display = skipPin ? 'none' : 'block';
+
+    // ---------- 🚀 سبسکرپشن/ٹرائل فعال ہو (یا PIN ابھی تک ڈیفالٹ ہو) تو خوش آمدید سکرین پر رکنے کی بجائے
+    // خودکار سیدھا ایپ میں داخل کر دیں — ایک اضافی "Enter App" ٹیپ کی ضرورت نہ رہے ----------
+    if(skipPin){
+      quickEnterApp();
+      return;
+    }
   }catch(err){
     console.error('setupLoginScreen ناکام ہو گیا، محفوظ حالت پر واپس جا رہے ہیں:', err);
     const statusEl = document.getElementById('loginSubStatus');

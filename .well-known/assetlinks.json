@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.pbtcodelabs.aioposdirect",
+        "sha256_cert_fingerprints": ["10:3E:04:98:99:22:19:45:06:A4:35:3B:EB:EB:C3:15:D5:85:81:D6:91:3C:3E:BD:20:8F:70:24:B3:8F:F0:27"]
+      }
+    }]

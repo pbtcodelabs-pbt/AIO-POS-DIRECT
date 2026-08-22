@@ -1974,12 +1974,12 @@
          (فارمیٹ: Weekday + HHMM + am/pm + Day + Month + Year) تاکہ نمبر یاد نہ رہے تو بھی تازگی کی تصدیق ہو سکے ---------- -->
     <div style="display:flex; flex-direction:column; align-items:flex-start; gap:1px;">
       <span id="testBuildLabel" class="mobileBrand testBuildGlow" style="display:inline;">AIO POS Direct</span>
-      <span id="testBuildTimestamp" style="font-size:9.5px; color:rgba(255,255,255,.8); font-weight:800; letter-spacing:.3px;">Sat0710pm22aug26</span>
+      <span id="testBuildTimestamp" style="font-size:9.5px; color:rgba(255,255,255,.8); font-weight:800; letter-spacing:.3px;">Sat0744pm22aug26</span>
     </div>
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR228FR0710PM</span>
+      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR228SA0744PM</span>
     </div>
   </div>
 
@@ -5662,12 +5662,24 @@ const FIREBASE_PROJECT_ID = 'aio-pos-backup';
 const FIREBASE_API_KEY = 'AIzaSyBdoyFrqJ67OonYVIoCM6rjeBDI1hZBGKE';
 const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents`;
 
-// ---------- ہر انسٹالیشن کی منفرد شناخت — خالص عددی (Code Builder ٹول کے numeric UID سے ہم آہنگ) ----------
+// ---------- ہر انسٹالیشن کی منفرد شناخت — ڈیوائس کے fingerprint سے بنتی ہے (بالکل بے ترتیب نہیں) —
+// اسی لیے Data Clear/Uninstall کے بعد بھی وہی ID دوبارہ بنتی ہے (اسی فون پر)، تاکہ کوئی ٹرائل بار بار
+// ری سیٹ کر کے دوبارہ مفت استعمال نہ کر سکے۔ ٹرائل کا اصل تالا Firestore میں لگتا ہے (نیچے دیکھیں) ----------
 // نوٹ: بالکل پہلی بار (نیا ڈیوائس) پر خودکار 30 دن کا مفت (Beta) ٹرائل بھی شروع ہو جاتا ہے — تاکہ
 // کسی نئے صارف کو فائل کھولتے ہی PIN/Activation کے چکر میں نہ الجھنا پڑے، وہ فوراً ایپ آزما سکے۔
 function getOrCreateDeviceUID(){
   if(AppState.settings.deviceUID) return AppState.settings.deviceUID;
-  const uid = String(Math.floor(10000000 + Math.random() * 90000000));
+  const fp = [
+    navigator.userAgent.length,
+    screen.width, screen.height,
+    navigator.hardwareConcurrency || 2,
+    new Date().getTimezoneOffset(),
+    navigator.language.length,
+    (navigator.deviceMemory || 4) * 10
+  ].join('');
+  let hash = 0;
+  for(let i = 0; i < fp.length; i++){ hash = ((hash << 5) - hash) + fp.charCodeAt(i); hash |= 0; }
+  const uid = String(10000 + (Math.abs(hash) % 90000));
   AppState.settings.deviceUID = uid;
   if(!AppState.settings.subscriptionExpiry && !AppState.settings.freeTrialGranted){
     const trialEnd = new Date();
@@ -5679,6 +5691,55 @@ function getOrCreateDeviceUID(){
   }
   persistAllData();
   return uid;
+}
+
+// ---------- 🔒 Firestore میں ٹرائل کو مستقل طور پر لاک کریں — ایک بار انٹرنیٹ ملتے ہی چیک ہوتا ہے۔
+// اگر یہی Device ID پہلے سے Firestore میں "trials" میں موجود ہو (یعنی Data Clear کر کے دوبارہ ٹرائل لینے
+// کی کوشش کی گئی) تو مقامی ٹرائل فوراً منسوخ کر دیا جاتا ہے۔ اگر نیا ہو تو مستقل ریکارڈ بنا دیا جاتا ہے ----------
+async function checkAndLockTrialOnline(){
+  if(!AppState.settings.freeTrialGranted || AppState.settings.trialLockConfirmedOnline) return;
+  const uid = AppState.settings.deviceUID;
+  if(!uid) return;
+  try{
+    const res = await fetch(`${FIRESTORE_BASE}/trials/${uid}?key=${FIREBASE_API_KEY}`);
+    if(res.status === 200){
+      // ---------- پہلے سے موجود ریکارڈ ملا — یعنی اس ڈیوائس پر ٹرائل پہلے استعمال ہو چکا، دوبارہ نہیں ملے گا ----------
+      AppState.settings.subscriptionExpiry = null;
+      AppState.settings.isOnFreeTrial = false;
+      persistAllData();
+      if(typeof setupLoginScreen === 'function') setupLoginScreen();
+      return;
+    }
+    if(res.status === 404){
+      await fetch(`${FIRESTORE_BASE}/trials/${uid}?key=${FIREBASE_API_KEY}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fields: { usedAt: { integerValue: String(Date.now()) } } })
+      });
+    }
+  }catch(e){ return; } // ---------- آف لائن ہو تو اگلی بار انٹرنیٹ ملنے پر دوبارہ کوشش ہوگی ----------
+  AppState.settings.trialLockConfirmedOnline = true;
+  persistAllData();
+}
+
+// ---------- 📡 ادائیگی شدہ سبسکرپشن کو ہر بار ایپ کھلنے پر آن لائن دوبارہ چیک کریں — اگر Developer نے
+// Code Builder سے کوڈ منسوخ (Revoke) کر دیا ہو تو صارف کی ایپ فوراً بند ہو جائے (دور سے کنٹرول) ----------
+async function resyncLicenseOnline(){
+  if(AppState.settings.isOnFreeTrial) return;
+  const code = AppState.settings.lastActivationCode;
+  if(!code) return;
+  try{
+    const res = await fetch(`${FIRESTORE_BASE}/licenses/${encodeURIComponent(code)}?key=${FIREBASE_API_KEY}`);
+    if(!res.ok) return;
+    const doc = await res.json();
+    const data = _parseFirestoreFields(doc.fields || {});
+    if(data.active === false){
+      AppState.settings.subscriptionExpiry = null;
+      persistAllData();
+      if(typeof setupLoginScreen === 'function') setupLoginScreen();
+      alert('⚠️ Your subscription has been revoked by the developer. Please contact support.');
+    }
+  }catch(e){ /* آف لائن — کوئی مسئلہ نہیں، اگلی بار دوبارہ کوشش ہوگی */ }
 }
 
 function isSubscriptionActive(){
@@ -5764,6 +5825,7 @@ async function activateSubscription(code){
   AppState.settings.subscriptionExpiry = newExpiryStr;
   AppState.settings.subscriptionActivatedOn = new Date().toISOString().slice(0,10);
   AppState.settings.isOnFreeTrial = false;
+  AppState.settings.lastActivationCode = trimmedCode; // ---------- Remote Revoke کے لیے یاد رکھیں ----------
   persistAllData();
   return {success:true, expiry: newExpiryStr, daysGranted: daysNum};
 }
@@ -23249,6 +23311,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ---------- اگر اس ڈیوائس پر پن پہلے سے یاد رکھا ہوا ہے تو لاگ ان اسکرین چھوڑ کر سیدھا ایپ میں لے جائیں ----------
   tryAutoLogin();
+
+  // ---------- 📡 انٹرنیٹ ملتے ہی خاموشی سے: (1) ٹرائل کا Firestore لاک چیک/محفوظ کریں (2) ادائیگی شدہ
+  // سبسکرپشن دور سے منسوخ تو نہیں ہوئی — یوزر کو کوئی لوڈنگ نظر نہیں آئے گی، بیک گراؤنڈ میں ہوتا ہے ----------
+  setTimeout(() => {
+    checkAndLockTrialOnline();
+    resyncLicenseOnline();
+  }, 2000);
 
   renderProductList();
   populateCustomerDropdown();

@@ -4,7 +4,7 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>AIO POS Direct</title>
+<title>AIO POS — Skeleton</title>
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -1973,12 +1973,12 @@
          (فارمیٹ: Weekday + HHMM + am/pm + Day + Month + Year) تاکہ نمبر یاد نہ رہے تو بھی تازگی کی تصدیق ہو سکے ---------- -->
     <div style="display:flex; flex-direction:column; align-items:flex-start; gap:1px;">
       <span id="testBuildLabel" class="mobileBrand testBuildGlow" style="display:inline;">AIO POS Direct</span>
-      <span id="testBuildTimestamp" style="font-size:9.5px; color:rgba(255,255,255,.8); font-weight:800; letter-spacing:.3px;">Fri0450am21aug26</span>
+      <span id="testBuildTimestamp" style="font-size:9.5px; color:rgba(255,255,255,.8); font-weight:800; letter-spacing:.3px;">Sat0619pm22aug26</span>
     </div>
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR218FR0450AM</span>
+      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR228FR0619PM</span>
     </div>
   </div>
 
@@ -5657,44 +5657,16 @@ function getDeveloperContact(){
    ٹول میں UID + دنوں کی تعداد ڈال کر ایک کوڈ بناتا ہے — یہی کوڈ کسٹمر کو دیا جاتا ہے۔
    ایپ اسی فارمولے سے خود تصدیق کر لیتی ہے (کوئی انٹرنیٹ درکار نہیں)۔
    ===================================================================== */
-const LICENSE_SECRET = 'PBT-AIO-2026-SECRET-KEY'; // یہی سیکرٹ ڈویلپر کے نجی Generator ٹول میں بھی ہونا چاہیے
+const FIREBASE_PROJECT_ID = 'aio-pos-backup';
+const FIREBASE_API_KEY = 'AIzaSyBdoyFrqJ67OonYVIoCM6rjeBDI1hZBGKE';
+const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents`;
 
-function simpleHash(str){
-  let hash = 0;
-  for(let i = 0; i < str.length; i++){
-    hash = ((hash << 5) - hash) + str.charCodeAt(i);
-    hash |= 0;
-  }
-  return Math.abs(hash);
-}
-
-// ---------- UID + دنوں کی تعداد سے 6 ہندسوں کا فعال سازی کوڈ بنائیں ----------
-// نیا کوڈ فارمیٹ: پہلے 3 ہندسے = دنوں کی تعداد (000-999)، آخری 3 ہندسے = چیک سم —
-// اسی لیے کسٹمر کو صرف ایک ہی کوڈ درج کرنا ہوتا ہے، دنوں کی تعداد الگ سے پوچھنے کی ضرورت نہیں —
-// کوڈ خود بتا دیتا ہے کتنے دن دیے گئے، اور چیک سم تصدیق کرتا ہے کہ کوڈ اسی ڈیوائس کے لیے صحیح ہے ----------
-function generateLicenseCode(uid, days){
-  const daysNum = Math.max(1, Math.min(999, parseInt(days) || 0));
-  const daysPart = String(daysNum).padStart(3, '0');
-  const raw = `${uid}-${daysPart}-${LICENSE_SECRET}`;
-  const checksum = String(simpleHash(raw) % 1000).padStart(3, '0');
-  return daysPart + checksum;
-}
-// ---------- کوڈ سے دنوں کی تعداد نکالیں اور تصدیق کریں کہ یہ اسی ڈیوائس کے لیے صحیح بنایا گیا تھا ----------
-function verifyAndExtractDays(uid, code){
-  const trimmed = (code || '').trim();
-  if(!/^\d{6}$/.test(trimmed)) return null;
-  const daysPart = trimmed.slice(0, 3);
-  const daysNum = parseInt(daysPart);
-  const expected = generateLicenseCode(uid, daysNum);
-  return (expected === trimmed) ? daysNum : null;
-}
-
-// ---------- ہر انسٹالیشن کی منفرد شناخت — پہلی بار خودکار بنتی ہے، پھر ہمیشہ وہی رہتی ہے ----------
+// ---------- ہر انسٹالیشن کی منفرد شناخت — خالص عددی (Code Builder ٹول کے numeric UID سے ہم آہنگ) ----------
 // نوٹ: بالکل پہلی بار (نیا ڈیوائس) پر خودکار 30 دن کا مفت (Beta) ٹرائل بھی شروع ہو جاتا ہے — تاکہ
 // کسی نئے صارف کو فائل کھولتے ہی PIN/Activation کے چکر میں نہ الجھنا پڑے، وہ فوراً ایپ آزما سکے۔
 function getOrCreateDeviceUID(){
   if(AppState.settings.deviceUID) return AppState.settings.deviceUID;
-  const uid = 'AIO-' + Math.random().toString(36).slice(2,6).toUpperCase() + '-' + Math.random().toString(36).slice(2,6).toUpperCase();
+  const uid = String(Math.floor(10000000 + Math.random() * 90000000));
   AppState.settings.deviceUID = uid;
   if(!AppState.settings.subscriptionExpiry && !AppState.settings.freeTrialGranted){
     const trialEnd = new Date();
@@ -5723,24 +5695,76 @@ function daysLeftInSubscription(){
   return Math.round((expDate - today) / (1000*60*60*24));
 }
 
-// ---------- کسٹمر کا درج کردہ کوڈ خود تصدیق کریں — دنوں کی تعداد کوڈ کے اندر سے نکل آتی ہے ----------
-function activateSubscription(code){
+function _parseFirestoreFields(fields){
+  const out = {};
+  for(const key in fields){
+    const v = fields[key];
+    if(v.stringValue !== undefined) out[key] = v.stringValue;
+    else if(v.integerValue !== undefined) out[key] = parseInt(v.integerValue);
+    else if(v.booleanValue !== undefined) out[key] = v.booleanValue;
+    else out[key] = null;
+  }
+  return out;
+}
+
+// ---------- کسٹمر کا درج کردہ کوڈ Firestore سے آن لائن تصدیق کریں (اب فارمولا فائل کے اندر کہیں نہیں) ----------
+async function activateSubscription(code){
+  const trimmedCode = (code || '').trim();
+  if(!trimmedCode) return {success:false, message:'Please enter an activation code.'};
+
   const uid = getOrCreateDeviceUID();
-  const daysNum = verifyAndExtractDays(uid, code);
-  if(!daysNum) return {success:false, message:'Invalid activation code. Please double-check with your developer.'};
+  let docRes;
+  try{
+    docRes = await fetch(`${FIRESTORE_BASE}/licenses/${encodeURIComponent(trimmedCode)}?key=${FIREBASE_API_KEY}`);
+  }catch(e){
+    return {success:false, message:'No internet connection. Please connect to the internet and try again.'};
+  }
+
+  if(docRes.status === 404) return {success:false, message:'Invalid activation code. Please double-check with your developer.'};
+  if(!docRes.ok) return {success:false, message:'Could not verify code right now. Please try again.'};
+
+  const doc = await docRes.json();
+  const data = _parseFirestoreFields(doc.fields || {});
+
+  if(data.active === false) return {success:false, message:'This code has been revoked. Please contact the developer.'};
+  if(data.boundUid !== uid) return {success:false, message:'This code was issued for a different device.'};
+  if(data.activatedAt) return {success:false, message:'This code has already been used.'};
+
+  const daysNum = data.lifetime ? 36500 : (data.days || 0);
+  if(!daysNum) return {success:false, message:'This code has invalid duration data. Please contact the developer.'};
 
   // ---------- اگر پہلے سے فعال ادائیگی شدہ سبسکرپشن ہو تو نئے دن اس میں جوڑ دیں (توسیع/renewal)۔
-  // لیکن اگر ابھی صرف مفت ٹرائل چل رہا ہو تو نیا کوڈ اسی پر جمع نہیں ہونا چاہیے (ورنہ ٹرائل کے باقی دن +
-  // نئے دن مل کر غیر ارادی طور پر ڈبل مل جاتے ہیں) — اس صورت میں نیا کوڈ آج سے تازہ شروع ہو گا، ٹرائل ختم ہو کر
-  // اصل سبسکرپشن اس کی جگہ لے لے گی ----------
+  // لیکن اگر ابھی صرف مفت ٹرائل چل رہا ہو تو نیا کوڈ اسی پر جمع نہیں ہونا چاہیے ----------
   const hasActivePaidSub = isSubscriptionActive() && !AppState.settings.isOnFreeTrial;
   const base = hasActivePaidSub ? new Date(AppState.settings.subscriptionExpiry) : new Date();
   base.setDate(base.getDate() + daysNum);
-  AppState.settings.subscriptionExpiry = base.toISOString().slice(0,10);
-  AppState.settings.subscriptionActivatedOn = new Date().toISOString().slice(0,10); // ---------- آج کی تاریخ — بینر میں "Subscribed on" کے لیے ----------
-  AppState.settings.isOnFreeTrial = false; // ---------- اصل ادائیگی شدہ کوڈ لگ گیا — اب یہ مفت ٹرائل نہیں رہا ----------
+  const newExpiryStr = base.toISOString().slice(0,10);
+
+  // ---------- Firestore میں کوڈ کو "استعمال شدہ" مارک کریں — دوبارہ استعمال ناممکن ----------
+  try{
+    const updateRes = await fetch(
+      `${FIRESTORE_BASE}/licenses/${encodeURIComponent(trimmedCode)}?updateMask.fieldPaths=activatedAt&updateMask.fieldPaths=expiresAt&key=${FIREBASE_API_KEY}`,
+      {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fields: {
+            activatedAt: { integerValue: String(Date.now()) },
+            expiresAt: { integerValue: String(base.getTime()) }
+          }
+        })
+      }
+    );
+    if(!updateRes.ok) return {success:false, message:'This code was already used or is no longer valid.'};
+  }catch(e){
+    return {success:false, message:'No internet connection. Please connect to the internet and try again.'};
+  }
+
+  AppState.settings.subscriptionExpiry = newExpiryStr;
+  AppState.settings.subscriptionActivatedOn = new Date().toISOString().slice(0,10);
+  AppState.settings.isOnFreeTrial = false;
   persistAllData();
-  return {success:true, expiry: AppState.settings.subscriptionExpiry, daysGranted: daysNum};
+  return {success:true, expiry: newExpiryStr, daysGranted: daysNum};
 }
 
 // ---------- ہوم پیج (اور ہر صفحے) کے اوپر باریک پٹی — کب سبسکرائب کیا، کب ختم ہوگی، کتنے دن باقی — روزانہ خودکار تازہ ----------
@@ -6222,10 +6246,12 @@ function showSubscriptionGate(){
   openPackagePlansModal();
 }
 
-function submitActivationCode(){
+async function submitActivationCode(){
   const code = document.getElementById('subGateCodeInput').value;
-  const result = activateSubscription(code);
   const msgEl = document.getElementById('subGateMsg');
+  msgEl.style.color = 'var(--muted)';
+  msgEl.textContent = '⏳ Checking code online...';
+  const result = await activateSubscription(code);
   if(result.success){
     msgEl.style.color = 'var(--success)';
     msgEl.textContent = `✅ Activated! ${result.daysGranted} day(s) added — valid until ${result.expiry}. Opening app...`;
@@ -6248,10 +6274,12 @@ function toggleLoginActivationBox(){
 }
 
 // ---------- PIN درج کیے بغیر ہی، سیدھا Login سکرین سے کوڈ لگا کر ٹرائل/سبسکرپشن فعال کریں ----------
-function activateFromLoginScreen(){
+async function activateFromLoginScreen(){
   const code = document.getElementById('loginActivationCodeInput').value;
-  const result = activateSubscription(code);
   const msgEl = document.getElementById('loginActivationMsg');
+  msgEl.style.color = 'var(--muted)';
+  msgEl.textContent = '⏳ Checking code online...';
+  const result = await activateSubscription(code);
   if(result.success){
     msgEl.style.color = 'var(--success)';
     msgEl.textContent = `✅ Activated! ${result.daysGranted} day(s) added — valid until ${result.expiry}.`;

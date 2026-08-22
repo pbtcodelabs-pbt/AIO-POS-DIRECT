@@ -1835,6 +1835,7 @@
   <button class="devChatOption" onclick="sendDevChat('whatsapp')"><span class="devChatIcon">💬</span> WhatsApp</button>
   <button class="devChatOption" onclick="sendDevChat('sms')"><span class="devChatIcon">✉️</span> SMS</button>
   <button class="devChatOption" onclick="sendDevChat('email')"><span class="devChatIcon">📧</span> Gmail</button>
+  <button class="devChatOption" onclick="resetDeviceUIDForTesting()" style="margin-top:10px; border-top:1px solid var(--border); padding-top:12px;"><span class="devChatIcon">🔄</span> Reset Device ID (Testing Only)</button>
 </div>
 
 <!-- 🔐 SUBSCRIPTION GATE — سبسکرپشن ختم/غیر فعال ہونے پر یہ صفحہ لاگ ان کے بعد نظر آئے گا -->
@@ -1973,12 +1974,12 @@
          (فارمیٹ: Weekday + HHMM + am/pm + Day + Month + Year) تاکہ نمبر یاد نہ رہے تو بھی تازگی کی تصدیق ہو سکے ---------- -->
     <div style="display:flex; flex-direction:column; align-items:flex-start; gap:1px;">
       <span id="testBuildLabel" class="mobileBrand testBuildGlow" style="display:inline;">AIO POS Direct</span>
-      <span id="testBuildTimestamp" style="font-size:9.5px; color:rgba(255,255,255,.8); font-weight:800; letter-spacing:.3px;">Sat0619pm22aug26</span>
+      <span id="testBuildTimestamp" style="font-size:9.5px; color:rgba(255,255,255,.8); font-weight:800; letter-spacing:.3px;">Sat0710pm22aug26</span>
     </div>
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR228FR0619PM</span>
+      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR228FR0710PM</span>
     </div>
   </div>
 
@@ -5991,6 +5992,20 @@ function openDevChat(context){
   document.getElementById('devChatTitle').textContent = context === 'subscription' ? '💬 Ask About Subscription' : '💬 Chat with Developer';
   document.getElementById('devChatUidLine').textContent = `Your Device ID: ${uid}`;
   document.getElementById('devChatPanel').classList.toggle('show');
+}
+
+// ---------- 🔄 ٹیسٹنگ کے دوران Device ID دوبارہ بنانے کے لیے — کچھ فونز (خاص طور پر MIUI/Xiaomi) پر
+// Chrome کا "Clear data" TWA کی سائٹ ڈیٹا صحیح طرح صاف نہیں کرتا، اس لیے یہ فوری متبادل راستہ ----------
+function resetDeviceUIDForTesting(){
+  if(!confirm('⚠️ This will erase this device\'s Device ID and subscription/trial data (for testing only). Continue?')) return;
+  delete AppState.settings.deviceUID;
+  delete AppState.settings.subscriptionExpiry;
+  delete AppState.settings.subscriptionActivatedOn;
+  delete AppState.settings.isOnFreeTrial;
+  delete AppState.settings.freeTrialGranted;
+  persistAllData();
+  alert('✅ Device ID reset. The app will reload now.');
+  location.reload();
 }
 
 // ---------- 📤 ایپ کا لائیو لنک شیئر کریں — Login اور Home دونوں جگہ سے کال ہوتا ہے۔

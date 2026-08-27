@@ -1281,6 +1281,10 @@
   .invoicePreviewScrollArea{flex:1 1 auto; overflow-y:auto; min-height:0; border-top:1px solid #eee;}
   .invoicePreviewBox .previewHeader{padding:14px 18px; border-bottom:1px solid #eef1f6; display:flex; justify-content:space-between; align-items:center;}
   .previewStyleControls{display:flex; flex-wrap:wrap; gap:6px; padding:10px 14px; background:#f8fafc; border-bottom:1px solid #eef1f6;}
+  .pscMoreWrap{display:none; width:100%; flex-direction:column; gap:6px;}
+  .pscMoreWrap.open{display:flex;}
+  .pscMoreToggleBtn{border:1.5px dashed var(--primary); background:#fff; color:var(--primary-dark); padding:6px 12px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; margin-inline-start:auto;}
+  .pscEssentialRow{align-items:center;}
   .pscRow{display:flex; align-items:center; gap:4px; background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:4px 6px;}
   .pscLabel{font-size:11px; font-weight:700; color:var(--muted); margin-right:2px;}
   .pscRow button{border:none; background:#eef2ff; color:var(--primary-dark); font-weight:800; font-size:12px; padding:4px 9px; border-radius:6px; cursor:pointer;}
@@ -2018,7 +2022,7 @@
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR278TH01</span>
+      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR288FR01</span>
     </div>
   </div>
 
@@ -3659,49 +3663,52 @@
 
         <!-- ---------- لائیو پرنٹ سٹائل کنٹرولز — یہاں سے بدلتے ہی نیچے کینوس فوراً اسی حساب سے دوبارہ بن جاتا ہے (کمپیکٹ — بل زیادہ نظر آئے) ---------- -->
         <div class="previewStyleControls compactPsc">
-          <div class="pscCompactRow">
-            <div style="flex:1 1 100%; display:flex; align-items:center; gap:5px;">
-              <span class="pscLabel">🔠</span>
-              <input type="range" id="pscFontScaleSlider" min="70" max="260" step="5" value="100" oninput="setPreviewZoom('printFontScale', this.value)" style="flex:1;">
-              <span class="pscValue" id="pscFontScaleVal" style="min-width:38px; text-align:right;">100%</span>
-            </div>
-          </div>
-          <div class="pscCompactRow">
-            <div style="flex:1 1 100%; display:flex; align-items:center; gap:5px;">
-              <span class="pscLabel">↕</span>
-              <input type="range" id="pscRowScaleSlider" min="70" max="220" step="5" value="100" oninput="setPreviewZoom('printRowScale', this.value)" style="flex:1;">
-              <span class="pscValue" id="pscRowScaleVal" style="min-width:38px; text-align:right;">100%</span>
-            </div>
-          </div>
-          <div class="pscCompactRow">
-            <button id="pscBoldBtn" class="pscToggleBtn" onclick="togglePreviewBold()">𝐁</button>
-            <button id="pscThinBtn" class="pscToggleBtn" onclick="togglePreviewBold()">Thin</button>
+          <div class="pscCompactRow pscEssentialRow">
             <button id="pscAlignLeftBtn" class="pscToggleBtn" onclick="setPreviewAlign('left')">⬅</button>
             <button id="pscAlignCenterBtn" class="pscToggleBtn" onclick="setPreviewAlign('center')">↔</button>
             <button id="pscAlignRightBtn" class="pscToggleBtn" onclick="setPreviewAlign('right')">➡</button>
-          </div>
-          <div class="pscCompactRow">
             <div class="pscStepperGroup">
               <span class="pscLabel">.00</span>
               <button onclick="adjustPreviewStyle('priceDecimals', -1, 0, 4)">−</button>
               <span class="pscValue" id="pscDecimalsVal">0</span>
               <button onclick="adjustPreviewStyle('priceDecimals', 1, 0, 4)">+</button>
             </div>
-            <select id="pscFontFamilySelect" onchange="setPreviewFontFamily(this.value)" class="pscDropdown"></select>
+            <button type="button" class="pscMoreToggleBtn" id="pscMoreToggleBtn" onclick="togglePscMoreOptions('pscMoreWrap','pscMoreToggleBtn')">⚙️ More ▾</button>
           </div>
-          <div class="pscCompactRow">
-            <span class="pscLabel">🎨</span>
-            <div id="pscColorSwatches" style="display:flex; gap:5px; flex-wrap:wrap;"></div>
-          </div>
-          <div class="pscCompactRow">
-            <label class="pscCheckLabel">
-              <input type="checkbox" id="pscA4Chk" onchange="toggleInvoicePaperStyle(this.checked)"> 🖨️ Print A4
-            </label>
-          </div>
-          <!-- ---------- A4 پر پرنٹ کرتے وقت Portrait/Landscape منتخب کریں — صرف Print A4 آن ہونے پر نظر آتا ہے ---------- -->
-          <div id="pscOrientRow" class="pscCompactRow" style="display:none;">
-            <button type="button" id="pscOrientPortraitBtn" onclick="setInvoiceOrientation('portrait')" class="pscToggleBtn">📄 Portrait</button>
-            <button type="button" id="pscOrientLandscapeBtn" onclick="setInvoiceOrientation('landscape')" class="pscToggleBtn">📃 Landscape</button>
+          <div class="pscMoreWrap" id="pscMoreWrap">
+            <div class="pscCompactRow">
+              <div style="flex:1 1 100%; display:flex; align-items:center; gap:5px;">
+                <span class="pscLabel">🔠</span>
+                <input type="range" id="pscFontScaleSlider" min="70" max="260" step="5" value="100" oninput="setPreviewZoom('printFontScale', this.value)" style="flex:1;">
+                <span class="pscValue" id="pscFontScaleVal" style="min-width:38px; text-align:right;">100%</span>
+              </div>
+            </div>
+            <div class="pscCompactRow">
+              <div style="flex:1 1 100%; display:flex; align-items:center; gap:5px;">
+                <span class="pscLabel">↕</span>
+                <input type="range" id="pscRowScaleSlider" min="70" max="220" step="5" value="100" oninput="setPreviewZoom('printRowScale', this.value)" style="flex:1;">
+                <span class="pscValue" id="pscRowScaleVal" style="min-width:38px; text-align:right;">100%</span>
+              </div>
+            </div>
+            <div class="pscCompactRow">
+              <button id="pscBoldBtn" class="pscToggleBtn" onclick="togglePreviewBold()">𝐁</button>
+              <button id="pscThinBtn" class="pscToggleBtn" onclick="togglePreviewBold()">Thin</button>
+              <select id="pscFontFamilySelect" onchange="setPreviewFontFamily(this.value)" class="pscDropdown"></select>
+            </div>
+            <div class="pscCompactRow">
+              <span class="pscLabel">🎨</span>
+              <div id="pscColorSwatches" style="display:flex; gap:5px; flex-wrap:wrap;"></div>
+            </div>
+            <div class="pscCompactRow">
+              <label class="pscCheckLabel">
+                <input type="checkbox" id="pscA4Chk" onchange="toggleInvoicePaperStyle(this.checked)"> 🖨️ Print A4
+              </label>
+            </div>
+            <!-- ---------- A4 پر پرنٹ کرتے وقت Portrait/Landscape منتخب کریں — صرف Print A4 آن ہونے پر نظر آتا ہے ---------- -->
+            <div id="pscOrientRow" class="pscCompactRow" style="display:none;">
+              <button type="button" id="pscOrientPortraitBtn" onclick="setInvoiceOrientation('portrait')" class="pscToggleBtn">📄 Portrait</button>
+              <button type="button" id="pscOrientLandscapeBtn" onclick="setInvoiceOrientation('landscape')" class="pscToggleBtn">📃 Landscape</button>
+            </div>
           </div>
         </div>
 
@@ -3715,6 +3722,9 @@
         </div>
         <div class="previewActions" id="pscBtPrintRow" style="padding-top:0;">
           <button style="background:#e0f2fe; color:#075985; flex:1;" onclick="printViaWebBluetooth('invoiceCanvas')">🔵 Try Direct Bluetooth Print (no app needed)</button>
+        </div>
+        <div class="previewActions" style="padding-top:0;">
+          <button style="background:#fef9c3; color:#854d0e; flex:1;" onclick="printInvoiceFastText()">⚡ Fast Print (Simple Text — No Fonts/Images)</button>
         </div>
         <!-- ---------- A4 PDF کا اپنا شیئر بٹن — Android کی نیٹو شیئر شیٹ کھلتی ہے جس میں Print/WhatsApp/دیگر سب مل جاتی ہیں ---------- -->
         <div class="previewActions" id="pscA4ShareRow" style="padding-top:0; display:none;">
@@ -3885,51 +3895,54 @@
           <span style="cursor:pointer;" onclick="closeAdvOrderPreview()">✖</span>
         </div>
 
-        <!-- ---------- لائیو پرنٹ سٹائل کنٹرولز — بالکل بل/رپورٹ جیسے، یہاں سے بدلتے ہی نیچے کینوس فوراً اسی حساب سے دوبارہ بن جاتا ہے (کمپیکٹ) ---------- -->
+        <!-- ---------- لائیو پرنٹ سٹائل کنٹرولز — بالکل بل جیسے، Alignment/Decimals ہمیشہ نظر آئیں، باقی "More" کے نیچے ---------- -->
         <div class="previewStyleControls compactPsc">
-          <div class="pscCompactRow">
-            <div style="flex:1 1 100%; display:flex; align-items:center; gap:5px;">
-              <span class="pscLabel">🔠</span>
-              <input type="range" id="aopscFontScaleSlider" min="70" max="260" step="5" value="100" oninput="setAdvOrderZoom('advOrderFontScale', this.value)" style="flex:1;">
-              <span class="pscValue" id="aopscFontScaleVal" style="min-width:38px; text-align:right;">100%</span>
-            </div>
-          </div>
-          <div class="pscCompactRow">
-            <div style="flex:1 1 100%; display:flex; align-items:center; gap:5px;">
-              <span class="pscLabel">↕</span>
-              <input type="range" id="aopscRowScaleSlider" min="70" max="220" step="5" value="100" oninput="setAdvOrderZoom('advOrderRowScale', this.value)" style="flex:1;">
-              <span class="pscValue" id="aopscRowScaleVal" style="min-width:38px; text-align:right;">100%</span>
-            </div>
-          </div>
-          <div class="pscCompactRow">
-            <button id="aopscBoldBtn" class="pscToggleBtn" onclick="toggleAdvOrderBold()">𝐁</button>
-            <button id="aopscThinBtn" class="pscToggleBtn" onclick="toggleAdvOrderBold()">Thin</button>
+          <div class="pscCompactRow pscEssentialRow">
             <button id="aopscAlignLeftBtn" class="pscToggleBtn" onclick="setAdvOrderAlign('left')">⬅</button>
             <button id="aopscAlignCenterBtn" class="pscToggleBtn" onclick="setAdvOrderAlign('center')">↔</button>
             <button id="aopscAlignRightBtn" class="pscToggleBtn" onclick="setAdvOrderAlign('right')">➡</button>
-          </div>
-          <div class="pscCompactRow">
             <div class="pscStepperGroup">
               <span class="pscLabel">.00</span>
               <button onclick="adjustAdvOrderStyle('advOrderPriceDecimals', -1, 0, 4)">−</button>
               <span class="pscValue" id="aopscDecimalsVal">0</span>
               <button onclick="adjustAdvOrderStyle('advOrderPriceDecimals', 1, 0, 4)">+</button>
             </div>
-            <select id="aopscFontFamilySelect" onchange="setAdvOrderFontFamily(this.value)" class="pscDropdown"></select>
+            <button type="button" class="pscMoreToggleBtn" id="aopscMoreToggleBtn" onclick="togglePscMoreOptions('aopscMoreWrap','aopscMoreToggleBtn')">⚙️ More ▾</button>
           </div>
-          <div class="pscCompactRow">
-            <span class="pscLabel">🎨</span>
-            <div id="aopscColorSwatches" style="display:flex; gap:5px; flex-wrap:wrap;"></div>
-          </div>
-          <div class="pscCompactRow">
-            <label class="pscCheckLabel">
-              <input type="checkbox" id="aopscA4Chk" onchange="toggleAdvOrderPaperStyle(this.checked)"> 🖨️ Print A4
-            </label>
-          </div>
-          <!-- ---------- A4 پر پرنٹ کرتے وقت Portrait/Landscape منتخب کریں — صرف Print A4 آن ہونے پر نظر آتا ہے ---------- -->
-          <div id="aopscOrientRow" class="pscCompactRow" style="display:none;">
-            <button type="button" id="aopscOrientPortraitBtn" onclick="setAdvOrderOrientation('portrait')" class="pscToggleBtn">📄 Portrait</button>
-            <button type="button" id="aopscOrientLandscapeBtn" onclick="setAdvOrderOrientation('landscape')" class="pscToggleBtn">📃 Landscape</button>
+          <div class="pscMoreWrap" id="aopscMoreWrap">
+            <div class="pscCompactRow">
+              <div style="flex:1 1 100%; display:flex; align-items:center; gap:5px;">
+                <span class="pscLabel">🔠</span>
+                <input type="range" id="aopscFontScaleSlider" min="70" max="260" step="5" value="100" oninput="setAdvOrderZoom('advOrderFontScale', this.value)" style="flex:1;">
+                <span class="pscValue" id="aopscFontScaleVal" style="min-width:38px; text-align:right;">100%</span>
+              </div>
+            </div>
+            <div class="pscCompactRow">
+              <div style="flex:1 1 100%; display:flex; align-items:center; gap:5px;">
+                <span class="pscLabel">↕</span>
+                <input type="range" id="aopscRowScaleSlider" min="70" max="220" step="5" value="100" oninput="setAdvOrderZoom('advOrderRowScale', this.value)" style="flex:1;">
+                <span class="pscValue" id="aopscRowScaleVal" style="min-width:38px; text-align:right;">100%</span>
+              </div>
+            </div>
+            <div class="pscCompactRow">
+              <button id="aopscBoldBtn" class="pscToggleBtn" onclick="toggleAdvOrderBold()">𝐁</button>
+              <button id="aopscThinBtn" class="pscToggleBtn" onclick="toggleAdvOrderBold()">Thin</button>
+              <select id="aopscFontFamilySelect" onchange="setAdvOrderFontFamily(this.value)" class="pscDropdown"></select>
+            </div>
+            <div class="pscCompactRow">
+              <span class="pscLabel">🎨</span>
+              <div id="aopscColorSwatches" style="display:flex; gap:5px; flex-wrap:wrap;"></div>
+            </div>
+            <div class="pscCompactRow">
+              <label class="pscCheckLabel">
+                <input type="checkbox" id="aopscA4Chk" onchange="toggleAdvOrderPaperStyle(this.checked)"> 🖨️ Print A4
+              </label>
+            </div>
+            <!-- ---------- A4 پر پرنٹ کرتے وقت Portrait/Landscape منتخب کریں — صرف Print A4 آن ہونے پر نظر آتا ہے ---------- -->
+            <div id="aopscOrientRow" class="pscCompactRow" style="display:none;">
+              <button type="button" id="aopscOrientPortraitBtn" onclick="setAdvOrderOrientation('portrait')" class="pscToggleBtn">📄 Portrait</button>
+              <button type="button" id="aopscOrientLandscapeBtn" onclick="setAdvOrderOrientation('landscape')" class="pscToggleBtn">📃 Landscape</button>
+            </div>
           </div>
         </div>
 
@@ -3944,6 +3957,9 @@
         <!-- ---------- تھرمل رول کے لیے — بغیر کسی اضافی ایپ کے سیدھا بلوٹوتھ پرنٹر سے پرنٹ — A4 پر یہ متعلقہ نہیں ---------- -->
         <div class="previewActions" id="aopBtPrintRow" style="padding-top:0;">
           <button style="background:#e0f2fe; color:#075985; flex:1;" onclick="printViaWebBluetooth('advOrderCanvas')">🔵 Try Direct Bluetooth Print (no app needed)</button>
+        </div>
+        <div class="previewActions" style="padding-top:0;">
+          <button style="background:#fef9c3; color:#854d0e; flex:1;" onclick="printAdvOrderFastText()">⚡ Fast Print (Simple Text — No Fonts/Images)</button>
         </div>
         <!-- ---------- A4 PDF کا اپنا شیئر بٹن — Android کی نیٹو شیئر شیٹ کھلتی ہے جس میں Print/WhatsApp/دیگر سب مل جاتی ہیں ---------- -->
         <div class="previewActions" id="aopA4ShareRow" style="padding-top:0; display:none;">
@@ -3961,54 +3977,57 @@
         </div>
 
         <div class="previewStyleControls compactPsc">
-          <div class="pscCompactRow">
-            <div class="pscStepperGroup">
-              <span class="pscLabel">🔠</span>
-              <button onclick="adjustPoZoomStep('poFontScale',-5)">−</button>
-              <span class="pscValue" id="popscFontScaleVal">100%</span>
-              <button onclick="adjustPoZoomStep('poFontScale',5)">+</button>
-            </div>
-            <div class="pscStepperGroup">
-              <span class="pscLabel">↕</span>
-              <button onclick="adjustPoZoomStep('poRowScale',-5)">−</button>
-              <span class="pscValue" id="popscRowScaleVal">100%</span>
-              <button onclick="adjustPoZoomStep('poRowScale',5)">+</button>
-            </div>
-          </div>
-          <div class="pscCompactRow">
-            <button id="popscBoldBtn" class="pscToggleBtn" onclick="togglePoBold()">𝐁 Bold</button>
+          <div class="pscCompactRow pscEssentialRow">
+            <select id="popscAlignSelect" onchange="setPoAlign(this.value)" class="pscDropdown">
+              <option value="left">⬅ Left</option>
+              <option value="center">↔ Center</option>
+              <option value="right">➡ Right</option>
+            </select>
             <div class="pscStepperGroup">
               <span class="pscLabel">.00</span>
               <button onclick="adjustPoStyle('poPriceDecimals', -1, 0, 4)">−</button>
               <span class="pscValue" id="popscDecimalsVal">0</span>
               <button onclick="adjustPoStyle('poPriceDecimals', 1, 0, 4)">+</button>
             </div>
+            <button type="button" class="pscMoreToggleBtn" id="popscMoreToggleBtn" onclick="togglePscMoreOptions('popscMoreWrap','popscMoreToggleBtn')">⚙️ More ▾</button>
           </div>
-          <div class="pscCompactRow">
-            <select id="popscAlignSelect" onchange="setPoAlign(this.value)" class="pscDropdown">
-              <option value="left">⬅ Left</option>
-              <option value="center">↔ Center</option>
-              <option value="right">➡ Right</option>
-            </select>
-            <select id="popscVAlignSelect" onchange="setPoVAlign(this.value)" class="pscDropdown" title="Vertical align within row">
-              <option value="top">⬆ Top</option>
-              <option value="middle">↕ Middle</option>
-              <option value="bottom">⬇ Bottom</option>
-            </select>
-          </div>
-          <div class="pscCompactRow">
-            <select id="popscFontFamilySelect" onchange="setPoFontFamily(this.value)" class="pscDropdown"></select>
-            <select id="popscThemeSelect" onchange="setReceiptColor(this.value)" class="pscDropdown"></select>
-          </div>
-          <div class="pscCompactRow">
-            <label class="pscCheckLabel">
-              <input type="checkbox" id="popscA4Chk" onchange="togglePoPaperStyle(this.checked)"> 🖨️ Print A4
-            </label>
-            <div id="popscOrientRow" style="display:none; gap:4px; align-items:center;">
+          <div class="pscMoreWrap" id="popscMoreWrap">
+            <div class="pscCompactRow">
+              <div class="pscStepperGroup">
+                <span class="pscLabel">🔠</span>
+                <button onclick="adjustPoZoomStep('poFontScale',-5)">−</button>
+                <span class="pscValue" id="popscFontScaleVal">100%</span>
+                <button onclick="adjustPoZoomStep('poFontScale',5)">+</button>
+              </div>
+              <div class="pscStepperGroup">
+                <span class="pscLabel">↕</span>
+                <button onclick="adjustPoZoomStep('poRowScale',-5)">−</button>
+                <span class="pscValue" id="popscRowScaleVal">100%</span>
+                <button onclick="adjustPoZoomStep('poRowScale',5)">+</button>
+              </div>
+            </div>
+            <div class="pscCompactRow">
+              <button id="popscBoldBtn" class="pscToggleBtn" onclick="togglePoBold()">𝐁 Bold</button>
+              <select id="popscVAlignSelect" onchange="setPoVAlign(this.value)" class="pscDropdown" title="Vertical align within row">
+                <option value="top">⬆ Top</option>
+                <option value="middle">↕ Middle</option>
+                <option value="bottom">⬇ Bottom</option>
+              </select>
+            </div>
+            <div class="pscCompactRow">
+              <select id="popscFontFamilySelect" onchange="setPoFontFamily(this.value)" class="pscDropdown"></select>
+              <select id="popscThemeSelect" onchange="setReceiptColor(this.value)" class="pscDropdown"></select>
+            </div>
+            <div class="pscCompactRow">
+              <label class="pscCheckLabel">
+                <input type="checkbox" id="popscA4Chk" onchange="togglePoPaperStyle(this.checked)"> 🖨️ Print A4
+              </label>
+              <div id="popscOrientRow" style="display:none; gap:4px; align-items:center;">
               <button type="button" id="popscOrientPortraitBtn" onclick="setPoOrientation('portrait')" class="pscToggleBtn">📄 Portrait</button>
               <button type="button" id="popscOrientLandscapeBtn" onclick="setPoOrientation('landscape')" class="pscToggleBtn">📃 Landscape</button>
             </div>
           </div>
+        </div>
         </div>
 
         <div class="invoicePreviewScrollArea" style="flex:1 1 auto;">
@@ -4021,6 +4040,9 @@
         </div>
         <div class="previewActions" id="poBtPrintRow" style="padding-top:0;">
           <button style="background:#e0f2fe; color:#075985; flex:1;" onclick="printViaWebBluetooth('poCanvas')">🔵 Try Direct Bluetooth Print (no app needed)</button>
+        </div>
+        <div class="previewActions" style="padding-top:0;">
+          <button style="background:#fef9c3; color:#854d0e; flex:1;" onclick="printPoFastText()">⚡ Fast Print (Simple Text — No Fonts/Images)</button>
         </div>
         <div class="previewActions" id="poA4ShareRow" style="padding-top:0; display:none;">
           <button style="background:#f0fdf4; color:#166534; flex:1; display:flex; align-items:center; justify-content:center;" onclick="sharePoPdf()"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" style="flex:0 0 auto; vertical-align:-3px; margin-right:5px;"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>Print/Share A4 PDF</button>
@@ -4399,58 +4421,58 @@
       <span style="cursor:pointer;" onclick="closeReportPreview()">✖</span>
     </div>
 
-    <div class="previewStyleControls compactPsc" id="reportStyleControlsWrap" style="display:none;">
-      <div class="pscCompactRow">
-        <div style="flex:1 1 100%; display:flex; align-items:center; gap:5px;">
-          <span class="pscLabel">🔠</span>
-          <input type="range" id="rpscFontScaleSlider" min="100" max="400" step="10" value="100" oninput="setReportZoom(this.value)" style="flex:1;">
-          <span class="pscValue" id="rpscFontScaleVal" style="min-width:38px; text-align:right;">100%</span>
-        </div>
-      </div>
-      <div class="pscCompactRow">
-        <div style="flex:1 1 100%; display:flex; align-items:center; gap:5px;">
-          <span class="pscLabel">↕</span>
-          <input type="range" id="rpscRowScaleSlider" min="70" max="260" step="5" value="100" oninput="setReportRowZoom(this.value)" style="flex:1;">
-          <span class="pscValue" id="rpscRowScaleVal" style="min-width:38px; text-align:right;">100%</span>
-        </div>
-      </div>
-      <div class="pscCompactRow">
-        <button id="rpscBoldBtn" class="pscToggleBtn" onclick="toggleReportBold()">𝐁</button>
-        <button id="rpscThinBtn" class="pscToggleBtn" onclick="toggleReportBold()">Thin</button>
+    <div class="previewStyleControls compactPsc" id="reportStyleControlsWrap">
+      <div class="pscCompactRow pscEssentialRow">
         <button id="rpscAlignLeftBtn" class="pscToggleBtn" onclick="setReportAlign('left')">⬅</button>
         <button id="rpscAlignCenterBtn" class="pscToggleBtn" onclick="setReportAlign('center')">↔</button>
         <button id="rpscAlignRightBtn" class="pscToggleBtn" onclick="setReportAlign('right')">➡</button>
-      </div>
-      <div class="pscCompactRow">
         <div class="pscStepperGroup">
           <span class="pscLabel">.00</span>
           <button onclick="adjustReportStyle('reportPriceDecimals', -1, 0, 4)">−</button>
           <span class="pscValue" id="rpscDecimalsVal">0</span>
           <button onclick="adjustReportStyle('reportPriceDecimals', 1, 0, 4)">+</button>
         </div>
-        <select id="rpscFontFamilySelect" onchange="setReportFontFamily(this.value)" class="pscDropdown"></select>
+        <button type="button" class="pscMoreToggleBtn" id="rpscMoreToggleBtn" onclick="togglePscMoreOptions('rpscMoreWrap','rpscMoreToggleBtn')">⚙️ More ▾</button>
       </div>
-      <div class="pscCompactRow">
-        <span class="pscLabel">🎨</span>
-        <div id="rpscColorSwatches" style="display:flex; gap:5px; flex-wrap:wrap;"></div>
-      </div>
-      <div class="pscCompactRow">
-        <label class="pscCheckLabel">
-          <input type="checkbox" id="rpscA4Chk" onchange="toggleReportPaperStyle(this.checked)"> 🖨️ Print A4
-        </label>
-        <label id="rpscShowStockWrap" class="pscCheckLabel">
-          <input type="checkbox" id="rpscShowStockChk" onchange="toggleReportShowStock(this.checked)"> Show In Stock Qty
-        </label>
-      </div>
-      <!-- ---------- A4 پر پرنٹ کرتے وقت Portrait/Landscape منتخب کریں — صرف Print A4 آن ہونے پر نظر آتا ہے ---------- -->
-      <div id="rpscOrientRow" class="pscCompactRow" style="display:none;">
-        <button type="button" id="rpscOrientPortraitBtn" onclick="setReportOrientation('portrait')" class="pscToggleBtn">📄 Portrait</button>
-        <button type="button" id="rpscOrientLandscapeBtn" onclick="setReportOrientation('landscape')" class="pscToggleBtn">📃 Landscape</button>
+      <div class="pscMoreWrap" id="rpscMoreWrap">
+        <div class="pscCompactRow">
+          <div style="flex:1 1 100%; display:flex; align-items:center; gap:5px;">
+            <span class="pscLabel">🔠</span>
+            <input type="range" id="rpscFontScaleSlider" min="100" max="400" step="10" value="100" oninput="setReportZoom(this.value)" style="flex:1;">
+            <span class="pscValue" id="rpscFontScaleVal" style="min-width:38px; text-align:right;">100%</span>
+          </div>
+        </div>
+        <div class="pscCompactRow">
+          <div style="flex:1 1 100%; display:flex; align-items:center; gap:5px;">
+            <span class="pscLabel">↕</span>
+            <input type="range" id="rpscRowScaleSlider" min="70" max="260" step="5" value="100" oninput="setReportRowZoom(this.value)" style="flex:1;">
+            <span class="pscValue" id="rpscRowScaleVal" style="min-width:38px; text-align:right;">100%</span>
+          </div>
+        </div>
+        <div class="pscCompactRow">
+          <button id="rpscBoldBtn" class="pscToggleBtn" onclick="toggleReportBold()">𝐁</button>
+          <button id="rpscThinBtn" class="pscToggleBtn" onclick="toggleReportBold()">Thin</button>
+          <select id="rpscFontFamilySelect" onchange="setReportFontFamily(this.value)" class="pscDropdown"></select>
+        </div>
+        <div class="pscCompactRow">
+          <span class="pscLabel">🎨</span>
+          <div id="rpscColorSwatches" style="display:flex; gap:5px; flex-wrap:wrap;"></div>
+        </div>
+        <div class="pscCompactRow">
+          <label class="pscCheckLabel">
+            <input type="checkbox" id="rpscA4Chk" onchange="toggleReportPaperStyle(this.checked)"> 🖨️ Print A4
+          </label>
+          <label id="rpscShowStockWrap" class="pscCheckLabel">
+            <input type="checkbox" id="rpscShowStockChk" onchange="toggleReportShowStock(this.checked)"> Show In Stock Qty
+          </label>
+        </div>
+        <!-- ---------- A4 پر پرنٹ کرتے وقت Portrait/Landscape منتخب کریں — صرف Print A4 آن ہونے پر نظر آتا ہے ---------- -->
+        <div id="rpscOrientRow" class="pscCompactRow" style="display:none;">
+          <button type="button" id="rpscOrientPortraitBtn" onclick="setReportOrientation('portrait')" class="pscToggleBtn">📄 Portrait</button>
+          <button type="button" id="rpscOrientLandscapeBtn" onclick="setReportOrientation('landscape')" class="pscToggleBtn">📃 Landscape</button>
+        </div>
       </div>
     </div>
-
-    <!-- ---------- ⚙️ Advanced formatting بٹن — عام صارف کو صرف پرنٹ/شیئر چاہیے، سٹائل کنٹرول چھپے رہیں جب تک نہ مانگیں ---------- -->
-    <button type="button" onclick="const w=document.getElementById('reportStyleControlsWrap'); const open=w.style.display==='none'; w.style.display=open?'flex':'none'; this.textContent=open?'⚙️ Hide Formatting Options':'⚙️ Advanced Formatting Options';" style="width:100%; margin:8px 0; padding:9px; background:#eef2ff; color:var(--primary-dark); border:none; border-radius:10px; font-size:12.5px; font-weight:700; cursor:pointer;">⚙️ Advanced Formatting Options</button>
 
     <div id="reportCanvasScrollWrap" class="invoicePreviewScrollArea">
       <canvas id="reportCanvas"></canvas>
@@ -14489,7 +14511,7 @@ async function renderAdvOrderToCanvas(order){
   const scale = baseScale * fscale;
   const rc = getReceiptColor();
 
-  const noW = Math.round(28 * scale), variantW = Math.round(56 * scale), qtyW = Math.round(50 * scale), priceW = Math.round(75 * scale), totalW = Math.round(85 * scale);
+  const noW = Math.round(28 * scale), variantW = Math.round(56 * scale * Math.max(1, fscale)), qtyW = Math.round(50 * scale), priceW = Math.round(75 * scale), totalW = Math.round(85 * scale);
   const tableLeft = useA4 ? 40 : 8, tableRight = pxWidth - (useA4 ? 40 : 8);
   const itemW = (tableRight - tableLeft) - noW - variantW - qtyW - priceW - totalW;
   // ---------- کالمز: #, Item, Variant, Qty, Approx., Total — بالکل نارمل بل کی طرح ----------
@@ -14806,7 +14828,7 @@ async function renderPoToCanvas(){
   // خامخواہ چوڑے ڈبے نہیں بنیں گے، اور نہ ہی کوئی لکھائی کٹے گی ----------
   const measureCtx = document.createElement('canvas').getContext('2d');
   const bodyFontPx = Math.round(14 * scale), headerFontPx = Math.round(13 * scale);
-  measureCtx.font = `bold ${bodyFontPx}px ${canvasFontFamily}`;
+  measureCtx.font = `bold ${Math.round(bodyFontPx * Math.max(1, fscale))}px ${canvasFontFamily}`;
   const padX = Math.round(10 * scale);
   const noW = Math.max(Math.round(24 * scale), measureCtx.measureText('#').width + padX, measureCtx.measureText(String(po.items.length)).width + padX);
   let variantW = measureCtx.measureText('Variant').width + padX;
@@ -17697,9 +17719,15 @@ async function renderInvoiceToCanvas(invoice, paperWidthMM = 80, highlightMatchK
     img.src = receiptQrURL;
   });
 
+  // ---------- Settings کے "🔠 Print Text Size" سلائیڈر کے مطابق — پورے بل کی لکھائی کا سائز اسی تناسب سے بڑا/چھوٹا ہوتا ہے
+  // (کالمز کی چوڑائی حساب کرنے سے پہلے یہاں لے آئے، تاکہ Variant جیسے تنگ کالم بھی اسی تناسب سے چوڑے ہو سکیں) ---------- -->
+  const fscale = (AppState.settings.printFontScale || 100) / 100;
+
   // ---------- ٹیبل کالمز کی چوڑائی — پیپر سائز کے تناسب سے، تاکہ 58mm اور 80mm دونوں پر صحیح فٹ ہوں
-  // کالمز کی ترتیب: #  |  Item  |  Variant  |  Qty  |  Price  |  Total ----------
-  const noW = Math.round(28 * scale), variantW = Math.round(46 * scale), qtyW = Math.round(50 * scale), priceW = Math.round(75 * scale), totalW = Math.round(85 * scale);
+  // کالمز کی ترتیب: #  |  Item  |  Variant  |  Qty  |  Price  |  Total
+  // ⚠️ Variant کالم کو fscale سے بھی جوڑا گیا ہے — ورنہ فونٹ سائز بڑھانے پر بھی یہ تنگ کالم میں فٹ ہونے کے لیے
+  // خودکار سکڑ کر ہمیشہ باریک ہی رہ جاتا تھا، چاہے باقی سارا بل موٹا/بڑا ہو جائے ---------- -->
+  const noW = Math.round(28 * scale), variantW = Math.round(46 * scale * Math.max(1, fscale)), qtyW = Math.round(50 * scale), priceW = Math.round(75 * scale), totalW = Math.round(85 * scale);
   const tableLeft = 8, tableRight = pxWidth - 8;
   const itemW = (tableRight - tableLeft) - noW - variantW - qtyW - priceW - totalW;
   const colX = [
@@ -17760,8 +17788,6 @@ async function renderInvoiceToCanvas(invoice, paperWidthMM = 80, highlightMatchK
   // نستعلیق منتخب ہونے پر پرنٹ خودکار طور پر صاف Arial پر چلا جاتا ہے (باقی سب فونٹ جوں کے توں پرنٹ ہوں گے)۔
   const selectedFontPreset = FONT_PRESETS.find(f => f.id === AppState.settings.printFontId) || FONT_PRESETS[0];
   const canvasFontFamily = selectedFontPreset.isNastaleeq ? 'Arial, sans-serif' : selectedFontPreset.family;
-  // ---------- Settings کے "🔠 Print Text Size" سلائیڈر کے مطابق — پورے بل کی لکھائی کا سائز اسی تناسب سے بڑا/چھوٹا ہوتا ہے ----------
-  const fscale = (AppState.settings.printFontScale || 100) / 100;
   const F = (spec) => spec.replace(/(\d+)px/, (m, n) => Math.round(n * fscale) + 'px') + ` ${canvasFontFamily}`;
 
   // ---------- ڈرائنگ سے پہلے یقینی بنائیں کہ منتخب فونٹ مکمل لوڈ ہو چکا ہے (خصوصاً پہلی بار Google Font کے لیے) ----------
@@ -18579,6 +18605,15 @@ function adjustPreviewStyle(settingKey, delta, min, max){
   rerenderInvoicePreview();
 }
 
+function togglePscMoreOptions(wrapId, btnId){
+  const wrap = document.getElementById(wrapId);
+  const btn = document.getElementById(btnId);
+  if(!wrap) return;
+  const nowOpen = !wrap.classList.contains('open');
+  wrap.classList.toggle('open', nowOpen);
+  if(btn) btn.textContent = nowOpen ? '⚙️ Less ▴' : '⚙️ More ▾';
+}
+
 function togglePreviewBold(){
   AppState.settings.printBoldItems = !(AppState.settings.printBoldItems !== false);
   persistAllData();
@@ -18934,6 +18969,183 @@ function canvasToEscPosRaster(canvas, paperWidthMM){
 }
 
 // ---------- WhatsApp Share (ابھی صرف اسٹب) ----------
+// ---------- ⚡ فاسٹ پرنٹ — خالص سادہ متن (کوئی تصویر/فونٹ رینڈرنگ نہیں)، تھرمل پرنٹر پر بہت تیز اور قابلِ بھروسہ۔
+// جن صارفین کا پرنٹر image/raster پرنٹنگ میں سست یا ناکام ہو، ان کے لیے متبادل راستہ ---------- -->
+function padRightMono(str, len){
+  str = String(str);
+  return str.length >= len ? str.slice(0, len) : str + ' '.repeat(len - str.length);
+}
+function padLeftMono(str, len){
+  str = String(str);
+  return str.length >= len ? str.slice(0, len) : ' '.repeat(len - str.length) + str;
+}
+function centerMono(str, width){
+  str = String(str);
+  if(str.length >= width) return str.slice(0, width);
+  return ' '.repeat(Math.floor((width - str.length) / 2)) + str;
+}
+function escposTextBytes(text){
+  const encoder = new TextEncoder();
+  const init = new Uint8Array([0x1B, 0x40]);
+  const body = encoder.encode(text + '\n');
+  const feedCut = new Uint8Array([0x0A, 0x0A, 0x0A, 0x1D, 0x56, 0x00]);
+  const result = new Uint8Array(init.length + body.length + feedCut.length);
+  result.set(init, 0);
+  result.set(body, init.length);
+  result.set(feedCut, init.length + body.length);
+  return result;
+}
+async function sendPlainTextToPrinter(text, fallbackFn){
+  if(!navigator.bluetooth){ fallbackFn(text); return; }
+  try{
+    const device = await navigator.bluetooth.requestDevice({
+      acceptAllDevices: true,
+      optionalServices: [
+        '000018f0-0000-1000-8000-00805f9b34fb',
+        '49535343-fe7d-4ae5-8fa9-9fafd205e455',
+        '6e400001-b5a3-f393-e0a9-e50e24dcca9e',
+        'e7810a71-73ae-499d-8c15-faa9aef0c3f2',
+        '0000ff00-0000-1000-8000-00805f9b34fb',
+      ]
+    });
+    const server = await device.gatt.connect();
+    const services = await server.getPrimaryServices();
+    let writeChar = null;
+    for(const service of services){
+      const chars = await service.getCharacteristics();
+      for(const c of chars){ if(c.properties.write || c.properties.writeWithoutResponse){ writeChar = c; break; } }
+      if(writeChar) break;
+    }
+    if(!writeChar){ fallbackFn(text); return; }
+    const bytes = escposTextBytes(text);
+    const chunkSize = 180;
+    for(let i = 0; i < bytes.length; i += chunkSize){
+      const chunk = bytes.slice(i, i + chunkSize);
+      if(writeChar.properties.writeWithoutResponse) await writeChar.writeValueWithoutResponse(chunk);
+      else await writeChar.writeValue(chunk);
+      await new Promise(r => setTimeout(r, 15));
+    }
+    alert('⚡ Fast (plain text) print sent — should print almost instantly!');
+  }catch(e){
+    fallbackFn(text);
+  }
+}
+function printPlainTextViaBrowser(text){
+  applyPrintPageSize(AppState.settings.paperWidth || 80);
+  const area = document.getElementById('printReceiptArea');
+  enterPrintMode();
+  area.innerHTML = `<pre style="font-family:'Courier New', monospace; font-size:12px; line-height:1.3; white-space:pre-wrap; margin:0; padding:4px; color:#000;">${text.replace(/</g,'&lt;')}</pre>`;
+  setTimeout(() => triggerPrint(), 60);
+}
+
+function buildInvoicePlainText(invoice){
+  const cols = (AppState.settings.paperWidth || 80) === 80 ? 42 : 32;
+  const lines = [];
+  lines.push(centerMono(AppState.settings.businessName || 'AIO POS', cols));
+  if(AppState.settings.businessPhone) lines.push(centerMono(AppState.settings.businessPhone, cols));
+  const d = new Date(invoice.created_at);
+  const dd = String(d.getDate()).padStart(2,'0'), mm = String(d.getMonth()+1).padStart(2,'0'), yy = String(d.getFullYear()).slice(-2);
+  lines.push(centerMono(`Bill#${invoice.daily_bill_no || '—'}/${invoice.monthly_bill_no || '—'} ${dd}/${mm}/${yy}`, cols));
+  lines.push(centerMono('Customer: ' + (invoice.customer_name || 'Walk-in'), cols));
+  lines.push('-'.repeat(cols));
+  const qtyW = 4, totalW = 9, nameW = cols - qtyW - totalW;
+  lines.push(padRightMono('Item', nameW) + padLeftMono('Qty', qtyW) + padLeftMono('Total', totalW));
+  lines.push('-'.repeat(cols));
+  const decimals = AppState.settings.priceDecimals ?? 0;
+  (invoice.items || []).forEach(item => {
+    const remainingQty = Math.max(0, item.qty - (item.returnQty || 0));
+    const totalTxt = (remainingQty * item.unitPrice).toFixed(decimals);
+    if(item.name.length > nameW){
+      lines.push(item.name);
+      lines.push(padRightMono('', nameW) + padLeftMono(String(remainingQty), qtyW) + padLeftMono(totalTxt, totalW));
+    } else {
+      lines.push(padRightMono(item.name, nameW) + padLeftMono(String(remainingQty), qtyW) + padLeftMono(totalTxt, totalW));
+    }
+  });
+  lines.push('-'.repeat(cols));
+  lines.push(padRightMono('Grand Total', cols - totalW) + padLeftMono('Rs.' + invoice.grand_total.toFixed(decimals), totalW));
+  lines.push('', centerMono('Thank you for your purchase!', cols), '', '', '');
+  return lines.join('\n');
+}
+async function printInvoiceFastText(){
+  const inv = invoicesData.find(i => i.invoice_id === currentPreviewInvoiceId);
+  if(!inv){ alert('Bill not found.'); return; }
+  await sendPlainTextToPrinter(buildInvoicePlainText(inv), printPlainTextViaBrowser);
+}
+
+function buildAdvOrderPlainText(order){
+  const cols = (AppState.settings.paperWidth || 80) === 80 ? 42 : 32;
+  const lines = [];
+  lines.push(centerMono(AppState.settings.businessName || 'AIO POS', cols));
+  const d = new Date(order.createdAt);
+  const dd = String(d.getDate()).padStart(2,'0'), mm = String(d.getMonth()+1).padStart(2,'0'), yy = String(d.getFullYear()).slice(-2);
+  lines.push(centerMono(`Advance Order #${order.id} — ${dd}/${mm}/${yy}`, cols));
+  lines.push(centerMono('Customer: ' + (order.customerName || 'Walk-in'), cols));
+  if(order.customerPhone) lines.push(centerMono(order.customerPhone, cols));
+  lines.push(centerMono('(Approximate Pricing — Not a Real Bill)', cols));
+  lines.push('-'.repeat(cols));
+  const qtyW = 4, totalW = 9, nameW = cols - qtyW - totalW;
+  lines.push(padRightMono('Item', nameW) + padLeftMono('Qty', qtyW) + padLeftMono('Total', totalW));
+  lines.push('-'.repeat(cols));
+  const decimals = AppState.settings.advOrderPriceDecimals ?? 0;
+  (order.items || []).forEach(item => {
+    const totalTxt = (item.qty * item.unitPrice).toFixed(decimals);
+    if(item.name.length > nameW){
+      lines.push(item.name);
+      lines.push(padRightMono('', nameW) + padLeftMono(String(item.qty), qtyW) + padLeftMono(totalTxt, totalW));
+    } else {
+      lines.push(padRightMono(item.name, nameW) + padLeftMono(String(item.qty), qtyW) + padLeftMono(totalTxt, totalW));
+    }
+  });
+  lines.push('-'.repeat(cols));
+  const grandTotal = (order.items || []).reduce((s,i) => s + (i.qty*i.unitPrice), 0);
+  lines.push(padRightMono('Approx. Total', cols - totalW) + padLeftMono('Rs.' + grandTotal.toFixed(decimals), totalW));
+  if(order.note) lines.push('', 'Note: ' + order.note);
+  lines.push('', '', '');
+  return lines.join('\n');
+}
+async function printAdvOrderFastText(){
+  const order = advanceOrdersData.find(o => o.id === currentPreviewAdvOrderId);
+  if(!order){ alert('Order not found.'); return; }
+  await sendPlainTextToPrinter(buildAdvOrderPlainText(order), printPlainTextViaBrowser);
+}
+
+function buildPoPlainText(po, supplier){
+  const cols = (AppState.settings.paperWidth || 80) === 80 ? 42 : 32;
+  const lines = [];
+  const received = po.status === 'received';
+  lines.push(centerMono(AppState.settings.businessName || 'AIO POS', cols));
+  lines.push(centerMono(received ? 'GOODS RECEIVED' : 'PURCHASE ORDER', cols));
+  lines.push(centerMono('Supplier: ' + (supplier?.name || '—'), cols));
+  if(supplier?.phone) lines.push(centerMono(supplier.phone, cols));
+  lines.push(centerMono('Order Date: ' + po.date, cols));
+  if(received && po.receivedDate) lines.push(centerMono('Received: ' + po.receivedDate, cols));
+  lines.push('-'.repeat(cols));
+  const qtyW = 4, totalW = 9, nameW = cols - qtyW - totalW;
+  lines.push(padRightMono('Item', nameW) + padLeftMono('Qty', qtyW) + padLeftMono('Total', totalW));
+  lines.push('-'.repeat(cols));
+  const decimals = AppState.settings.poPriceDecimals ?? 0;
+  (po.items || []).forEach(item => {
+    const totalTxt = (item.qty * item.cost).toFixed(decimals);
+    if(item.name.length > nameW){
+      lines.push(item.name);
+      lines.push(padRightMono('', nameW) + padLeftMono(String(item.qty), qtyW) + padLeftMono(totalTxt, totalW));
+    } else {
+      lines.push(padRightMono(item.name, nameW) + padLeftMono(String(item.qty), qtyW) + padLeftMono(totalTxt, totalW));
+    }
+  });
+  lines.push('-'.repeat(cols));
+  lines.push(padRightMono('Grand Total', cols - totalW) + padLeftMono('Rs.' + (po.total || 0).toFixed(decimals), totalW));
+  lines.push('', '', '');
+  return lines.join('\n');
+}
+async function printPoFastText(){
+  const s = suppliersData.find(sup => (sup.purchaseHistory || [])[currentPreviewPoIdx]);
+  const po = s ? (s.purchaseHistory || [])[currentPreviewPoIdx] : null;
+  if(!po){ alert('Purchase order not found.'); return; }
+  await sendPlainTextToPrinter(buildPoPlainText(po, s), printPlainTextViaBrowser);
+}
+
 function shareInvoiceWhatsapp(){
   const inv = invoicesData.find(i => i.invoice_id === currentPreviewInvoiceId);
   if(!inv) return;

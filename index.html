@@ -4,7 +4,7 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>AIO POS — Skeleton</title>
+<title>AIO POS Direct</title>
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -17,7 +17,7 @@
 <!-- ---------- Google Fonts (7 پیارے انگلش فونٹس — صرف ہلکے وزن، ایپ کو بھاری نہیں کرتے) ---------- -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&family=Roboto:wght@300;400;700&family=Lato:wght@300;400;700&family=Roboto+Condensed:wght@400;700&family=Carlito:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&family=Roboto:wght@300;400;700&family=Lato:wght@300;400;700&family=Roboto+Condensed:wght@400;700&family=Carlito:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
 <style>
   /* ===================== THEME VARIABLES (بعد میں Theme Selector یہاں تبدیل کرے گا) ===================== */
   :root{
@@ -61,6 +61,21 @@
   @keyframes testShimmer{
     0%{ background-position:0% 50%; }
     100%{ background-position:300% 50%; }
+  }
+  .nastaleeqSparkle{
+    font-family:'Noto Nastaliq Urdu', serif;
+    font-size:13px;
+    font-weight:700;
+    background:linear-gradient(90deg, #fb923c, #f472b6, #a78bfa, #38bdf8, #4ade80, #facc15, #fb923c);
+    background-size:300% auto;
+    -webkit-background-clip:text; background-clip:text; color:transparent !important;
+    animation:testShimmer 4s linear infinite, sparklePulse 1.6s ease-in-out infinite;
+    display:inline-block;
+    line-height:1.9;
+  }
+  @keyframes sparklePulse{
+    0%, 100%{ filter:drop-shadow(0 0 1px rgba(255,255,255,.4)); opacity:.92; }
+    50%{ filter:drop-shadow(0 0 5px rgba(255,255,255,.9)); opacity:1; }
   }
   /* --- 🎂 DOB Wheel Picker — Day/Month/Year تین آسان ڈراپ ڈاؤن، پرانا کیلنڈر باکس ہٹا کر (دور کے سال تک بار بار کلک کرنے کی زحمت ختم) --- */
   .dobPicker{display:flex; gap:6px; align-items:center; margin:8px 0;}
@@ -839,13 +854,23 @@
   .homeQuickPanel{
     position:fixed; top:0; left:0; z-index:900;
     background:#fff; border-radius:14px; box-shadow:0 10px 28px rgba(15,23,42,.28); width:230px;
-    max-height:min(70vh, 420px); overflow-y:auto; overflow-x:hidden; opacity:0; pointer-events:none;
+    max-height:min(52vh, 360px); overflow-y:auto; overflow-x:hidden; opacity:0; pointer-events:none;
     transform:scaleY(0.85); transform-origin:top left;
-    transition:opacity .18s ease, transform .18s ease; visibility:hidden; padding:10px 0;
+    transition:opacity .18s ease, transform .18s ease; visibility:hidden; padding:0 0 8px;
   }
   .homeQuickPanel.open{ opacity:1; pointer-events:auto; transform:scaleY(1); visibility:visible; }
+  .homeQuickPanel.wide{ width:262px; }
   .homeQuickPanelLabel{ font-size:11px; font-weight:800; color:var(--muted); text-transform:uppercase; padding:6px 12px 6px; }
   .homeIntensityRow{ display:flex; align-items:center; gap:8px; padding:2px 12px 10px; }
+  .hsBackupRow{ display:flex; gap:8px; padding:8px 12px 6px; }
+  .hsBackupBtn{ flex:1; display:flex; flex-direction:column; align-items:center; gap:5px; padding:10px 6px; border-radius:12px; background:#eef4ff; border:1px solid #dbe6fb; cursor:pointer; font-size:12px; font-weight:700; color:#1e3a8a; }
+  .hsBackupBtn:active{ background:#e0ebff; }
+  .hsTabBar{ display:flex; gap:4px; padding:4px 10px 8px; border-bottom:1px solid #eef1f6; margin-bottom:6px; }
+  .hsTabBtn{ flex:1; border:none; background:#f1f5f9; color:var(--muted); padding:7px 4px; border-radius:8px; font-size:10.5px; font-weight:800; cursor:pointer; text-align:center; line-height:1.3; }
+  .hsTabBtn.active{ background:var(--primary); color:#fff; }
+  .hsChipRow{ display:flex; flex-wrap:wrap; gap:6px; padding:2px 12px 8px; }
+  .hsChip{ border:1.5px solid #dbe1ea; background:#fff; color:var(--text); padding:6px 11px; border-radius:20px; font-size:11.5px; font-weight:700; cursor:pointer; }
+  .hsChip.active{ background:var(--primary); border-color:var(--primary); color:#fff; }
 
   .productCard{background:var(--card); border-radius:var(--radius); box-shadow:0 2px 10px rgba(41,29,10,.07); overflow:hidden;}
   .productHead{display:flex; justify-content:space-between; align-items:center; padding:14px 18px; cursor:pointer;}
@@ -861,37 +886,47 @@
 
   .variantTableWrap{display:none; padding:0 18px 16px;}
   .productCard.open .variantTableWrap{display:block;}
-  /* ---------- خانے پہلے سے بڑے اور آسانی سے ٹچ ہونے والے بنائے گئے (Variant/Stock کالم خاص طور پر بڑھائے گئے) ---------- */
-  table.variantTable{width:100%; border-collapse:collapse; font-size:14px; table-layout:fixed;}
-  table.variantTable th:nth-child(1), table.variantTable td:nth-child(1){width:52px;}
-  table.variantTable th:nth-child(2), table.variantTable td:nth-child(2){width:110px;}
-  table.variantTable th:nth-child(3), table.variantTable td:nth-child(3){width:120px;}
-  table.variantTable th:nth-child(4), table.variantTable td:nth-child(4){width:90px;}
-  table.variantTable th:nth-child(5), table.variantTable td:nth-child(5){width:90px;}
-  table.variantTable th:nth-child(6), table.variantTable td:nth-child(6){width:95px;}
-  table.variantTable th:nth-child(7), table.variantTable td:nth-child(7){width:95px;}
-  table.variantTable th:nth-child(8), table.variantTable td:nth-child(8){width:95px;}
-  table.variantTable th:nth-child(9), table.variantTable td:nth-child(9){width:140px;}
-  table.variantTable th:nth-child(10), table.variantTable td:nth-child(10){width:120px;}
-  table.variantTable th:nth-child(11), table.variantTable td:nth-child(11){width:44px;}
+
+  .variantCardWrap{display:none; padding:0 14px 16px;}
+  .productCard.open .variantCardWrap{display:block;}
+  .vcNavBar{display:flex; align-items:center; justify-content:space-between; background:#eef2ff; border-radius:12px 12px 0 0; padding:10px 14px;}
+  .vcNavTitle{display:flex; align-items:center; gap:8px; font-weight:800; font-size:13px; color:var(--primary-dark);}
+  .vcMainBadge{background:var(--primary); color:#fff; font-size:10px; font-weight:800; padding:2px 8px; border-radius:20px; letter-spacing:.3px;}
+  .vcNavArrows{display:flex; align-items:center; gap:6px;}
+  .vcNavBtn{border:none; background:#fff; color:var(--primary-dark); width:30px; height:30px; border-radius:8px; font-size:15px; font-weight:800; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,.08);}
+  .vcNavBtn:disabled{opacity:.35; cursor:default;}
+  .vcCard{background:var(--card); border:1px solid #e5e9f0; border-top:none; border-radius:0 0 14px 14px; box-shadow:0 4px 16px rgba(41,29,10,.06); overflow:hidden;}
+  .vcPhotoArea{background:#f8fafc; padding:16px; display:flex; justify-content:center; border-bottom:1px solid #eef1f5;}
+  .vcPhotoBox{width:96px; height:96px; border-radius:14px; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#eef2ff; cursor:pointer; border:1.5px dashed #c7d2fe;}
+  .vcPhotoBox img{width:100%; height:100%; object-fit:cover;}
+  .vcPhotoBox .vcPhotoIcon{font-size:26px; color:var(--primary-dark);}
+  .vcFieldsArea{padding:14px 16px 4px; background:#fff;}
+  .vcFieldFull{margin-bottom:12px;}
+  .vcFieldGrid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;}
+  .vcFieldLabel{font-size:10.5px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.3px; margin-bottom:4px; display:block;}
+  .vcFieldWrap input, .vcFieldWrap .vcInputRow{width:100%;}
+  .vcFieldWrap input{padding:9px 10px; border:1px solid #dbe1ea; border-radius:9px; font-size:14px; background:#fafbfc;}
+  .vcFieldWrap input:focus{border-color:var(--primary); background:#fff; outline:none;}
+  .vcFieldWrap.vcNameField input{font-size:15px; font-weight:700;}
+  .vcInputRow{display:flex; gap:6px; align-items:center;}
+  .vcInputRow input{flex:1; min-width:0;}
+  .vcInputRow button{flex:0 0 34px; height:34px; border:1px solid #dbe1ea; background:#fff; border-radius:8px; cursor:pointer;}
+  .vcStockWrap{position:relative;}
+  .vcStockTag{font-size:10px; font-weight:800; margin-top:3px;}
+  .vcActionsRow{display:flex; gap:8px; padding:12px 16px 16px; background:#fff;}
+  .vcActionsRow button{flex:1; border:none; border-radius:10px; padding:10px; font-size:12.5px; font-weight:700; cursor:pointer;}
+  .vcBatchBtn{background:#eef2ff; color:var(--primary-dark);}
+  .vcDeleteBtn{background:#fef2f2; color:var(--danger);}
+  .vcBottomBtns{display:flex; flex-direction:column; gap:8px; margin-top:12px;}
+
+
   .expiryInput.exp-red{background:#fef2f2; border-color:var(--danger); color:var(--danger); font-weight:700;}
   .expiryInput.exp-orange{background:#fff7ed; border-color:#fb923c; color:#c2410c; font-weight:700;}
   .expiryInput.exp-yellow{background:#fefce8; border-color:#eab308; color:#854d0e; font-weight:600;}
-  table.variantTable th{text-align:left; padding:10px 10px; color:var(--muted); font-size:11.5px; text-transform:uppercase; border-bottom:2px solid #eef1f6;}
-  table.variantTable td{padding:10px 8px; border-bottom:1px solid #f1f5f9;}
-  table.variantTable input{width:100%; padding:11px 8px; border:1.5px solid #e2e8f0; border-radius:8px; font-size:14.5px; text-align:center; min-height:42px; box-sizing:border-box;}
-  table.variantTable input:focus{border-color:var(--primary); outline:none; box-shadow:0 0 0 3px rgba(124,58,237,.12);}
-  .lowStockTag{background:#fef2f2; color:var(--danger); font-size:11px; padding:2px 8px; border-radius:10px; font-weight:600;}
-  .negativeStockTag{background:var(--danger); color:#fff; font-size:11px; padding:2px 8px; border-radius:10px; font-weight:800; margin-top:3px; display:inline-block;}
   input.negativeStockInput{color:var(--danger) !important; font-weight:800 !important; border-color:var(--danger) !important;}
-  .variantImgCell{width:52px;}
-  .variantThumb{width:46px; height:46px; border-radius:50%; object-fit:cover; cursor:pointer; border:3px solid var(--primary); box-shadow:0 1px 4px rgba(0,0,0,.15);}
-  .variantImgBtn{width:44px; height:44px; border-radius:8px; border:1.5px dashed #cbd5e1; background:#f8fafc; cursor:pointer; font-size:16px; color:var(--muted);}
   .addVariantBtn{margin-top:10px; padding:8px 16px; background:#eef2ff; color:var(--primary-dark); border:1px dashed var(--primary); border-radius:8px; cursor:pointer; font-size:13px; font-weight:600;}
   .collapseCardBtn{margin-top:8px; width:100%; padding:11px 16px; background:var(--primary); color:#fff; border:none; border-radius:8px; cursor:pointer; font-size:13.5px; font-weight:700; box-shadow:0 2px 6px rgba(0,0,0,.15);}
   .collapseCardBtn:active{opacity:.85;}
-  .variantRowActions{display:flex; gap:6px;}
-  .variantRowActions button{border:none; background:none; cursor:pointer; font-size:14px;}
 
   /* --- New Product Modal --- */
   .modalBoxWide{background:#fff; border-radius:var(--radius); padding:24px; width:420px; max-height:85vh; max-height:85dvh; overflow-y:auto;}
@@ -1697,7 +1732,7 @@
 
     /* --- Tables: عمودی سکرول کی بجائے افقی سکرول تاکہ کالم نہ ٹوٹیں (صرف اصل کارٹ/ویریئنٹ ٹیبل پر — کسی بھی modal کے اندر موجود چھوٹے ٹیبل پر نہیں، ورنہ وہ modal سے باہر نکل جاتا ہے) --- */
     .cartWrap, .variantTableWrap{overflow-x:auto;}
-    .cartWrap table.cartTable, .variantTableWrap table.variantTable{min-width:480px;}
+    .cartWrap table.cartTable{min-width:480px;}
 
     /* --- Modal کے اندر موجود چھوٹے ٹیبلز (جیسے پرچیز آرڈر) اپنی چوڑائی میں ہی سمٹے رہیں، افقی سکرول سے --- */
     .modalBoxWide table.cartTable{min-width:0; width:100%;}
@@ -1978,12 +2013,12 @@
          (فارمیٹ: Weekday + HHMM + am/pm + Day + Month + Year) تاکہ نمبر یاد نہ رہے تو بھی تازگی کی تصدیق ہو سکے ---------- -->
     <div style="display:flex; flex-direction:column; align-items:flex-start; gap:1px;">
       <span id="testBuildLabel" class="mobileBrand testBuildGlow" style="display:inline;">AIO POS Direct</span>
-      <span id="testBuildTimestamp" style="font-size:9.5px; color:rgba(255,255,255,.8); font-weight:800; letter-spacing:.3px;">Mon0627am24aug26</span>
+      <span class="nastaleeqSparkle">جاگدے رہـنا۔۔۔۔ساڈے تے نہ رہـنا</span>
     </div>
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR248MO0627AM</span>
+      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR278TH01</span>
     </div>
   </div>
 
@@ -2039,6 +2074,8 @@
   <!-- ---------- MAIN CONTENT AREA ---------- -->
   <div id="mainArea">
 
+    <div class="homeQuickPanel wide" id="homeSettingsPanel"></div>
+
     <!-- BILLING (Admin + Salesman دونوں کو نظر آتی ہے) — پورا صفحہ صرف پراڈکٹس کے لیے، باقی سب فلوٹنگ کارٹ بار میں -->
     <!-- ===================== 🏠 HOME SCREEN — اصل مین پیج، لاگ ان کے فوراً بعد یہی کھلتا ہے ===================== -->
     <div class="screen" id="screen-home">
@@ -2064,17 +2101,10 @@
           </div>
         </div>
         <div class="hbcIconsRow">
-          <button class="hbcChatBtn" id="hbcFontBtn" onclick="toggleHomeFontPanel(event)" title="Font Style">Aa</button>
-          <button class="hbcChatBtn" id="hbcThemeBtn" onclick="toggleHomeThemePanel(event)" title="Colour Theme">🎨</button>
-          <button class="hbcChatBtn admin-only" onclick="backupToGoogleDrive()" title="Backup to Google Drive">☁️</button>
-          <button class="hbcChatBtn admin-only" onclick="restoreFromGoogleDrive()" title="Restore from Google Drive"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block; margin:0 auto;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+          <button class="hbcChatBtn" id="hbcSettingsBtn" onclick="toggleHomeSettingsPanel(event)" title="Settings">⚙️</button>
           <button class="hbcChatBtn" onclick="shareAppLink()" title="Share This App" style="background:rgba(255,255,255,.9); color:var(--primary-dark);"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" style="display:block;"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg></button>
           <button class="hbcChatBtn" onclick="openDevChat('support')" title="Chat with Developer">💬</button>
         </div>
-        <!-- ---------- 🅰️🎨 ہوم پیج پر فوری Font/Theme پاپ اپ پینل — Settings تک جانے کی ضرورت نہیں ---------- -->
-        <div class="homeQuickPanel" id="homeFontPanel"></div>
-        <div class="homeQuickPanel" id="homeThemePanel"></div>
-        <!-- ---------- ☁️/📥 بٹنوں کے بالکل نیچے، ہمیشہ نظر آنے والی لائن — آخری بیک اپ فائل کا نام ہمیشہ سامنے رہے، غائب ہونے والا پیغام نہیں ---------- -->
         <div class="hbcLastBackupLine admin-only" id="hbcLastBackupLine"></div>
       </div>
       <input type="file" id="businessLogoInput" accept="image/*" style="display:none;" onchange="handleBusinessLogoUpload(event)">
@@ -2115,6 +2145,10 @@
             <button id="modeRetail" class="active" onclick="setSaleMode('retail')">🏷️ Retail</button>
             <button id="modeWholesale" onclick="setSaleMode('wholesale')">📦 Wholesale</button>
           </div>
+
+          <!-- ---------- ⚙️ Settings بٹن — بالکل یہیں Billing اسکرین پر، تاکہ تھیم/فونٹ/Product Card میں
+               کوئی بھی تبدیلی کرتے وقت نیچے موجود اصل پراڈکٹ کارڈز ہمیشہ نظر آتے رہیں ---------- -->
+          <button class="fontsFabMain" id="hbcSettingsBtnBilling" onclick="toggleHomeSettingsPanel(event, 'hbcSettingsBtnBilling')" title="Settings" style="flex:0 0 auto;">⚙️</button>
 
           <!-- ---------- FONTS بٹن — کاؤنٹر سیل کے دائیں طرف، مستقل جگہ پر (پراڈکٹس پر کبھی نہیں چڑھتا) ---------- -->
           <div id="fontsFab" class="fontsFab">
@@ -2714,14 +2748,6 @@
               <button onclick="pickFromGallery()" style="flex:1; background:#374151;">🖼️ Gallery</button>
               <button id="captureBtnMain" onclick="handleCaptureButtonClick()" style="flex:2;">📸 Capture</button>
             </div>
-          </div>
-          <!-- ---------- Remove.bg بیک گراؤنڈ ریموول (پراڈکٹ فوٹو کے لیے) — ایک بٹن API سے خودکار، دوسرا سیدھا ویب سائٹ ---------- -->
-          <div id="removeBgRow" style="display:none; flex-direction:column; gap:6px; margin-top:2px;">
-            <div style="display:flex; gap:8px;">
-              <button id="removeBgApiBtn" onclick="removeBackgroundViaApi()" style="flex:1; background:#7c3aed;">🪄 Remove Background (Auto)</button>
-              <button onclick="openRemoveBgWebsite()" style="flex:1; background:#0ea5e9;">🌐 Open remove.bg</button>
-            </div>
-            <div id="removeBgUsageText" style="color:#cbd5e1; font-size:11px; text-align:center;"></div>
           </div>
           <div id="photoPreviewButtons" style="display:none; gap:8px;">
             <button onclick="retakePhoto()" style="flex:1; background:#374151;">🔄 Retake</button>
@@ -4759,13 +4785,6 @@
 // اب یہ سب localStorage میں مستقل محفوظ ہوتا ہے — بند/دوبارہ کھولنے پر بھی موجود رہے گا۔
 const STORAGE_PREFIX = 'aioPos_';
 
-// ================= Remove.bg API (پراڈکٹ فوٹو کا بیک گراؤنڈ خودکار ریموو کرنے کے لیے) =================
-// نوٹ: فری پلان میں تقریباً 50 تصویریں ماہانہ مفت ہوتی ہیں۔ 50 مکمل ہونے پر API کی جانب سے
-// خطا (403 / کریڈٹ ختم) آئے گی — تب یہ بٹن یوزر کو بتا دے گا اور "🌐 remove.bg کھولیں" بٹن سے
-// ویب سائٹ پر جا کر دستی طور پر بیک گراؤنڈ ریموو کیا جا سکتا ہے۔
-const REMOVE_BG_API_KEY = 'oxacEC9rhoSSGdqSzPtFjQen';
-const REMOVE_BG_API_URL = 'https://api.remove.bg/v1.0/removebg';
-const REMOVE_BG_MONTHLY_LIMIT = 50; // صرف مقامی گنتی/اندازے کے لیے — اصل حد remove.bg اپنے سرور پر لگاتا ہے
 // ================= PIN Hashing (SHA-256) — عارضی حفاظت جب تک Firebase Auth نہیں آتا =================
 // نوٹ: یہ localStorage میں پلین ٹیکسٹ PIN رکھنے سے بہتر ہے، لیکن حتمی حل نہیں —
 // اصل پروڈکشن میں یہ تصدیق سرور سائیڈ (Firebase Auth) پر ہونی چاہیے، کبھی صرف براؤزر میں نہیں۔
@@ -7694,9 +7713,9 @@ function renderBillingProductGrid(){
           ${scaleBadgeHtml}
           ${stockBadgeHtml}
           ${p.image ? `<img src="${p.image}">` : ''}
-          <div class="pgCaption${p.image ? '' : ' pgCaptionNoImg'}">
-            <div class="pgName" style="font-size:${p.image ? nameFontSize : (p.name.length > 18 ? '10px' : p.name.length > 13 ? '11px' : '12.5px')};">${p.name}</div>
-            <div class="pgPrice">${priceLabel}</div>
+          <div class="pgCaption${p.image ? '' : ' pgCaptionNoImg'}" style="${p.image ? `background:${getProductCardCaptionBgFinal()};` : `background:${getProductCardBgFinal()};`}">
+            <div class="pgName" style="font-size:${AppState.settings.productCardNameSize || 13}px; font-weight:${AppState.settings.productCardNameWeight || 800}; font-family:${(FONT_PRESETS.find(f => f.id === AppState.settings.productCardNameFont) || {}).family || 'inherit'}; color:${getProductCardTextColorFinal(!!p.image)};">${p.name}</div>
+            <div class="pgPrice" style="color:${getProductCardTextColorFinal(!!p.image)};">${priceLabel}</div>
           </div>
         </div>
         <div class="pgButtonStrip">
@@ -9872,64 +9891,110 @@ function renderProductList(query = ''){
           <span class="chevron">▶</span>
         </div>
       </div>
-      <div class="variantTableWrap">
-        <table class="variantTable">
-          <thead>
-            <tr>
-              <th>Photo</th><th>Variant</th><th>Barcode</th><th>Purchase</th><th>Retail</th><th>Wholesale</th><th>Stock</th><th>Low Stock Limit</th><th>Expiry Date</th><th>Location</th><th></th>
-            </tr>
-          </thead>
-          <tbody>
-            ${p.variants.map(v => renderVariantRow(p.product_id, v)).join('')}
-          </tbody>
-        </table>
-        <button class="addVariantBtn" onclick="addVariantRow(${p.product_id})">+ Add new variant (e.g. 100g)</button>
-        <button class="collapseCardBtn" onclick="toggleProductCard(${p.product_id})">▲ Done — Collapse this product</button>
+      <div class="variantCardWrap" id="vcWrap-${p.product_id}">
+        ${renderVariantCardSection(p.product_id)}
       </div>
     </div>
   `).join('');
 }
 
-function renderVariantRow(productId, v){
-  const isLow = v.stock <= v.lowStockAt;
+let activeVariantIndexByProduct = new Map();
+
+function renderVariantCardSection(productId){
+  const p = productsData.find(pr => pr.product_id === productId);
+  if(!p || !p.variants.length) return '';
+  let idx = activeVariantIndexByProduct.get(productId) ?? 0;
+  idx = Math.max(0, Math.min(p.variants.length - 1, idx));
+  activeVariantIndexByProduct.set(productId, idx);
+  const v = p.variants[idx];
+  const isLow = v.stock <= v.lowStockAt && v.stock >= 0;
   const isNegative = v.stock < 0;
-  const expiryTier = getExpiryTier(v.expiryDate); // null | 'exp-yellow' | 'exp-orange' | 'exp-red'
+  const expiryTier = getExpiryTier(v.expiryDate);
+
   return `
-    <tr data-variant-id="${v.variant_id}">
-      <td class="variantImgCell">
-        ${v.image
-          ? `<img src="${v.image}" class="variantThumb" onclick="triggerImageUpload(${productId},${v.variant_id})" title="Tap to change photo">`
-          : `<button class="variantImgBtn" onclick="triggerImageUpload(${productId},${v.variant_id})" title="Add photo">📷</button>`}
-      </td>
-      <td><input value="${v.label}" onfocus="this.select()" onchange="updateVariantField(${productId},${v.variant_id},'label',this.value)"></td>
-      <td>
-        <div style="display:flex; gap:4px; align-items:center;">
-          <input id="variantBarcode-${v.variant_id}" value="${v.barcode}" onfocus="this.select()" onchange="updateVariantField(${productId},${v.variant_id},'barcode',this.value)" style="flex:1; min-width:50px;">
-          <button type="button" onclick="openBarcodeScanner('variantBarcode-${v.variant_id}')" title="Scan barcode" style="flex:0 0 28px; padding:2px 0; font-size:13px; border:1px solid #dbe1ea; background:#fff; border-radius:6px; cursor:pointer;">📷</button>
+    <div class="vcNavBar">
+      <div class="vcNavTitle">
+        ${idx === 0 ? `<span class="vcMainBadge">MAIN</span>` : ''}
+        <span>Variant ${idx + 1} of ${p.variants.length}</span>
+      </div>
+      <div class="vcNavArrows">
+        <button class="vcNavBtn" onclick="changeActiveVariant(${productId}, -1)" ${idx === 0 ? 'disabled' : ''} title="Previous variant">◀</button>
+        <button class="vcNavBtn" onclick="changeActiveVariant(${productId}, 1)" ${idx === p.variants.length - 1 ? 'disabled' : ''} title="Next variant">▶</button>
+      </div>
+    </div>
+    <div class="vcCard">
+      <div class="vcPhotoArea">
+        <div class="vcPhotoBox" onclick="triggerImageUpload(${productId},${v.variant_id})" title="Tap to add/change photo">
+          ${v.image ? `<img src="${v.image}">` : `<span class="vcPhotoIcon">📷</span>`}
         </div>
-      </td>
-      <td><input type="number" value="${v.purchase}" onfocus="this.select()" onchange="updateVariantField(${productId},${v.variant_id},'purchase',this.value)"></td>
-      <td><input type="number" value="${v.retail}" onfocus="this.select()" onchange="updateVariantField(${productId},${v.variant_id},'retail',this.value)"></td>
-      <td><input type="number" value="${v.wholesale}" onfocus="this.select()" onchange="updateVariantField(${productId},${v.variant_id},'wholesale',this.value)"></td>
-      <td id="stockCell-${v.variant_id}">
-        <input type="number" value="${v.stock}" class="${isNegative ? 'negativeStockInput' : ''}" id="stockInput-${v.variant_id}" onfocus="this.select()" onchange="updateVariantField(${productId},${v.variant_id},'stock',this.value)">
-        <div class="lowStockTag" id="lowStockTag-${v.variant_id}" style="display:${isLow && !isNegative ? 'block' : 'none'};">⚠️ Low Stock</div>
-        <div class="negativeStockTag" id="negativeStockTag-${v.variant_id}" style="display:${isNegative ? 'block' : 'none'};">❌ Negative Stock</div>
-      </td>
-      <td>
-        <input type="number" value="${v.lowStockAt ?? 0}" onfocus="this.select()" title="Low Stock alert will trigger when stock reaches this number or below" onchange="updateVariantField(${productId},${v.variant_id},'lowStockAt',this.value)">
-      </td>
-      <td>
-        <input type="date" class="expiryInput ${expiryTier || ''}" value="${v.expiryDate || ''}" onchange="updateVariantField(${productId},${v.variant_id},'expiryDate',this.value,this)">
-      </td>
-      <td><input value="${v.location}" placeholder="Aisle/Shelf/Warehouse" onfocus="this.select()" onchange="updateVariantField(${productId},${v.variant_id},'location',this.value)"></td>
-      <td class="variantRowActions">
-        <button title="Manage expiry batches (multiple boxes, different expiry dates)" onclick="openVariantBatchesModal(${productId},${v.variant_id})" style="border:none; background:#eef2ff; color:var(--primary-dark); width:28px; height:28px; border-radius:8px; font-size:13px; cursor:pointer;">🗓️${v.batches && v.batches.length > 1 ? `<span style="display:block; font-size:8px; font-weight:800; margin-top:-2px;">${v.batches.length}</span>` : ''}</button>
-        <button title="Delete" onclick="deleteVariant(${productId},${v.variant_id})">🗑️</button>
-      </td>
-    </tr>
+      </div>
+      <div class="vcFieldsArea">
+        <div class="vcFieldWrap vcFieldFull vcNameField">
+          <span class="vcFieldLabel">Variant Name / Size</span>
+          <input value="${v.label}" onfocus="this.select()" onchange="updateVariantField(${productId},${v.variant_id},'label',this.value)">
+        </div>
+        <div class="vcFieldWrap vcFieldFull">
+          <span class="vcFieldLabel">Barcode</span>
+          <div class="vcInputRow">
+            <input id="variantBarcode-${v.variant_id}" value="${v.barcode}" onfocus="this.select()" onchange="updateVariantField(${productId},${v.variant_id},'barcode',this.value)">
+            <button type="button" onclick="openBarcodeScanner('variantBarcode-${v.variant_id}')" title="Scan barcode">📷</button>
+          </div>
+        </div>
+        <div class="vcFieldGrid">
+          <div class="vcFieldWrap">
+            <span class="vcFieldLabel">Purchase Price</span>
+            <input type="number" value="${v.purchase}" onfocus="this.select()" onchange="updateVariantField(${productId},${v.variant_id},'purchase',this.value)">
+          </div>
+          <div class="vcFieldWrap">
+            <span class="vcFieldLabel">Retail Price</span>
+            <input type="number" value="${v.retail}" onfocus="this.select()" onchange="updateVariantField(${productId},${v.variant_id},'retail',this.value)">
+          </div>
+          <div class="vcFieldWrap">
+            <span class="vcFieldLabel">Wholesale Price</span>
+            <input type="number" value="${v.wholesale}" onfocus="this.select()" onchange="updateVariantField(${productId},${v.variant_id},'wholesale',this.value)">
+          </div>
+          <div class="vcFieldWrap vcStockWrap">
+            <span class="vcFieldLabel">Stock</span>
+            <input type="number" value="${v.stock}" class="${isNegative ? 'negativeStockInput' : ''}" id="stockInput-${v.variant_id}" onfocus="this.select()" onchange="updateVariantField(${productId},${v.variant_id},'stock',this.value)">
+            <div class="vcStockTag" id="lowStockTag-${v.variant_id}" style="display:${isLow ? 'block' : 'none'}; color:#b45309;">⚠️ Low Stock</div>
+            <div class="vcStockTag" id="negativeStockTag-${v.variant_id}" style="display:${isNegative ? 'block' : 'none'}; color:var(--danger);">❌ Negative Stock</div>
+          </div>
+          <div class="vcFieldWrap">
+            <span class="vcFieldLabel">Low Stock Alert At</span>
+            <input type="number" value="${v.lowStockAt ?? 0}" onfocus="this.select()" title="Low Stock alert will trigger when stock reaches this number or below" onchange="updateVariantField(${productId},${v.variant_id},'lowStockAt',this.value)">
+          </div>
+          <div class="vcFieldWrap">
+            <span class="vcFieldLabel">Expiry Date</span>
+            <input type="date" class="expiryInput ${expiryTier || ''}" value="${v.expiryDate || ''}" onchange="updateVariantField(${productId},${v.variant_id},'expiryDate',this.value,this)">
+          </div>
+        </div>
+        <div class="vcFieldWrap vcFieldFull">
+          <span class="vcFieldLabel">Location (Aisle / Shelf / Warehouse)</span>
+          <input value="${v.location}" placeholder="e.g. Aisle 4, Shelf B" onfocus="this.select()" onchange="updateVariantField(${productId},${v.variant_id},'location',this.value)">
+        </div>
+      </div>
+      <div class="vcActionsRow">
+        <button class="vcBatchBtn" onclick="openVariantBatchesModal(${productId},${v.variant_id})">🗓️ Batches${v.batches && v.batches.length > 1 ? ` (${v.batches.length})` : ''}</button>
+        <button class="vcDeleteBtn" onclick="deleteVariant(${productId},${v.variant_id})">🗑️ Delete This Variant</button>
+      </div>
+    </div>
+    <div class="vcBottomBtns">
+      <button class="addVariantBtn" onclick="addVariantRow(${productId})">+ Add New Variant (e.g. 100g)</button>
+      <button class="collapseCardBtn" onclick="toggleProductCard(${productId})">▲ Done — Collapse this product</button>
+    </div>
   `;
 }
+
+function changeActiveVariant(productId, delta){
+  const p = productsData.find(pr => pr.product_id === productId);
+  if(!p) return;
+  let idx = activeVariantIndexByProduct.get(productId) ?? 0;
+  idx = Math.max(0, Math.min(p.variants.length - 1, idx + delta));
+  activeVariantIndexByProduct.set(productId, idx);
+  const wrap = document.getElementById(`vcWrap-${productId}`);
+  if(wrap) wrap.innerHTML = renderVariantCardSection(productId);
+}
+
 
 // ---------- ایکسپائری تاریخ سے رنگ کا درجہ (tier) نکالیں: 30 دن=پیلا, 15=نارنجی, 7 یا کم=سرخ ----------
 function getExpiryTier(expiryDate){
@@ -10318,7 +10383,6 @@ async function startPhotoCapture(mode, defaultShape, title){
   document.getElementById('itemPhotoStaticImg').src = '';
   document.getElementById('photoPreviewStep').style.display = 'none';
   document.getElementById('photoPreviewButtons').style.display = 'none';
-  document.getElementById('removeBgRow').style.display = 'none';
   document.getElementById('photoCaptureControls').style.display = 'flex';
   document.getElementById('brightnessSlider').value = 125;
   document.getElementById('shapeToggleRow').style.display = 'flex';
@@ -10505,10 +10569,6 @@ function showPhotoPreview(){
   document.getElementById('photoPreviewStep').style.display = 'flex';
   document.getElementById('photoPreviewButtons').style.display = 'flex';
   document.getElementById('photoPreviewImg').src = capturedPhotoDataUrl;
-  // ---------- Remove.bg بٹن صرف پراڈکٹ فوٹو کے لیے دکھائیں (کسٹمر/سپلائر پروفائل فوٹو کے لیے نہیں) ----------
-  const showRemoveBg = (photoCaptureMode !== 'party');
-  document.getElementById('removeBgRow').style.display = showRemoveBg ? 'flex' : 'none';
-  if(showRemoveBg) updateRemoveBgUsageText();
 }
 
 function retakePhoto(){
@@ -10573,126 +10633,6 @@ function confirmPhoto(){
     document.getElementById(`pcard-${itemPhotoTargetProductId}`)?.classList.add('open');
   }
   closeItemPhotoCapture();
-}
-
-// ================= Remove.bg — بیک گراؤنڈ ریموول (پراڈکٹ فوٹو) =================
-
-// ---------- اس مہینے کی گنتی کے لیے کلید (ہر نئے مہینے میں خودکار ری سیٹ ہو جاتی ہے) ----------
-function removeBgUsageKey(){
-  const now = new Date();
-  return `removeBgUsage_${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-}
-function getRemoveBgUsageCount(){
-  return loadFromStorage(removeBgUsageKey(), 0);
-}
-function incrementRemoveBgUsageCount(){
-  const n = getRemoveBgUsageCount() + 1;
-  saveToStorage(removeBgUsageKey(), n);
-  return n;
-}
-function updateRemoveBgUsageText(){
-  const used = getRemoveBgUsageCount();
-  const remaining = Math.max(0, REMOVE_BG_MONTHLY_LIMIT - used);
-  const el = document.getElementById('removeBgUsageText');
-  if(el) el.textContent = `Approximately ${remaining}/${REMOVE_BG_MONTHLY_LIMIT} free background removals left this month`;
-}
-
-// ---------- data URL کو Blob میں تبدیل کریں (API کو فائل بھیجنے کے لیے) ----------
-function dataUrlToBlob(dataUrl){
-  const parts = dataUrl.split(',');
-  const mimeMatch = parts[0].match(/:(.*?);/);
-  const mime = mimeMatch ? mimeMatch[1] : 'image/png';
-  const binary = atob(parts[1]);
-  const bytes = new Uint8Array(binary.length);
-  for(let i=0; i<binary.length; i++) bytes[i] = binary.charCodeAt(i);
-  return new Blob([bytes], {type: mime});
-}
-
-// ---------- remove.bg ویب سائٹ سیدھی نئے ٹیب میں کھولیں (فری کریڈٹ ختم ہونے پر یا دستی استعمال کے لیے) ----------
-// مسئلہ: ابھی ابھی کھینچی گئی تصویر صرف ایپ کی میموری میں ہوتی ہے، فون کی گیلری میں محفوظ نہیں ہوتی —
-// اس لیے remove.bg کے اپ لوڈ باکس میں وہ نظر ہی نہیں آتی۔ حل: پہلے یہ تصویر خودکار طور پر
-// فون کی Downloads/Gallery میں محفوظ کریں، پھر remove.bg کھولیں۔ نتیجہ واپس لانے کے لیے
-// (چونکہ کوئی ویب سائٹ خودکار طور پر ہماری ایپ کو فائل واپس نہیں بھیج سکتی) — remove.bg سے
-// ڈاؤن لوڈ کرنے کے بعد "Retake" ➜ "🖼️ Gallery" سے وہی نئی (بیک گراؤنڈ ریموو شدہ) تصویر منتخب کریں،
-// وہ اسی کراپ/پریویو اسکرین میں آ کر لگ جائے گی۔
-function openRemoveBgWebsite(){
-  if(!capturedPhotoDataUrl){
-    window.open('https://www.remove.bg/upload', '_blank');
-    return;
-  }
-
-  const filename = `product_photo_${Date.now()}.jpg`;
-  const link = document.createElement('a');
-  link.href = capturedPhotoDataUrl;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-
-  alert(
-    `✅ This photo has been saved to your phone's Downloads/Gallery as "${filename}".\n\n` +
-    `Now do these 3 steps:\n` +
-    `1) Go to remove.bg and upload this same photo from your Downloads folder\n` +
-    `2) After the background is removed, download the result from there\n` +
-    `3) Come back to this screen and tap "🔄 Retake" then "🖼️ Gallery", and select that same newly downloaded (background-removed) photo — it will drop straight into place here.`
-  );
-
-  setTimeout(() => {
-    window.open('https://www.remove.bg/upload', '_blank');
-  }, 300);
-}
-
-// ---------- API کے ذریعے خودکار بیک گراؤنڈ ریموول — نتیجہ سیدھا پریویو میں لگ جاتا ہے، پھر "Use This Photo" سے محفوظ کریں ----------
-async function removeBackgroundViaApi(){
-  if(!capturedPhotoDataUrl){ alert('Please capture or select a photo first.'); return; }
-
-  const btn = document.getElementById('removeBgApiBtn');
-  const originalLabel = btn.textContent;
-  btn.disabled = true;
-  btn.textContent = '⏳ Removing background…';
-
-  try{
-    const formData = new FormData();
-    formData.append('image_file', dataUrlToBlob(capturedPhotoDataUrl), 'photo.png');
-    formData.append('size', 'auto');
-
-    const response = await fetch(REMOVE_BG_API_URL, {
-      method: 'POST',
-      headers: { 'X-Api-Key': REMOVE_BG_API_KEY },
-      body: formData
-    });
-
-    if(!response.ok){
-      let reason = `Error ${response.status}`;
-      try{
-        const errJson = await response.json();
-        if(errJson?.errors?.[0]?.title) reason = errJson.errors[0].title;
-      }catch(e){}
-      if(response.status === 402 || response.status === 403){
-        alert('Looks like this month\'s 50 free photos are used up (or there\'s an API key issue).\nUse the "🌐 Open remove.bg" button to remove the background manually on their website.\n\nDetails: ' + reason);
-      } else {
-        alert('There was a problem removing the background:\n' + reason);
-      }
-      return;
-    }
-
-    const resultBlob = await response.blob();
-    const reader = new FileReader();
-    reader.onload = () => {
-      capturedPhotoDataUrl = reader.result; // ---------- بیک گراؤنڈ ریموو شدہ تصویر اب اصل تصویر کی جگہ لے لے گی ----------
-      document.getElementById('photoPreviewImg').src = capturedPhotoDataUrl;
-      incrementRemoveBgUsageCount();
-      updateRemoveBgUsageText();
-    };
-    reader.readAsDataURL(resultBlob);
-
-  }catch(e){
-    console.warn('Remove.bg API error:', e);
-    alert('There was an internet or API problem. Try the manual method with the "🌐 Open remove.bg" button.');
-  }finally{
-    btn.disabled = false;
-    btn.textContent = originalLabel;
-  }
 }
 
 // ---------- منتخب کی گئی تصویر (گیلری یا فون کیمرہ) کو اسی مکمل ایڈٹ اسکرین میں لوڈ کریں — کراپ فریم، پنچ زوم/ڈریگ، شکل، برائٹنس، Enhance اور لائیو "پراڈکٹ کارڈ" پریویو سب یہاں بھی کام کریں گے ----------
@@ -10896,6 +10836,7 @@ function addVariantRow(productId){
     label: 'New Variant', barcode: '', purchase:0, retail:0, wholesale:0, stock:0, lowStockAt:5, location:'', image:null, expiryDate:''
   });
 
+  activeVariantIndexByProduct.set(productId, product.variants.length - 1);
   openProductCards.add(productId);
   rerenderProductListPreserveScroll();
 }
@@ -13527,9 +13468,9 @@ function renderPoBrowseList(){
           ${qtyBadgeHtml}
           ${stockBadgeHtml}
           ${p.image ? `<img src="${p.image}">` : ''}
-          <div class="pgCaption${p.image ? '' : ' pgCaptionNoImg'}">
-            <div class="pgName" style="font-size:${p.image ? nameFontSize : (p.name.length > 18 ? '10px' : p.name.length > 13 ? '11px' : '12.5px')};">${p.name}</div>
-            <div class="pgPrice">${priceLabel}</div>
+          <div class="pgCaption${p.image ? '' : ' pgCaptionNoImg'}" style="${p.image ? `background:${getProductCardCaptionBgFinal()};` : `background:${getProductCardBgFinal()};`}">
+            <div class="pgName" style="font-size:${AppState.settings.productCardNameSize || 13}px; font-weight:${AppState.settings.productCardNameWeight || 800}; font-family:${(FONT_PRESETS.find(f => f.id === AppState.settings.productCardNameFont) || {}).family || 'inherit'}; color:${getProductCardTextColorFinal(!!p.image)};">${p.name}</div>
+            <div class="pgPrice" style="color:${getProductCardTextColorFinal(!!p.image)};">${priceLabel}</div>
           </div>
         </div>
         <div class="pgButtonStrip">
@@ -13973,9 +13914,9 @@ function renderAdvOrderProductGrid(){
         <div class="pgImageArea${p.image ? '' : ' pgNoImage'}">
           ${qtyBadgeHtml}
           ${p.image ? `<img src="${p.image}">` : ''}
-          <div class="pgCaption${p.image ? '' : ' pgCaptionNoImg'}">
-            <div class="pgName" style="font-size:${p.image ? nameFontSize : (p.name.length > 18 ? '10px' : p.name.length > 13 ? '11px' : '12.5px')};">${p.name}</div>
-            <div class="pgPrice">${priceLabel}</div>
+          <div class="pgCaption${p.image ? '' : ' pgCaptionNoImg'}" style="${p.image ? `background:${getProductCardCaptionBgFinal()};` : `background:${getProductCardBgFinal()};`}">
+            <div class="pgName" style="font-size:${AppState.settings.productCardNameSize || 13}px; font-weight:${AppState.settings.productCardNameWeight || 800}; font-family:${(FONT_PRESETS.find(f => f.id === AppState.settings.productCardNameFont) || {}).family || 'inherit'}; color:${getProductCardTextColorFinal(!!p.image)};">${p.name}</div>
+            <div class="pgPrice" style="color:${getProductCardTextColorFinal(!!p.image)};">${priceLabel}</div>
           </div>
         </div>
         <div class="pgButtonStrip">
@@ -19254,8 +19195,9 @@ document.addEventListener('click', (e) => {
    🅰️🎨 ہوم پیج Font/Theme کوئیک پینل — بزنس نیم کے نیچے دو گول بٹن،
    دبانے پر فوراً وہیں پاپ اپ کھلتا ہے، Settings تک جانے کی ضرورت نہیں
    ===================================================================== */
-let homeFontPanelOpen = false;
-let homeThemePanelOpen = false;
+let homeSettingsPanelOpen = false;
+let homeSettingsActiveTab = 'theme';
+let homeSettingsTriggerBtnId = 'hbcSettingsBtnBilling';
 
 function positionHomeQuickPanel(btnId, panelId){
   const btn = document.getElementById(btnId);
@@ -19276,30 +19218,42 @@ function positionHomeQuickPanel(btnId, panelId){
   panel.style.left = left + 'px';
 }
 
-function renderHomeFontPanel(){
-  const panel = document.getElementById('homeFontPanel');
-  if(!panel) return;
-  panel.innerHTML = '<div class="homeQuickPanelLabel">Font Style</div>' + FONT_PRESETS.map(f => `
-    <div class="fontOptionRow ${AppState.settings.fontId === f.id ? 'active' : ''}"
-         data-font="${f.id}" onclick="applyFont('${f.id}');">
-      <span class="fontPreviewText" style="font-family:${f.family};">${f.label}</span>
-      <span class="fontCheckMark">✓</span>
-    </div>
-  `).join('');
+const DRIVE_MINI_ICON = `<svg viewBox="0 0 40 34" width="20" height="17"><polygon points="14,2 26,2 38,22 26,22" fill="#34a853"/><polygon points="8,32 20,32 26,22 14,22" fill="#ffbc04"/><polygon points="2,22 14,2 20,12 8,32" fill="#4285f4"/></svg>`;
+
+function switchHomeSettingsTab(tab){
+  homeSettingsActiveTab = tab;
+  renderHomeSettingsPanel();
 }
 
-function renderHomeThemePanel(){
-  const panel = document.getElementById('homeThemePanel');
+function renderHomeSettingsPanel(){
+  const panel = document.getElementById('homeSettingsPanel');
   if(!panel) return;
+  const isAdmin = document.body.classList.contains('role-admin');
   const intensity = AppState.settings.themeIntensity || 0;
-  panel.innerHTML = `
-    <div class="homeQuickPanelLabel">Colour Theme</div>
-    <div class="themeSwatchGrid" style="padding:2px 12px 10px;">
+
+  const backupRowHtml = isAdmin ? `
+    <div class="hsBackupRow">
+      <div class="hsBackupBtn" onclick="backupToGoogleDrive(); closeHomeSettingsPanel();">${DRIVE_MINI_ICON}<span>Backup</span></div>
+      <div class="hsBackupBtn" onclick="restoreFromGoogleDrive(); closeHomeSettingsPanel();">${DRIVE_MINI_ICON}<span>Restore</span></div>
+    </div>` : '';
+
+  const tabBarHtml = `
+    <div class="hsTabBar">
+      <button class="hsTabBtn ${homeSettingsActiveTab === 'theme' ? 'active' : ''}" onclick="switchHomeSettingsTab('theme')">🎨<br>Theme</button>
+      <button class="hsTabBtn ${homeSettingsActiveTab === 'font' ? 'active' : ''}" onclick="switchHomeSettingsTab('font')">🔤<br>App Font</button>
+      <button class="hsTabBtn ${homeSettingsActiveTab === 'card' ? 'active' : ''}" onclick="switchHomeSettingsTab('card')">🏷️<br>Card</button>
+    </div>`;
+
+  let tabContentHtml = '';
+
+  if(homeSettingsActiveTab === 'theme'){
+    tabContentHtml = `
+    <div class="themeSwatchGrid" style="padding:2px 12px 8px;">
       ${THEME_PRESETS.map(t => `
         <div class="themeSwatch ${t.id === AppState.settings.themeId ? 'active' : ''}"
              data-theme="${t.id}" title="${t.name}"
              style="background:${t.primary};"
-             onclick="applyTheme('${t.id}'); renderHomeThemePanel();"></div>
+             onclick="applyTheme('${t.id}'); renderHomeSettingsPanel();"></div>
       `).join('')}
     </div>
     <div class="homeQuickPanelLabel">Shade — Light ↔ Dark</div>
@@ -19307,50 +19261,171 @@ function renderHomeThemePanel(){
       <span style="font-size:15px;">🔅</span>
       <input type="range" min="-40" max="40" step="2" value="${intensity}" oninput="adjustThemeIntensity(this.value)" style="flex:1;">
       <span style="font-size:15px;">🔆</span>
+    </div>`;
+  }
+
+  else if(homeSettingsActiveTab === 'font'){
+    tabContentHtml = `
+    <div class="hsChipRow">
+      ${FONT_PRESETS.map(f => `
+        <button class="hsChip ${AppState.settings.fontId === f.id ? 'active' : ''}" style="font-family:${f.family};" onclick="applyFont('${f.id}'); renderHomeSettingsPanel();">${f.label}</button>
+      `).join('')}
+    </div>`;
+  }
+
+  else if(homeSettingsActiveTab === 'card'){
+    const pcnSize = AppState.settings.productCardNameSize || 13;
+    const pcnWeight = AppState.settings.productCardNameWeight || 800;
+    const pcnBg = AppState.settings.productCardNameBg || '#eef2ff';
+    const pcnBgIntensity = AppState.settings.productCardNameBgIntensity || 0;
+    const pcnColor = AppState.settings.productCardNameColor || '#166534';
+    const pcnFontId = AppState.settings.productCardNameFont || '';
+    tabContentHtml = `
+    <div style="padding:2px 12px 2px; font-size:11px; color:var(--muted);">Text size — ${pcnSize}px</div>
+    <div style="padding:0 12px 6px;">
+      <input type="range" min="8" max="22" step="1" value="${pcnSize}" oninput="adjustProductCardNameSize(this.value); this.previousElementSibling.textContent='Text size — '+this.value+'px';" style="width:100%;">
     </div>
-  `;
+    <div style="padding:2px 12px 2px; font-size:11px; color:var(--muted);">Boldness — ${pcnWeight}</div>
+    <div style="padding:0 12px 6px;">
+      <input type="range" min="400" max="900" step="100" value="${pcnWeight}" oninput="adjustProductCardNameWeight(this.value); this.previousElementSibling.textContent='Boldness — '+this.value;" style="width:100%;">
+    </div>
+    <div class="homeQuickPanelLabel" style="padding-bottom:2px;">Writing Style</div>
+    <div class="hsChipRow" style="padding-top:0;">
+      <button class="hsChip ${!pcnFontId ? 'active' : ''}" onclick="adjustProductCardNameFont(''); renderHomeSettingsPanel();">Default</button>
+      ${FONT_PRESETS.map(f => `
+        <button class="hsChip ${pcnFontId === f.id ? 'active' : ''}" style="font-family:${f.family};" onclick="adjustProductCardNameFont('${f.id}'); renderHomeSettingsPanel();">${f.label}</button>
+      `).join('')}
+    </div>
+    <div style="padding:4px 12px 2px; font-size:11px; color:var(--muted);">Background colour</div>
+    <div style="display:flex; align-items:center; gap:8px; padding:0 12px 6px;">
+      <input id="productCardNameBgPicker" type="color" value="${pcnBg}" oninput="adjustProductCardNameBg(this.value)" style="width:36px; height:32px; border:none; border-radius:7px; padding:0; cursor:pointer;">
+      <button class="hsBackupBtn" style="flex:1; flex-direction:row; gap:6px; padding:8px;" onclick="resetProductCardNameBg(); renderHomeSettingsPanel();">↺ Reset</button>
+    </div>
+    <div style="padding:2px 12px 2px; font-size:11px; color:var(--muted);">Background Shade — Light ↔ Dark</div>
+    <div class="homeIntensityRow">
+      <span style="font-size:15px;">🔅</span>
+      <input type="range" min="-40" max="40" step="2" value="${pcnBgIntensity}" oninput="adjustProductCardNameBgIntensity(this.value)" style="flex:1;">
+      <span style="font-size:15px;">🔆</span>
+    </div>
+    <div style="padding:4px 12px 2px; font-size:11px; color:var(--muted);">Text (Writing) Colour</div>
+    <div style="display:flex; align-items:center; gap:8px; padding:0 12px 8px;">
+      <input type="color" value="${pcnColor}" oninput="adjustProductCardNameColor(this.value)" style="width:36px; height:32px; border:none; border-radius:7px; padding:0; cursor:pointer;">
+      <button class="hsBackupBtn" style="flex:1; flex-direction:row; gap:6px; padding:8px;" onclick="resetProductCardNameColor(); renderHomeSettingsPanel();">↺ Auto</button>
+    </div>`;
+  }
+
+  panel.innerHTML = backupRowHtml + tabBarHtml + tabContentHtml;
 }
 
-function toggleHomeFontPanel(e){
+function toggleHomeSettingsPanel(e, btnId){
   if(e) e.stopPropagation();
-  closeHomeThemePanel();
-  homeFontPanelOpen = !homeFontPanelOpen;
-  const panel = document.getElementById('homeFontPanel');
-  if(panel) panel.classList.toggle('open', homeFontPanelOpen);
-  if(homeFontPanelOpen){ renderHomeFontPanel(); positionHomeQuickPanel('hbcFontBtn', 'homeFontPanel'); }
+  homeSettingsTriggerBtnId = btnId || (e && e.currentTarget && e.currentTarget.id) || homeSettingsTriggerBtnId;
+  homeSettingsPanelOpen = !homeSettingsPanelOpen;
+  const panel = document.getElementById('homeSettingsPanel');
+  if(panel) panel.classList.toggle('open', homeSettingsPanelOpen);
+  if(homeSettingsPanelOpen){ renderHomeSettingsPanel(); positionHomeQuickPanel(homeSettingsTriggerBtnId, 'homeSettingsPanel'); }
 }
-function closeHomeFontPanel(){
-  homeFontPanelOpen = false;
-  document.getElementById('homeFontPanel')?.classList.remove('open');
-}
-function toggleHomeThemePanel(e){
-  if(e) e.stopPropagation();
-  closeHomeFontPanel();
-  homeThemePanelOpen = !homeThemePanelOpen;
-  const panel = document.getElementById('homeThemePanel');
-  if(panel) panel.classList.toggle('open', homeThemePanelOpen);
-  if(homeThemePanelOpen){ renderHomeThemePanel(); positionHomeQuickPanel('hbcThemeBtn', 'homeThemePanel'); }
-}
-function closeHomeThemePanel(){
-  homeThemePanelOpen = false;
-  document.getElementById('homeThemePanel')?.classList.remove('open');
+function closeHomeSettingsPanel(){
+  homeSettingsPanelOpen = false;
+  document.getElementById('homeSettingsPanel')?.classList.remove('open');
 }
 document.addEventListener('click', (e) => {
-  const fp = document.getElementById('homeFontPanel');
-  const fb = document.getElementById('hbcFontBtn');
-  if(homeFontPanelOpen && fp && !fp.contains(e.target) && fb && !fb.contains(e.target)) closeHomeFontPanel();
-  const tp = document.getElementById('homeThemePanel');
-  const tb = document.getElementById('hbcThemeBtn');
-  if(homeThemePanelOpen && tp && !tp.contains(e.target) && tb && !tb.contains(e.target)) closeHomeThemePanel();
+  const sp = document.getElementById('homeSettingsPanel');
+  const sb1 = document.getElementById('hbcSettingsBtn');
+  const sb2 = document.getElementById('hbcSettingsBtnBilling');
+  const clickedTrigger = (sb1 && sb1.contains(e.target)) || (sb2 && sb2.contains(e.target));
+  if(homeSettingsPanelOpen && sp && !sp.contains(e.target) && !clickedTrigger) closeHomeSettingsPanel();
 });
 window.addEventListener('resize', () => {
-  if(homeFontPanelOpen) positionHomeQuickPanel('hbcFontBtn', 'homeFontPanel');
-  if(homeThemePanelOpen) positionHomeQuickPanel('hbcThemeBtn', 'homeThemePanel');
+  if(homeSettingsPanelOpen) positionHomeQuickPanel(homeSettingsTriggerBtnId, 'homeSettingsPanel');
 });
 window.addEventListener('scroll', () => {
-  if(homeFontPanelOpen) positionHomeQuickPanel('hbcFontBtn', 'homeFontPanel');
-  if(homeThemePanelOpen) positionHomeQuickPanel('hbcThemeBtn', 'homeThemePanel');
+  if(homeSettingsPanelOpen) positionHomeQuickPanel(homeSettingsTriggerBtnId, 'homeSettingsPanel');
 }, true);
+
+// ---------- 🏷️ پراڈکٹ کارڈ کا انداز — سائز/موٹائی/فونٹ/رنگ/پس منظر، سب کچھ خود منتخب کریں ----------
+function adjustProductCardNameSize(px){
+  const clamped = Math.max(8, Math.min(22, Number(px) || 13));
+  AppState.settings.productCardNameSize = clamped;
+  persistAllData();
+  try{ if(typeof renderBillingProductGrid === 'function') renderBillingProductGrid(); }catch(e){}
+  try{ if(typeof renderPoBrowseList === 'function') renderPoBrowseList(); }catch(e){}
+  try{ if(typeof renderAdvOrderProductGrid === 'function') renderAdvOrderProductGrid(); }catch(e){}
+}
+function adjustProductCardNameWeight(weight){
+  AppState.settings.productCardNameWeight = Math.max(400, Math.min(900, Number(weight) || 800));
+  persistAllData();
+  try{ if(typeof renderBillingProductGrid === 'function') renderBillingProductGrid(); }catch(e){}
+  try{ if(typeof renderPoBrowseList === 'function') renderPoBrowseList(); }catch(e){}
+  try{ if(typeof renderAdvOrderProductGrid === 'function') renderAdvOrderProductGrid(); }catch(e){}
+}
+function adjustProductCardNameFont(fontId){
+  AppState.settings.productCardNameFont = fontId || null;
+  persistAllData();
+  try{ if(typeof renderBillingProductGrid === 'function') renderBillingProductGrid(); }catch(e){}
+  try{ if(typeof renderPoBrowseList === 'function') renderPoBrowseList(); }catch(e){}
+  try{ if(typeof renderAdvOrderProductGrid === 'function') renderAdvOrderProductGrid(); }catch(e){}
+}
+function adjustProductCardNameBg(hex){
+  AppState.settings.productCardNameBg = hex;
+  persistAllData();
+  try{ if(typeof renderBillingProductGrid === 'function') renderBillingProductGrid(); }catch(e){}
+  try{ if(typeof renderPoBrowseList === 'function') renderPoBrowseList(); }catch(e){}
+  try{ if(typeof renderAdvOrderProductGrid === 'function') renderAdvOrderProductGrid(); }catch(e){}
+}
+function adjustProductCardNameBgIntensity(val){
+  AppState.settings.productCardNameBgIntensity = Math.max(-40, Math.min(40, Number(val) || 0));
+  persistAllData();
+  try{ if(typeof renderBillingProductGrid === 'function') renderBillingProductGrid(); }catch(e){}
+  try{ if(typeof renderPoBrowseList === 'function') renderPoBrowseList(); }catch(e){}
+  try{ if(typeof renderAdvOrderProductGrid === 'function') renderAdvOrderProductGrid(); }catch(e){}
+}
+function adjustProductCardNameColor(hex){
+  AppState.settings.productCardNameColor = hex;
+  persistAllData();
+  try{ if(typeof renderBillingProductGrid === 'function') renderBillingProductGrid(); }catch(e){}
+  try{ if(typeof renderPoBrowseList === 'function') renderPoBrowseList(); }catch(e){}
+  try{ if(typeof renderAdvOrderProductGrid === 'function') renderAdvOrderProductGrid(); }catch(e){}
+}
+function resetProductCardNameColor(){
+  AppState.settings.productCardNameColor = null;
+  persistAllData();
+  try{ if(typeof renderBillingProductGrid === 'function') renderBillingProductGrid(); }catch(e){}
+}
+function resetProductCardNameBg(){
+  AppState.settings.productCardNameBg = null;
+  AppState.settings.productCardNameBgIntensity = 0;
+  const picker = document.getElementById('productCardNameBgPicker');
+  if(picker) picker.value = '#eef2ff';
+  persistAllData();
+  try{ if(typeof renderBillingProductGrid === 'function') renderBillingProductGrid(); }catch(e){}
+}
+function getProductCardBgFinal(){
+  const base = AppState.settings.productCardNameBg;
+  const intensity = AppState.settings.productCardNameBgIntensity || 0;
+  if(!base && !intensity) return 'linear-gradient(145deg,#eef2ff,#e0e7ff)';
+  const effectiveBase = base || '#eef2ff';
+  return intensity ? shiftColorLightness(effectiveBase, intensity) : effectiveBase;
+}
+function getProductCardTextColorFinal(overPhoto){
+  if(AppState.settings.productCardNameColor) return AppState.settings.productCardNameColor;
+  return overPhoto ? '#ffffff' : 'var(--primary-dark)';
+}
+function hexToRgba(hex, alpha){
+  const h = (hex || '#000000').replace('#', '');
+  const full = h.length === 3 ? h.split('').map(c => c + c).join('') : h;
+  const r = parseInt(full.substring(0,2), 16) || 0;
+  const g = parseInt(full.substring(2,4), 16) || 0;
+  const b = parseInt(full.substring(4,6), 16) || 0;
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+function getProductCardCaptionBgFinal(){
+  const base = AppState.settings.productCardNameBg;
+  if(!base) return 'linear-gradient(transparent, rgba(0,0,0,.72) 65%)';
+  const intensity = AppState.settings.productCardNameBgIntensity || 0;
+  const finalHex = intensity ? shiftColorLightness(base, intensity) : base;
+  return `linear-gradient(transparent, ${hexToRgba(finalHex, .78)} 65%)`;
+}
 
 // ---------- Settings اسکرین کھلتے وقت سب کچھ رینڈر + پرنٹر خودکار تلاش ----------
 // ---------- Settings میں 💾 Storage Used کارڈ اپڈیٹ کریں — تاکہ صارف کو ہمیشہ حقیقی اندازہ رہے کتنی جگہ استعمال ہو چکی ----------

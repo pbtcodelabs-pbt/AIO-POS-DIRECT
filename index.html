@@ -2093,7 +2093,7 @@
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR18SEPFR1231AM</span>
+      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR18SEPFR1257AM</span>
     </div>
   </div>
 
@@ -5782,6 +5782,81 @@ const FIREBASE_PROJECT_ID = 'aio-pos-backup';
 const FIREBASE_API_KEY = 'AIzaSyBdoyFrqJ67OonYVIoCM6rjeBDI1hZBGKE';
 const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents`;
 
+/* =====================================================================
+   🔐 Firebase Anonymous Auth — صرف "licenses" کلیکشن میں لکھنے (Developer Panel سے
+   کوڈ جنریٹ/معطل/ڈیلیٹ کرنے) کے لیے۔ Firestore Rules عام طور پر بغیر Authentication کے
+   لکھائی روک دیتے ہیں (یہی وجہ ہے "Firestore write failed" آنے کی) — یہاں سے ایپ خود بخود
+   بیک گراؤنڈ میں ایک anonymous شناخت بنا لیتی ہے اور ہر لکھنے والی درخواست کے ساتھ اس کا
+   ID Token بھیج دیتی ہے۔ صارف کو کچھ نظر نہیں آتا — کوئی ای میل/پاسورڈ نہیں مانگا جاتا۔
+   ⚠️ اس کے کام کرنے کے لیے Firebase Console میں یہ دو کام ضرور کریں (صرف ایک بار):
+   1) Authentication → Sign-in method → "Anonymous" کو Enable کریں۔
+   2) Firestore Database → Rules میں "licenses" کلیکشن کے لیے یہ رکھیں:
+        match /licenses/{code} {
+          allow read: if true;
+          allow write: if request.auth != null;
+        }
+   ===================================================================== */
+const AUTH_SIGNUP_URL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${FIREBASE_API_KEY}`;
+const AUTH_REFRESH_URL = `https://securetoken.googleapis.com/v1/token?key=${FIREBASE_API_KEY}`;
+window.__cloudSyncError = null;
+
+async function ensureFirebaseAuth(){
+  const auth = AppState.settings.fbAuth;
+  if(auth && auth.idToken && auth.expiresAt && auth.expiresAt > Date.now() + 60000){
+    window.__cloudSyncError = null;
+    return auth.idToken;
+  }
+  try{
+    if(auth && auth.refreshToken){
+      const res = await fetch(AUTH_REFRESH_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `grant_type=refresh_token&refresh_token=${encodeURIComponent(auth.refreshToken)}`
+      });
+      if(res.ok){
+        const data = await res.json();
+        AppState.settings.fbAuth = {
+          localId: data.user_id, idToken: data.id_token, refreshToken: data.refresh_token,
+          expiresAt: Date.now() + (parseInt(data.expires_in || '3600') * 1000)
+        };
+        persistAllData();
+        window.__cloudSyncError = null;
+        return AppState.settings.fbAuth.idToken;
+      }
+    }
+    const res = await fetch(AUTH_SIGNUP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ returnSecureToken: true })
+    });
+    if(!res.ok){
+      let reason = `HTTP ${res.status}`;
+      try{ const errBody = await res.json(); if(errBody?.error?.message) reason = errBody.error.message; }catch(e2){}
+      window.__cloudSyncError = `Auth failed (${reason}) on ${location.hostname}`;
+      return null;
+    }
+    const data = await res.json();
+    AppState.settings.fbAuth = {
+      localId: data.localId, idToken: data.idToken, refreshToken: data.refreshToken,
+      expiresAt: Date.now() + (parseInt(data.expiresIn || '3600') * 1000)
+    };
+    persistAllData();
+    window.__cloudSyncError = null;
+    return AppState.settings.fbAuth.idToken;
+  }catch(e){
+    window.__cloudSyncError = `Network/Auth error on ${location.hostname}: ${e.message}`;
+    return null;
+  }
+}
+
+// ---------- Firestore کو authenticated (Bearer token) درخواست بھیجنے کا مختصر طریقہ — صرف لکھنے والی کالز کے لیے ----------
+async function authFirestoreFetch(path, options = {}){
+  const token = await ensureFirebaseAuth();
+  if(!token) throw new Error('offline-or-auth-failed');
+  const headers = Object.assign({}, options.headers, { 'Authorization': `Bearer ${token}` });
+  return fetch(`${FIRESTORE_BASE}/${path}`, Object.assign({}, options, { headers }));
+}
+
 // ---------- ہر انسٹالیشن کی منفرد شناخت — ڈیوائس کے fingerprint سے بنتی ہے (بالکل بے ترتیب نہیں) —
 // اسی لیے Data Clear/Uninstall کے بعد بھی وہی ID دوبارہ بنتی ہے (اسی فون پر)، تاکہ کوئی ٹرائل بار بار
 // ری سیٹ کر کے دوبارہ مفت استعمال نہ کر سکے۔ ٹرائل کا اصل تالا Firestore میں لگتا ہے (نیچے دیکھیں) ----------
@@ -5925,8 +6000,8 @@ async function activateSubscription(code){
 
   // ---------- Firestore میں کوڈ کو "استعمال شدہ" مارک کریں — دوبارہ استعمال ناممکن ----------
   try{
-    const updateRes = await fetch(
-      `${FIRESTORE_BASE}/licenses/${encodeURIComponent(trimmedCode)}?updateMask.fieldPaths=activatedAt&updateMask.fieldPaths=expiresAt&key=${FIREBASE_API_KEY}`,
+    const updateRes = await authFirestoreFetch(
+      `licenses/${encodeURIComponent(trimmedCode)}?updateMask.fieldPaths=activatedAt&updateMask.fieldPaths=expiresAt&key=${FIREBASE_API_KEY}`,
       {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -6041,7 +6116,7 @@ async function generateGiftCode(){
   if(nameVal) fields.customerName = { stringValue: nameVal };
 
   try{
-    const res = await fetch(`${FIRESTORE_BASE}/licenses/${encodeURIComponent(code)}?key=${FIREBASE_API_KEY}`, {
+    const res = await authFirestoreFetch(`licenses/${encodeURIComponent(code)}?key=${FIREBASE_API_KEY}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ fields })
@@ -6165,14 +6240,14 @@ function renderIssuedCodesList(){
 }
 async function suspendLicenseCode(code){
   if(!confirm(`کوڈ ${code} معطل کریں؟ یہ اب کسی کے لیے بھی کام نہیں کرے گا۔`)) return;
-  await fetch(`${FIRESTORE_BASE}/licenses/${encodeURIComponent(code)}?updateMask.fieldPaths=active&key=${FIREBASE_API_KEY}`, {
+  await authFirestoreFetch(`licenses/${encodeURIComponent(code)}?updateMask.fieldPaths=active&key=${FIREBASE_API_KEY}`, {
     method: 'PATCH', headers: {'Content-Type':'application/json'},
     body: JSON.stringify({ fields: { active: { booleanValue: false } } })
   });
   loadIssuedCodesList();
 }
 async function reactivateLicenseCode(code){
-  await fetch(`${FIRESTORE_BASE}/licenses/${encodeURIComponent(code)}?updateMask.fieldPaths=active&key=${FIREBASE_API_KEY}`, {
+  await authFirestoreFetch(`licenses/${encodeURIComponent(code)}?updateMask.fieldPaths=active&key=${FIREBASE_API_KEY}`, {
     method: 'PATCH', headers: {'Content-Type':'application/json'},
     body: JSON.stringify({ fields: { active: { booleanValue: true } } })
   });
@@ -6180,7 +6255,7 @@ async function reactivateLicenseCode(code){
 }
 async function deleteLicenseCode(code){
   if(!confirm(`کوڈ ${code} مکمل طور پر ڈیلیٹ کریں؟ یہ واپس نہیں آ سکے گا۔`)) return;
-  await fetch(`${FIRESTORE_BASE}/licenses/${encodeURIComponent(code)}?key=${FIREBASE_API_KEY}`, { method: 'DELETE' });
+  await authFirestoreFetch(`licenses/${encodeURIComponent(code)}?key=${FIREBASE_API_KEY}`, { method: 'DELETE' });
   loadIssuedCodesList();
 }
 

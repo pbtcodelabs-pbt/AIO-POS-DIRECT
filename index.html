@@ -1399,6 +1399,9 @@
   .settingsBtnGrid button.active{border-color:var(--primary); background:#eef2ff; color:var(--primary-dark);}
 
   .testPrintBtn{width:100%; margin-top:16px; padding:12px; background:var(--primary); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer;}
+  /* ---------- 🕵️ Developer Panel — جاری کردہ کوڈز کے فلٹر بٹن ---------- */
+  .codeStatusFilterBtn{background:#f1f5f9; color:var(--text);}
+  .codeStatusFilterBtn.active{background:var(--primary-dark); color:#fff;}
 
   /* ===================== BARCODE SCANNER (کیمرہ) ===================== */
   .scannerBox{background:#000; border-radius:var(--radius); width:92vw; max-width:420px; overflow:hidden; position:relative;}
@@ -1826,7 +1829,7 @@
 <!-- ===================== LOGIN SCREEN ===================== -->
 <div id="loginScreen">
   <div class="loginBox">
-    <h2 id="loginHeading">🔐 Login</h2>
+    <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:pointer;">🔐 Login</h2>
 
     <!-- ---------- 🎉 خوش آمدید بینر — بیٹا ٹیسٹنگ کی صاف وضاحت، پہلی نظر میں ---------- -->
     <div class="welcomeTrialBanner">
@@ -1973,7 +1976,7 @@
 
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
-    <h2>🔒 Subscription Required</h2>
+    <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -1986,6 +1989,72 @@
     <div class="loginHint">No code yet? Tap the 💬 chat bubble below to ask your developer.</div>
   </div>
   <button class="devChatBubble" onclick="openDevChat('subscription')" title="Chat with Developer">💬</button>
+</div>
+
+<!-- =====================================================================
+     🕵️ DEVELOPER PANEL — چھپا ہوا، دکاندار کے Admin PIN سے بالکل الگ۔
+     Login لاک سکرین کے عنوان ("🔐 Login") یا Subscription Required سکرین کے عنوان پر
+     7 بار ٹیپ کرنے سے کھلتا ہے (handleDevPanelTap) — ایپ لاک حالت میں ہو تب بھی کھل جاتا ہے،
+     کسی PIN کی ضرورت نہیں۔ ڈیفالٹ پاسورڈ 857766 (نیچے سے کبھی بھی بدلا جا سکتا ہے)۔
+     یہیں سے سبسکرپشن/ایکٹیویشن کوڈز جنریٹ کیے جاتے ہیں — کسی علیحدہ بیرونی Code Generator کی
+     اب ضرورت نہیں، Fruit Mandi POS کے پروون نظام سے لیا گیا۔
+     ===================================================================== -->
+<div class="modalOverlay" id="devSecretModal" style="z-index:3750;" onclick="if(event.target===this) closeDevSecretPanel()">
+  <div class="modalBox" style="max-width:420px; position:relative;">
+    <button onclick="closeDevSecretPanel()" style="position:absolute; top:10px; left:10px; background:#f1f5f9; border:none; width:30px; height:30px; border-radius:50%; font-size:16px; cursor:pointer; color:var(--text);">✕</button>
+    <div class="pageTitle" style="margin-top:2px;">🕵️ Developer Panel</div>
+
+    <div id="devSecretLocked">
+      <div class="settingsHint">یہ عام Admin PIN سے نہیں کھلتا — صرف آپ کا اپنا الگ Developer Password درکار ہے۔</div>
+      <input type="password" id="devSecretPasswordInput" placeholder="Developer Password" style="width:100%; padding:11px; margin-top:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:15px; text-align:center;" onkeydown="if(event.key==='Enter') unlockDevSecretPanel()">
+      <button class="testPrintBtn" style="margin-top:10px;" onclick="unlockDevSecretPanel()">🔓 Unlock</button>
+      <div id="devSecretError" style="color:var(--danger); font-size:12px; margin-top:6px; text-align:center;"></div>
+    </div>
+
+    <div id="devSecretUnlocked" style="display:none; max-height:70vh; overflow-y:auto;">
+      <!-- ---------- 🎁 گفٹ/ایکٹیویشن کوڈ جنریٹر — Firestore کے licenses/{code} میں نیا ریکارڈ لکھتا ہے ---------- -->
+      <div class="settingsSubLabel" style="margin-top:0; color:#15803d;">🎁 Generate Gift / Activation Code</div>
+      <div class="settingsHint" style="margin-top:0; margin-bottom:6px;">دورانیہ منتخب کریں — کوڈ بن کر نیچے نظر آئے گا، اسی وقت WhatsApp پر شیئر کر سکتے ہیں۔ Device UID خالی چھوڑیں تو کوئی بھی ڈیوائس اسے ایک بار استعمال کر سکے گی۔</div>
+      <input type="text" id="giftCodeNameInput" placeholder="کسٹمر کا نام (مثلاً: احمد سٹور)" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
+      <select id="giftCodeDaysInput" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
+        <option value="7">7 دن (Free Trial جتنا)</option>
+        <option value="30" selected>30 دن (1 مہینہ)</option>
+        <option value="90">90 دن (3 مہینے)</option>
+        <option value="180">180 دن (6 مہینے)</option>
+        <option value="365">365 دن (1 سال)</option>
+        <option value="lifetime">🌟 Lifetime (ہمیشہ کے لیے)</option>
+      </select>
+      <input type="text" id="giftCodeUidInput" placeholder="مخصوص Device UID (اختیاری — خالی چھوڑ سکتے ہیں)" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
+      <button class="testPrintBtn" style="background:#dcfce7; color:#15803d;" onclick="generateGiftCode()">🎁 Generate Code</button>
+      <div id="giftCodeResultWrap" style="display:none; margin-top:10px; background:#f0fdf4; border:1.5px solid #86efac; border-radius:10px; padding:12px; text-align:center;">
+        <div id="giftCodeResultText" style="font-size:20px; font-weight:900; letter-spacing:2px; color:#15803d;"></div>
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button class="testPrintBtn" style="flex:1; margin:0;" onclick="copyGiftCode()">📋 Copy</button>
+          <button class="testPrintBtn" style="flex:1; margin:0; background:#dcfce7; color:#15803d;" onclick="shareGiftCodeWhatsapp()">📤 WhatsApp</button>
+        </div>
+      </div>
+
+      <!-- ---------- 📋 تمام جاری کردہ کوڈز — نام، حالت، فلٹرز، معطل/دوبارہ فعال/ڈیلیٹ کا اختیار ---------- -->
+      <div class="settingsSubLabel" style="margin-top:18px; padding-top:14px; border-top:1px solid #eef2f7; color:var(--primary-dark);">📋 جاری کردہ تمام کوڈز</div>
+      <button class="testPrintBtn" style="background:#eef2ff; color:var(--primary-dark); margin-bottom:8px;" onclick="loadIssuedCodesList()">🔄 فہرست لوڈ/تازہ کریں</button>
+      <div style="display:flex; gap:6px; margin-bottom:6px;">
+        <button id="codeFilterBtn-all" class="codeStatusFilterBtn active" onclick="setCodeStatusFilter('all')" style="flex:1; padding:7px; border-radius:8px; border:none; font-size:11.5px; font-weight:800; cursor:pointer;">سب</button>
+        <button id="codeFilterBtn-green" class="codeStatusFilterBtn" onclick="setCodeStatusFilter('green')" style="flex:1; padding:7px; border-radius:8px; border:none; font-size:11.5px; font-weight:800; cursor:pointer;">🟢 فعال</button>
+        <button id="codeFilterBtn-used" class="codeStatusFilterBtn" onclick="setCodeStatusFilter('used')" style="flex:1; padding:7px; border-radius:8px; border:none; font-size:11.5px; font-weight:800; cursor:pointer;">✅ استعمال شدہ</button>
+        <button id="codeFilterBtn-revoked" class="codeStatusFilterBtn" onclick="setCodeStatusFilter('revoked')" style="flex:1; padding:7px; border-radius:8px; border:none; font-size:11.5px; font-weight:800; cursor:pointer;">🚫 معطل</button>
+      </div>
+      <select id="codeMonthFilterSelect" onchange="renderIssuedCodesList()" style="width:100%; padding:8px; margin-bottom:10px; border:1px solid #dbe1ea; border-radius:8px; font-size:12.5px;">
+        <option value="all">📅 تمام وقت</option>
+      </select>
+      <div id="issuedCodesListWrap" style="display:flex; flex-direction:column; gap:8px;"></div>
+
+      <div class="settingsSubLabel" style="margin-top:18px; padding-top:14px; border-top:1px solid #eef2f7; color:#b91c1c;">🔑 Change Developer Panel Password</div>
+      <div class="settingsHint" style="margin-top:0; margin-bottom:6px;">یہاں سے آپ خود، کبھی بھی، یہ پاسورڈ بدل سکتے ہیں — کسی دکاندار یا ایڈمن کو یہ کبھی معلوم نہیں ہو سکے گا۔ خالی چھوڑیں تو پرانا پاسورڈ ہی چلتا رہے گا۔</div>
+      <input type="password" id="devSecretNewPasswordInput" placeholder="New Developer Password (leave blank to keep current)" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
+      <button class="testPrintBtn" onclick="saveDevSecretPanel()">💾 Save Password</button>
+      <div id="devSecretSaveMsg" style="color:var(--success); font-size:12px; margin-top:6px; text-align:center;"></div>
+    </div>
+  </div>
 </div>
 
 <!-- ===================== APP SHELL ===================== -->
@@ -2022,7 +2091,7 @@
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR288FR01</span>
+      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR17SEPTH0537PM</span>
     </div>
   </div>
 
@@ -5838,7 +5907,8 @@ async function activateSubscription(code){
   const data = _parseFirestoreFields(doc.fields || {});
 
   if(data.active === false) return {success:false, message:'This code has been revoked. Please contact the developer.'};
-  if(data.boundUid !== uid) return {success:false, message:'This code was issued for a different device.'};
+  // ---------- 🎁 اگر کوڈ کسی خاص ڈیوائس سے bound نہیں (boundUid خالی) تو کوئی بھی ڈیوائس ایک بار استعمال کر سکتی ہے ----------
+  if(data.boundUid && data.boundUid !== uid) return {success:false, message:'This code was issued for a different device.'};
   if(data.activatedAt) return {success:false, message:'This code has already been used.'};
 
   const daysNum = data.lifetime ? 36500 : (data.days || 0);
@@ -5877,6 +5947,239 @@ async function activateSubscription(code){
   AppState.settings.lastActivationCode = trimmedCode; // ---------- Remote Revoke کے لیے یاد رکھیں ----------
   persistAllData();
   return {success:true, expiry: newExpiryStr, daysGranted: daysNum};
+}
+
+/* =====================================================================
+   🕵️ Developer Panel — دکاندار کے Admin PIN سے بالکل الگ، اپنا خفیہ پاسورڈ۔
+   Login/Subscription لاک سکرین کے عنوان پر 7 بار ٹیپ کرنے سے کھلتا ہے (handleDevPanelTap)۔
+   نیچے والا ہیش ڈیفالٹ پاسورڈ کا SHA-256 ہے — پینل کے اندر سے ہی نیا پاسورڈ سیٹ کیا جا سکتا ہے
+   (AppState.settings.devPanelPasswordHash میں محفوظ ہوتا ہے)۔ Fruit Mandi POS کے پروون نظام سے
+   لیا گیا، اب اس ایپ کی اپنی Firestore (aio-pos-backup) پر کام کرتا ہے — کسی علیحدہ بیرونی
+   Code Generator ٹول کی اب ضرورت نہیں۔
+   ===================================================================== */
+const DEFAULT_DEV_PANEL_PASSWORD_HASH = '8b5a43764420e5af43f7c4623ad3a6699a628be06269051d38f494f9f4b22a9a'; // ڈیفالٹ پاسورڈ: 857766
+
+let devPanelTapCount = 0, devPanelTapTimer = null;
+function handleDevPanelTap(){
+  devPanelTapCount++;
+  clearTimeout(devPanelTapTimer);
+  devPanelTapTimer = setTimeout(() => { devPanelTapCount = 0; }, 3000);
+  if(devPanelTapCount >= 7){
+    devPanelTapCount = 0;
+    clearTimeout(devPanelTapTimer);
+    openDevSecretPanel();
+  }
+}
+
+function openDevSecretPanel(){
+  document.getElementById('devSecretModal').classList.add('show');
+  document.getElementById('devSecretLocked').style.display = 'block';
+  document.getElementById('devSecretUnlocked').style.display = 'none';
+  document.getElementById('devSecretPasswordInput').value = '';
+  document.getElementById('devSecretError').textContent = '';
+}
+function closeDevSecretPanel(){
+  document.getElementById('devSecretModal').classList.remove('show');
+}
+
+async function unlockDevSecretPanel(){
+  const entered = document.getElementById('devSecretPasswordInput').value;
+  const enteredHash = await hashPin(entered);
+  const validHash = AppState.settings.devPanelPasswordHash || DEFAULT_DEV_PANEL_PASSWORD_HASH;
+  if(enteredHash !== validHash){
+    document.getElementById('devSecretError').textContent = '❌ Incorrect password.';
+    return;
+  }
+  document.getElementById('devSecretError').textContent = '';
+  document.getElementById('devSecretPasswordInput').value = '';
+  document.getElementById('devSecretLocked').style.display = 'none';
+  document.getElementById('devSecretUnlocked').style.display = 'block';
+  document.getElementById('devSecretNewPasswordInput').value = '';
+  loadIssuedCodesList();
+}
+
+async function saveDevSecretPanel(){
+  const newPw = document.getElementById('devSecretNewPasswordInput').value;
+  if(newPw && newPw.trim()){
+    AppState.settings.devPanelPasswordHash = await hashPin(newPw.trim());
+    persistAllData();
+    document.getElementById('devSecretNewPasswordInput').value = '';
+    document.getElementById('devSecretSaveMsg').textContent = '✅ Saved!';
+  } else {
+    document.getElementById('devSecretSaveMsg').textContent = '⚠️ Enter a new password first.';
+  }
+  setTimeout(() => { document.getElementById('devSecretSaveMsg').textContent = ''; }, 2000);
+}
+
+// ---------- 🎁 فری/رعایتی ایڈمن گفٹ کوڈ جنریٹر — Firestore کے licenses/{code} میں نیا ریکارڈ لکھتا ہے ----------
+let lastGeneratedGiftCode = '';
+function generateRandomGiftCode(){
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // ---------- مشکل حروف (0/O, 1/I) جان بوجھ کر نکال دیے تاکہ کوڈ لکھنے/پڑھنے میں غلطی نہ ہو ----------
+  let code = '';
+  for(let i = 0; i < 10; i++){
+    if(i === 5) code += '-';
+    code += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return code;
+}
+async function generateGiftCode(){
+  const daysVal = document.getElementById('giftCodeDaysInput').value;
+  const uidVal = document.getElementById('giftCodeUidInput').value.trim();
+  const nameVal = document.getElementById('giftCodeNameInput').value.trim();
+  const isLifetime = daysVal === 'lifetime';
+  const code = generateRandomGiftCode();
+
+  const fields = {
+    active: { booleanValue: true },
+    createdAt: { integerValue: String(Date.now()) },
+  };
+  if(isLifetime) fields.lifetime = { booleanValue: true };
+  else fields.days = { integerValue: daysVal };
+  if(uidVal) fields.boundUid = { stringValue: uidVal };
+  if(nameVal) fields.customerName = { stringValue: nameVal };
+
+  try{
+    const res = await fetch(`${FIRESTORE_BASE}/licenses/${encodeURIComponent(code)}?key=${FIREBASE_API_KEY}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fields })
+    });
+    if(!res.ok) throw new Error('Firestore write failed');
+    lastGeneratedGiftCode = code;
+    document.getElementById('giftCodeResultText').textContent = code;
+    document.getElementById('giftCodeResultWrap').style.display = 'block';
+    loadIssuedCodesList(); // ---------- نیا کوڈ فہرست میں فوراً نظر آ جائے ----------
+  }catch(e){
+    alert('⚠️ کوڈ نہیں بن سکا — انٹرنیٹ چیک کریں اور دوبارہ کوشش کریں۔ (' + e.message + ')');
+  }
+}
+function copyGiftCode(){
+  if(!lastGeneratedGiftCode) return;
+  navigator.clipboard?.writeText(lastGeneratedGiftCode).catch(()=>{});
+}
+function shareGiftCodeWhatsapp(){
+  if(!lastGeneratedGiftCode) return;
+  const msg = `🧾 AIO POS — آپ کا ایکٹیویشن کوڈ:\n\n${lastGeneratedGiftCode}\n\nایپ میں لاگ ان سکرین سے "Have an activation code?" میں جا کر یہ کوڈ درج کریں۔`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// ---------- 📋 تمام جاری کردہ کوڈز کی فہرست — نام، حالت، معطل/ڈیلیٹ کا اختیار — فلٹر حالت + مہینہ ----------
+let _issuedCodesCache = [];
+let _codeStatusFilter = 'all'; // all | green | used | revoked
+
+function setCodeStatusFilter(val){
+  _codeStatusFilter = val;
+  ['all','green','used','revoked'].forEach(k => {
+    document.getElementById('codeFilterBtn-'+k)?.classList.toggle('active', k === val);
+  });
+  renderIssuedCodesList();
+}
+
+async function loadIssuedCodesList(){
+  const wrap = document.getElementById('issuedCodesListWrap');
+  wrap.innerHTML = '<div style="text-align:center; color:var(--muted); font-size:12.5px; padding:10px;">⏳ لوڈ ہو رہا ہے...</div>';
+  try{
+    const res = await fetch(`${FIRESTORE_BASE}/licenses?key=${FIREBASE_API_KEY}&pageSize=300`);
+    if(!res.ok) throw new Error('فہرست نہیں مل سکی');
+    const data = await res.json();
+    const docs = data.documents || [];
+    _issuedCodesCache = docs.map(d => {
+      const code = d.name.split('/').pop();
+      const f = _parseFirestoreFields(d.fields || {});
+      return { code, ...f };
+    }).sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+
+    // ---------- 📅 مہینہ ڈراپ ڈاؤن — موجودہ ڈیٹا میں جتنے مہینے ملیں، خودکار بھر دیں ----------
+    const monthSel = document.getElementById('codeMonthFilterSelect');
+    const seenMonths = new Set();
+    _issuedCodesCache.forEach(it => {
+      if(!it.createdAt) return;
+      const d = new Date(Number(it.createdAt));
+      seenMonths.add(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);
+    });
+    const monthNamesUr = ['جنوری','فروری','مارچ','اپریل','مئی','جون','جولائی','اگست','ستمبر','اکتوبر','نومبر','دسمبر'];
+    const sortedMonths = [...seenMonths].sort().reverse();
+    monthSel.innerHTML = '<option value="all">📅 تمام وقت</option>' +
+      sortedMonths.map(m => {
+        const [y, mo] = m.split('-');
+        return `<option value="${m}">${monthNamesUr[Number(mo)-1]} ${y}</option>`;
+      }).join('');
+
+    renderIssuedCodesList();
+  }catch(e){
+    wrap.innerHTML = `<div style="text-align:center; color:var(--danger); font-size:12.5px; padding:10px;">⚠️ فہرست لوڈ نہیں ہو سکی: ${e.message}</div>`;
+  }
+}
+
+function renderIssuedCodesList(){
+  const wrap = document.getElementById('issuedCodesListWrap');
+  if(_issuedCodesCache.length === 0){
+    wrap.innerHTML = '<div style="text-align:center; color:var(--muted); font-size:12.5px; padding:10px;">ابھی تک کوئی کوڈ جاری نہیں کیا گیا</div>';
+    return;
+  }
+
+  const monthVal = document.getElementById('codeMonthFilterSelect')?.value || 'all';
+  let items = _issuedCodesCache.filter(it => {
+    const isRevoked = it.active === false;
+    const isUsed = !!it.activatedAt;
+    if(_codeStatusFilter === 'green' && (isRevoked || isUsed)) return false;
+    if(_codeStatusFilter === 'used' && !isUsed) return false;
+    if(_codeStatusFilter === 'revoked' && !isRevoked) return false;
+    if(monthVal !== 'all'){
+      if(!it.createdAt) return false;
+      const d = new Date(Number(it.createdAt));
+      const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+      if(key !== monthVal) return false;
+    }
+    return true;
+  });
+
+  if(items.length === 0){
+    wrap.innerHTML = '<div style="text-align:center; color:var(--muted); font-size:12.5px; padding:10px;">اس فلٹر کے مطابق کوئی کوڈ نہیں ملا</div>';
+    return;
+  }
+
+  wrap.innerHTML = items.map(it => {
+    const isRevoked = it.active === false;
+    const isUsed = !!it.activatedAt;
+    const statusLabel = isRevoked ? '🚫 معطل شدہ' : (isUsed ? '✅ استعمال شدہ' : '🟢 فعال — استعمال کا منتظر');
+    const statusColor = isRevoked ? '#b91c1c' : (isUsed ? '#15803d' : '#c2410c');
+    const durationLabel = it.lifetime ? '🌟 Lifetime' : `${it.days || '?'} دن`;
+    return `
+    <div style="background:#fff; border:1.5px solid #e5e9f0; border-radius:10px; padding:10px 12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+        <div style="font-weight:900; letter-spacing:1px; font-size:14px;">${it.code}</div>
+        <div style="font-size:11px; font-weight:800; color:${statusColor};">${statusLabel}</div>
+      </div>
+      <div style="font-size:12px; color:var(--muted); margin-bottom:6px;">
+        👤 ${it.customerName || 'نام درج نہیں'} • ⏱️ ${durationLabel}${it.boundUid ? ' • 🔒 UID: '+it.boundUid : ' • 🔓 کوئی بھی ڈیوائس'}
+      </div>
+      <div style="display:flex; gap:6px;">
+        ${!isRevoked ? `<button onclick="suspendLicenseCode('${it.code}')" style="flex:1; padding:6px; background:#fef3c7; color:#92400e; border:none; border-radius:7px; font-size:11.5px; font-weight:800; cursor:pointer;">⏸️ معطل کریں</button>` : `<button onclick="reactivateLicenseCode('${it.code}')" style="flex:1; padding:6px; background:#dcfce7; color:#15803d; border:none; border-radius:7px; font-size:11.5px; font-weight:800; cursor:pointer;">▶️ دوبارہ فعال کریں</button>`}
+        <button onclick="deleteLicenseCode('${it.code}')" style="flex:1; padding:6px; background:#fee2e2; color:#b91c1c; border:none; border-radius:7px; font-size:11.5px; font-weight:800; cursor:pointer;">🗑️ ڈیلیٹ کریں</button>
+      </div>
+    </div>`;
+    }).join('');
+}
+async function suspendLicenseCode(code){
+  if(!confirm(`کوڈ ${code} معطل کریں؟ یہ اب کسی کے لیے بھی کام نہیں کرے گا۔`)) return;
+  await fetch(`${FIRESTORE_BASE}/licenses/${encodeURIComponent(code)}?updateMask.fieldPaths=active&key=${FIREBASE_API_KEY}`, {
+    method: 'PATCH', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ fields: { active: { booleanValue: false } } })
+  });
+  loadIssuedCodesList();
+}
+async function reactivateLicenseCode(code){
+  await fetch(`${FIRESTORE_BASE}/licenses/${encodeURIComponent(code)}?updateMask.fieldPaths=active&key=${FIREBASE_API_KEY}`, {
+    method: 'PATCH', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ fields: { active: { booleanValue: true } } })
+  });
+  loadIssuedCodesList();
+}
+async function deleteLicenseCode(code){
+  if(!confirm(`کوڈ ${code} مکمل طور پر ڈیلیٹ کریں؟ یہ واپس نہیں آ سکے گا۔`)) return;
+  await fetch(`${FIRESTORE_BASE}/licenses/${encodeURIComponent(code)}?key=${FIREBASE_API_KEY}`, { method: 'DELETE' });
+  loadIssuedCodesList();
 }
 
 // ---------- ہوم پیج (اور ہر صفحے) کے اوپر باریک پٹی — کب سبسکرائب کیا، کب ختم ہوگی، کتنے دن باقی — روزانہ خودکار تازہ ----------

@@ -2093,7 +2093,7 @@
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR18SEPFR1257AM</span>
+      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR20SEPSU1119AM</span>
     </div>
   </div>
 
@@ -6156,7 +6156,7 @@ async function loadIssuedCodesList(){
   const wrap = document.getElementById('issuedCodesListWrap');
   wrap.innerHTML = '<div style="text-align:center; color:var(--muted); font-size:12.5px; padding:10px;">⏳ لوڈ ہو رہا ہے...</div>';
   try{
-    const res = await fetch(`${FIRESTORE_BASE}/licenses?key=${FIREBASE_API_KEY}&pageSize=300`);
+    const res = await authFirestoreFetch(`licenses?key=${FIREBASE_API_KEY}&pageSize=300`);
     if(!res.ok) throw new Error('فہرست نہیں مل سکی');
     const data = await res.json();
     const docs = data.documents || [];

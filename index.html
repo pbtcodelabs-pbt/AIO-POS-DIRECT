@@ -2092,7 +2092,7 @@
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR20SEPSU1128AM</span>
+      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR20SEPSU0113PM</span>
     </div>
   </div>
 
@@ -4254,21 +4254,6 @@
             <input type="text" id="appShareLinkInput" placeholder="e.g. https://username.github.io/AIO/" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;" oninput="saveAdminControl()">
             <div class="settingsHint" style="margin-top:0; margin-bottom:6px;">Write your own message here (e.g. "Our app is very good, please use it") — it will be sent along with the link above when the 📤 Share button is pressed.</div>
             <textarea id="appShareMessageInput" placeholder="e.g. Try our AIO POS App — it's fast, reliable and free to try!" rows="3" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px; font-family:inherit; resize:vertical;" oninput="saveAdminControl()"></textarea>
-            <div class="settingsSubLabel">Accounts to Receive Your Payments</div>
-            <div id="devPaymentAccountsListWrap" style="margin-bottom:10px;"></div>
-            <select id="devPaymentTypeInput" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
-              <option value="">— Select Bank/Wallet —</option>
-            </select>
-            <input type="text" id="devPaymentNumberInput" placeholder="Account Number" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
-            <input type="text" id="devPaymentNameInput" placeholder="Account Holder Name" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
-            <button class="testPrintBtn" style="margin-bottom:8px; background:#eef2ff; color:var(--primary-dark);" onclick="addDevPaymentAccount()">➕ Add This Account</button>
-
-            <div class="settingsSubLabel" style="margin-top:18px; padding-top:14px; border-top:1px solid #eef2f7;">Rate Per Day (Rs.)</div>
-            <input type="number" id="perDayRateInput" placeholder="e.g. 30 (Rs per day)" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;" oninput="saveAdminControl()">
-
-            <div class="settingsSubLabel">Package Plans (with fixed price per plan)</div>
-            <div id="dayPresetsWrap"></div>
-            <button class="testPrintBtn" style="margin-top:6px; margin-bottom:8px; background:#eef2ff; color:var(--primary-dark);" onclick="addSubscriptionPlan()">➕ Add Plan</button>
 
             <div class="settingsSubLabel">One Admin PIN for Everything</div>
             <div class="settingsHint" style="margin-top:0; margin-bottom:6px;">This panel now unlocks with your app login PIN — no separate PIN to remember. To change it, go to <b>Home → Users</b>, tap the Admin user's <b>✏️ Set Custom PIN</b> button, and enter your new PIN there.</div>
@@ -4660,35 +4645,10 @@
     </div>
 
 <!-- BACKUP CONFIRMATION MODAL (Export/Import کی کامیابی خوبصورتی سے دکھانے کے لیے) -->
-<!-- 🗂️ VIEW PACKAGE PLANS MODAL — ہر کوئی دیکھ سکتا ہے (Login سے پہلے بھی)، بغیر کسی PIN کے -->
-<div class="modalOverlay" id="packagePlansModal" style="z-index:3600;" onclick="if(event.target===this) this.classList.remove('show')">
-  <div class="modalBox" style="max-width:400px; max-height:82vh; overflow-y:auto;">
-    <h3>🗂️ Package Plans</h3>
-
-    <!-- ---------- 🧮 کیلکولیٹر — کوئی بھی دن لکھیں، قیمت خودکار بنے ---------- -->
-    <div id="planCalcWrap" style="background:#eef2ff; border-radius:12px; padding:14px; margin-top:10px; text-align:center;">
-      <label style="font-size:12px; font-weight:700; color:var(--primary-dark); display:block; margin-bottom:6px;">Number of Days</label>
-      <input type="number" id="planCalcDaysInput" placeholder="e.g. 30" oninput="updatePlanCalculator()" style="width:100%; padding:10px; border:1.5px solid #c7d2fe; border-radius:10px; font-size:18px; text-align:center; font-weight:800; box-sizing:border-box;">
-      <div style="font-size:12px; color:var(--muted); margin-top:10px;">Total Price</div>
-      <div id="planCalcPriceOutput" style="font-size:26px; font-weight:800; color:var(--primary-dark);">—</div>
-    </div>
-
-    <div id="devPaymentAccountWrap" style="display:none; background:#fff7ed; border-radius:10px; padding:11px 14px; margin-top:10px; font-size:12.5px;">
-      <div style="font-weight:700; color:#9a3412; margin-bottom:2px;">💳 Send Payment To <span style="font-weight:400; font-size:11px;">(tap number to copy)</span></div>
-      <div id="devPaymentAccountText" onclick="copyDevPaymentNumber()" style="color:#7c2d12; font-weight:600; cursor:pointer; text-decoration:underline dotted;"></div>
-      <button id="devPaymentSwitchBtn" onclick="switchDevPaymentAccount()" style="display:none; margin-top:8px; border:1px solid #fdba74; background:#fff; color:#9a3412; border-radius:8px; padding:6px 10px; font-size:11.5px; font-weight:700;">🔄 Try a Different Wallet/Bank</button>
-    </div>
-
-    <div id="packagePlansWrap" style="margin-top:14px;"></div>
-    <button class="checkoutBtn" style="margin-top:14px; background:#7c3aed;" onclick="sharePackagePlansPoster()">🖼️ Share as Poster</button>
-    <p style="font-size:11px; color:var(--muted); line-height:1.6; margin-top:12px; text-align:center;">
-      💳 Payment issue? Tap below and we'll help you complete it manually.
-    </p>
-    <button class="checkoutBtn" style="margin-top:8px; background:#c2410c;" onclick="sendTroubleSubscribingMessage()">🆘 Still Stuck? Contact Us</button>
-    <button class="checkoutBtn" style="margin-top:10px; background:var(--success);" onclick="document.getElementById('packagePlansModal').classList.remove('show'); openDevChat('subscription');">💬 Chat with Developer</button>
-    <button class="cancelBtn" style="width:100%; margin-top:10px;" onclick="document.getElementById('packagePlansModal').classList.remove('show')">Close</button>
-  </div>
-</div>
+<!-- 🗂️ Package Plans کا پورا سسٹم ہٹا دیا گیا ہے (صارف کی ہدایت 20SEPSU) — کسٹمر کو اب کوئی پلان/پیکج
+     منتخب کرنے کا آپشن کہیں نظر نہیں آتا۔ صرف: (1) Login/Subscription Gate سے Activation Code ڈالنا،
+     (2) 💬 Chat with Developer (سیدھا رابطے کا پیغام)، (3) ڈویلپر کا اپنا 7-تیپ Secret Panel جہاں سے وہ
+     خود UID کی بنیاد پر کوڈ جنریٹ کرتا ہے — یہی تین راستے باقی ہیں ---------- -->
 
 <!-- 📋 REPLY TEMPLATES MODAL — کوئی PIN درکار نہیں، ہوم پیج سے ایک ٹیپ میں کھلتا ہے -->
 <div class="modalOverlay" id="replyTemplatesModal" onclick="if(event.target===this) this.classList.remove('show')">
@@ -4847,7 +4807,7 @@
     <p style="font-size:12.5px; color:var(--muted); line-height:1.6; margin-top:2px;" id="trialUrgentBody">
       Subscribe to keep using the same reports and features and to continue your business without interruption.
     </p>
-    <button class="backupConfirmCloseBtn" style="background:linear-gradient(155deg,#dc2626,#991b1b); margin-top:14px;" onclick="dismissTrialUrgentModal(); goTo('billing'); openPackagePlansModal();">🎟️ Subscribe Now</button>
+    <button class="backupConfirmCloseBtn" style="background:linear-gradient(155deg,#dc2626,#991b1b); margin-top:14px;" onclick="dismissTrialUrgentModal(); openDevChat('subscription');">🎟️ Subscribe Now</button>
     <button class="backupConfirmCloseBtn" style="background:#f1f5f9; color:var(--text); margin-top:8px;" onclick="dismissTrialUrgentModal()">Remind Me Later</button>
     <div style="margin-top:14px; padding-top:12px; border-top:1px dashed #dbe1ea; text-align:left;">
       <p style="font-size:11.5px; color:var(--muted); line-height:1.6; margin-bottom:8px;">
@@ -6349,7 +6309,6 @@ const HOME_TILE_GROUPS_ADMIN = [
   { section: '🛠️ Tools', tiles: [
     {icon:'🧾', label:'Bill & Print Settings', screen:'billsettings'},
     {icon:'📋', label:'Reply Templates', action:'openReplyTemplatesModal'},
-    {icon:'🗂️', label:'Package Plans', action:'openPackagePlansModal'},
   ]},
   { section: '🔴 Liabilities', tiles: [
     {icon:'📔', label:'My Diary', screen:'mydiary'},
@@ -6521,10 +6480,7 @@ async function shareAppLink(){
 function buildDevChatMessage(){
   const uid = getOrCreateDeviceUID();
   if(devChatContext === 'subscription'){
-    // ---------- اگر کیلکولیٹر سے دن/قیمت منتخب ہوں تو پیغام میں شامل کریں، ورنہ عام دلچسپی کا پیغام بھیجیں ----------
-    if(selectedPlanDays && selectedPlanPrice){
-      return `Sir, I want to subscribe your AIO POS application for ${selectedPlanDays} days at the price of Rs. ${selectedPlanPrice.toLocaleString()} in accordance with your package plan.\n\nMy Device ID:\n${uid}`;
-    }
+    // ---------- پیکج پلان سلیکشن کا پورا نظام ہٹا دیا گیا ہے — اب یہاں سے ہمیشہ وہی ایک مقررہ اردو پیغام جائے گا ----------
     return buildAdInquiryMessage();
   }
   // ---------- مسئلہ رپورٹ کرنے کا پیغام — خود بھرنے کے لیے خالی جگہ کے ساتھ ----------
@@ -6551,7 +6507,10 @@ function sendTroubleSubscribingMessage(){
 // "package plan" کا پرانا فرض شدہ حوالہ ہٹا دیا، چونکہ اب کوئی پیڈ پیکج پلان دکھایا نہیں جاتا ----------
 function buildAdInquiryMessage(){
   const uid = getOrCreateDeviceUID();
-  return `Sir, I saw your app's advertisement and I like it. Please guide me on how I can get this app and what the subscription charges are — I'd like to subscribe.\n\nMy Device ID:\n${uid}`;
+  // ---------- ✏️ صارف کی ہدایت (20SEPSU): سبسکرپشن ختم ہونے پر لاگ ان پیج سے ڈیویلپر کو بھیجا جانے والا پیغام
+  // مکمل اردو میں — اور UID بالکل الگ لائن میں، کسی بھی لفظ ("UID" وغیرہ) کے ساتھ ملائے بغیر، تاکہ صرف
+  // ہندسے آسانی سے کاپی ہو سکیں اور کسی اور متن کے ساتھ مکس نہ ہوں ---------- -->
+  return `محترم ڈیویلپر السلام علیکم ورحمۃ اللہ وبرکاتہ\n\nمیں اپ کی ایپ AIO POS DIRECT استعمال کرنا چاہتا ہوں برائے مہربانی مجھے اس کا سبسکرپشن کوڈ بھیجیں میری یو ائی ڈی یہ ہے\n\n${uid}`;
 }
 
 function sendDevChat(channel){
@@ -6747,8 +6706,6 @@ function showSubscriptionGate(){
         : `Your subscription expired on ${formatDateDMY(exp)}.`)
     : `This app is not yet activated.`;
   document.getElementById('subscriptionGateScreen').style.display = 'flex';
-  // ---------- ٹرائل ختم ہوتے ہی سیدھا Package Plans بھی خودکار سامنے آ جائیں — صارف کو الگ سے بٹن ڈھونڈنا نہ پڑے ----------
-  openPackagePlansModal();
 }
 
 async function submitActivationCode(){
@@ -7071,7 +7028,6 @@ const APP_SEARCH_INDEX = [
   {label:'Settings — Barcode Labels', path:'Bill & Print Settings', screen:'billsettings', keywords:'barcode labels print sticker code39 copies variant'},
   {label:'Settings — Storage Usage', path:'Settings', screen:'settings', anchor:'storageUsageCard', keywords:'storage usage space full device limit photos mb used'},
   {label:'Reply Templates', path:'Home → Tools', action:'openReplyTemplatesModal', keywords:'reply templates canned message whatsapp sms quick reply payment reminder thank you'},
-  {label:'Package Plans', path:'Home → Tools', action:'openPackagePlansModal', keywords:'package plans subscription price days activation code trial google play billing'},
 ];
 
 // ---------- 🔍 App Search بار — کمپیکٹ (صرف آئیکن)، دبانے پر کھلتی ہے، باہر ٹیپ کرنے یا نتیجہ چننے پر خودکار بند ----------
@@ -20301,70 +20257,9 @@ async function unlockAdminControl(){
   document.getElementById('devEmailInput').value = AppState.settings.devEmail || '';
   document.getElementById('appShareLinkInput').value = AppState.settings.appShareLink || '';
   document.getElementById('appShareMessageInput').value = AppState.settings.appShareMessage || '';
-  // ---------- Payment اکاؤنٹ dropdown خالی ہو تو بھریں (وہی BANK_LOGIN_URLS جو سپلائر اکاؤنٹس میں استعمال ہوتی ہے) ----------
-  const payTypeSel = document.getElementById('devPaymentTypeInput');
-  if(payTypeSel.options.length <= 1){
-    Object.keys(BANK_LOGIN_URLS).forEach(bank => {
-      const opt = document.createElement('option');
-      opt.value = bank; opt.textContent = bank;
-      payTypeSel.appendChild(opt);
-    });
-  }
-  // ---------- پرانا واحد اکاؤنٹ ہو اور نئی فہرست ابھی خالی ہو تو خودکار فہرست میں منتقل کر دیں (ایک بار) ----------
-  AppState.settings.devPaymentAccounts = AppState.settings.devPaymentAccounts || [];
-  if(AppState.settings.devPaymentAccounts.length === 0 && AppState.settings.devPaymentType && AppState.settings.devPaymentNumber){
-    AppState.settings.devPaymentAccounts.push({
-      type: AppState.settings.devPaymentType,
-      number: AppState.settings.devPaymentNumber,
-      name: AppState.settings.devPaymentName || ''
-    });
-    persistAllData();
-  }
-  payTypeSel.value = '';
-  document.getElementById('devPaymentNumberInput').value = '';
-  document.getElementById('devPaymentNameInput').value = '';
-  renderDevPaymentAccountsList();
-  document.getElementById('perDayRateInput').value = AppState.settings.perDayRate || '';
-  renderDayPresetsInAdmin();
   // ---------- سیکیورٹی: یہ باکس ہمیشہ خالی کھلے، چاہے پچھلی بار کچھ ٹائپ کر کے سیو کیا گیا ہو —
   // ورنہ ٹائپ کیا گیا جواب اسکرین پر نظر آتا رہتا ہے جو مقصد کے خلاف ہے ----------
   dpReset('securityDobInput');
-}
-
-// ---------- Admin Control میں موجودہ Payment Accounts کی فہرست دکھائیں (ہر ایک کے ساتھ حذف کا بٹن) ----------
-function renderDevPaymentAccountsList(){
-  const wrap = document.getElementById('devPaymentAccountsListWrap');
-  if(!wrap) return;
-  const accounts = AppState.settings.devPaymentAccounts || [];
-  if(accounts.length === 0){
-    wrap.innerHTML = `<div style="color:var(--muted); font-size:12px; padding:4px 2px;">No accounts added yet.</div>`;
-    return;
-  }
-  wrap.innerHTML = accounts.map((acc, idx) => `
-    <div style="display:flex; align-items:center; justify-content:space-between; background:#f8fafc; border:1px solid #eef2f7; border-radius:8px; padding:8px 10px; margin-bottom:6px; font-size:12.5px;">
-      <div><b>${acc.type}</b>: ${acc.number}${acc.name ? ' (' + acc.name + ')' : ''}</div>
-      <button onclick="deleteDevPaymentAccount(${idx})" style="border:none; background:none; font-size:16px; padding:2px 6px;">🗑️</button>
-    </div>
-  `).join('');
-}
-function addDevPaymentAccount(){
-  const type = document.getElementById('devPaymentTypeInput').value;
-  const number = document.getElementById('devPaymentNumberInput').value.trim();
-  const name = document.getElementById('devPaymentNameInput').value.trim();
-  if(!type || !number){ alert('Please select a bank/wallet and enter the account number.'); return; }
-  AppState.settings.devPaymentAccounts = AppState.settings.devPaymentAccounts || [];
-  AppState.settings.devPaymentAccounts.push({type, number, name});
-  document.getElementById('devPaymentTypeInput').value = '';
-  document.getElementById('devPaymentNumberInput').value = '';
-  document.getElementById('devPaymentNameInput').value = '';
-  persistAllData();
-  renderDevPaymentAccountsList();
-}
-function deleteDevPaymentAccount(idx){
-  if(!confirm('Delete this account?')) return;
-  AppState.settings.devPaymentAccounts.splice(idx, 1);
-  persistAllData();
-  renderDevPaymentAccountsList();
 }
 
 async function saveAdminControl(){
@@ -20373,7 +20268,6 @@ async function saveAdminControl(){
   AppState.settings.devEmail = document.getElementById('devEmailInput').value.trim();
   AppState.settings.appShareLink = document.getElementById('appShareLinkInput').value.trim();
   AppState.settings.appShareMessage = document.getElementById('appShareMessageInput').value.trim();
-  AppState.settings.perDayRate = parseFloat(document.getElementById('perDayRateInput').value) || 0;
   await saveSecurityRecoveryInfo();
   dpReset('securityDobInput');
   persistAllData();
@@ -20665,386 +20559,6 @@ async function finishPinRecovery(){
   persistAllData();
   document.getElementById('pinRecoveryModal').classList.remove('show');
   alert(`✅ Your new Admin PIN is now set. Please log in with it.`);
-}
-
-// ---------- 📋 Saved Reply Templates — سبسکرپشن پلانز وغیرہ ایک بار لکھیں، بار بار صرف Copy کریں ----------
-// ---------- 🗂️ Package Plans — ہر کوئی دیکھ سکتا ہے، صرف Admin ترتیب دے سکتا ہے ----------
-let selectedPlanDays = null;
-let selectedPlanPrice = null;
-
-/* =====================================================================
-   💳 GOOGLE PLAY BILLING — صرف اُس وقت فعال ہوتا ہے جب یہ ایپ Play Store سے
-   نصب شدہ TWA کے طور پر چل رہی ہو (براؤزر/عام PWA میں یہ خودکار بند رہتا ہے،
-   وہاں پرانا Local/EasyPaisa نظام ہی چلتا رہے گا — دونوں ورژن ایک ہی فائل میں محفوظ)۔
-
-   ⚠️ ضروری: نیچے PLAY_BILLING_PRODUCTS میں دیے گئے sku بالکل انہی ناموں سے
-   Play Console → Monetize → Subscriptions میں بنانے ہوں گے، ورنہ خریداری ناکام ہوگی۔
-   ===================================================================== */
-const PLAY_BILLING_PRODUCTS = [
-  { sku: 'aio_pos_trial7',    days: 7,     label: '7 Days Free'  },
-  { sku: 'aio_pos_monthly',   days: 30,    label: '1 Month'      },
-  { sku: 'aio_pos_6month',    days: 180,   label: '6 Months'     },
-  { sku: 'aio_pos_yearly',    days: 365,   label: '1 Year'       },
-  { sku: 'aio_pos_lifetime',  days: 36500, label: 'Lifetime (100 Years)' },
-];
-
-function isPlayBillingAvailable(){
-  // ---------- 🔒 یہ LOCAL/Direct فائل ہے — Play Store پر نہیں جاتی۔ اس لیے Google Play Billing
-  // کبھی فعال نہ ہو، ہمیشہ Local Package Plans + Activation Code نظام ہی چلے ----------
-  return false;
-}
-
-// ---------- Play Console سے قیمتیں لا کر کیش کر لیں — تاکہ Package Plans میں دکھائی جا سکیں ----------
-let playBillingDetailsCache = null;
-let playBillingLoadFailed = false; // ---------- ناکامی کی صورت میں Loading… ہمیشہ کے لیے اٹکنے کی بجائے خودکار Local/EasyPaisa پر واپس آ جائے ----------
-async function loadPlayBillingDetails(){
-  if(!isPlayBillingAvailable()) return null;
-  if(playBillingDetailsCache) return playBillingDetailsCache;
-  try{
-    const service = await window.getDigitalGoodsService('https://play.google.com/billing');
-    const details = await service.getDetails(PLAY_BILLING_PRODUCTS.map(p => p.sku));
-    if(!details || details.length === 0){ playBillingLoadFailed = true; return null; }
-    playBillingDetailsCache = details;
-    return details;
-  } catch(err){
-    console.error('Play Billing details load failed:', err);
-    playBillingLoadFailed = true;
-    return null;
-  }
-}
-
-// ---------- خریداری کا اصل عمل — کامیابی پر Play کو acknowledge کر کے، اسی طرح دن جوڑیں جیسے Local کوڈ سے جوڑتے ہیں ----------
-async function purchaseViaPlayBilling(sku, days){
-  if(!isPlayBillingAvailable()){
-    alert('❌ This purchase only works inside the app when installed from the Play Store.');
-    return;
-  }
-  try{
-    const paymentMethod = { supportedMethods: 'https://play.google.com/billing', data: { sku } };
-    const request = new PaymentRequest([paymentMethod]);
-    const response = await request.show();
-    const { purchaseToken } = response.details;
-    await response.complete('success');
-
-    const service = await window.getDigitalGoodsService('https://play.google.com/billing');
-    await service.acknowledge(purchaseToken, 'repeat'); // ---------- 'repeat' = subscription، ورنہ Google 3 دن بعد خودکار رقم واپس کر دیتا ہے ----------
-
-    // ---------- کامیاب خریداری — بالکل اسی طرح دن جوڑیں جیسے Local activation code سے جوڑے جاتے ہیں ----------
-    const hasActivePaidSub = isSubscriptionActive() && !AppState.settings.isOnFreeTrial;
-    const base = hasActivePaidSub ? new Date(AppState.settings.subscriptionExpiry) : new Date();
-    base.setDate(base.getDate() + days);
-    AppState.settings.subscriptionExpiry = base.toISOString().slice(0,10);
-    AppState.settings.subscriptionActivatedOn = new Date().toISOString().slice(0,10);
-    AppState.settings.isOnFreeTrial = false;
-    AppState.settings.subscriptionViaPlayBilling = true;
-    persistAllData();
-    document.getElementById('packagePlansModal')?.classList.remove('show');
-    refreshAllScreens();
-    alert('✅ Subscription activated successfully via Google Play!');
-  } catch(err){
-    console.error('Play Billing purchase failed:', err);
-    if(err && err.name !== 'AbortError'){ // ---------- صارف نے خود منسوخ کیا ہو تو خاموشی سے واپس، ورنہ پیغام دکھائیں ----------
-      alert('❌ Purchase could not be completed. Please try again.');
-    }
-  }
-}
-
-
-function openPackagePlansModal(){
-  document.getElementById('planCalcDaysInput').value = '';
-  document.getElementById('planCalcPriceOutput').textContent = '—';
-  selectedPlanDays = null;
-  selectedPlanPrice = null;
-  devPaymentSelectedIdx = 0;
-  playBillingLoadFailed = false; // ---------- ہر بار پاپ اپ کھلنے پر دوبارہ کوشش کا موقع دیں ----------
-  renderPackagePlansView();
-  document.getElementById('packagePlansModal').classList.add('show');
-  // ---------- Play Store سے نصب شدہ ہو تو تھوڑی دیر بعد قیمتیں لوڈ ہو کر دوبارہ رینڈر ہوں گی — 6 سیکنڈ میں جواب نہ آئے تو خودکار Local/EasyPaisa پر واپس ----------
-  if(isPlayBillingAvailable()){
-    loadPlayBillingDetails().then(() => renderPackagePlansView());
-    setTimeout(() => {
-      if(!playBillingDetailsCache){ playBillingLoadFailed = true; renderPackagePlansView(); }
-    }, 6000);
-  }
-}
-
-// ---------- کوئی بھی دن لکھیں — قیمت خودکار بنے (دن × روزانہ کی شرح)، Chat پیغام کے لیے بھی محفوظ ہو جائے ----------
-let devPaymentSelectedIdx = 0; // ---------- Package Plans میں فی الحال کون سا Dev Payment Account دکھایا جا رہا ہے ----------
-// ---------- کسٹمر "🔄 Try a Different Wallet/Bank" دبائے تو اگلے محفوظ شدہ اکاؤنٹ پر منتقل ہو جائیں (آخری کے بعد پہلے پر واپس) ----------
-function switchDevPaymentAccount(){
-  const accounts = AppState.settings.devPaymentAccounts || [];
-  if(accounts.length <= 1) return;
-  devPaymentSelectedIdx = (devPaymentSelectedIdx + 1) % accounts.length;
-  renderPackagePlansView();
-}
-// ---------- اکاؤنٹ نمبر پر ٹیپ کرتے ہی کلپ بورڈ میں کاپی ہو جائے — تاکہ کسٹمر کو ٹائپ نہ کرنا پڑے ----------
-function copyDevPaymentNumber(){
-  const accounts = AppState.settings.devPaymentAccounts || [];
-  const acc = accounts[devPaymentSelectedIdx];
-  if(!acc) return;
-  const el = document.getElementById('devPaymentAccountText');
-  const originalText = el.textContent;
-  const showCopied = () => { el.textContent = '✅ Copied: ' + acc.number; setTimeout(() => { el.textContent = originalText; }, 1800); };
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(acc.number).then(showCopied).catch(() => {});
-  } else {
-    try{
-      const ta = document.createElement('textarea');
-      ta.value = acc.number; ta.style.position = 'fixed'; ta.style.opacity = '0';
-      document.body.appendChild(ta); ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-      showCopied();
-    }catch(e){ /* کاپی ناکام — خاموشی سے نظرانداز */ }
-  }
-}
-
-function updatePlanCalculator(){
-  const days = parseInt(document.getElementById('planCalcDaysInput').value) || 0;
-  const rate = AppState.settings.perDayRate || 0;
-  const output = document.getElementById('planCalcPriceOutput');
-  if(days <= 0 || rate <= 0){
-    output.textContent = '—';
-    selectedPlanDays = null;
-    selectedPlanPrice = null;
-    return;
-  }
-  const price = days * rate;
-  output.textContent = `Rs. ${price.toLocaleString()}`;
-  selectedPlanDays = days;
-  selectedPlanPrice = price;
-}
-
-// ---------- دنوں کو خوش کن لیبل میں بدلیں — "30 days" کی بجائے "1 Month" وغیرہ ----------
-function formatPlanDaysLabel(days){
-  if(days === 30) return '1 Month';
-  if(days === 90) return '3 Months';
-  if(days === 180) return '6 Months';
-  if(days === 365) return '1 Year';
-  if(days % 30 === 0 && days > 0) return `${days / 30} Months`;
-  return `${days} day${days === 1 ? '' : 's'}`;
-}
-
-// ---------- کسی محفوظ شدہ پلان پر ٹیپ کریں تو کیلکولیٹر فوراً اسی دن/قیمت سے بھر جائے
-// (fixedPrice ہو تو وہی استعمال ہوگی، ورنہ per-day rate سے حساب ہوگی) ----------
-function selectPresetPlan(days, fixedPrice){
-  document.getElementById('planCalcDaysInput').value = days;
-  if(fixedPrice != null){
-    selectedPlanDays = days;
-    selectedPlanPrice = fixedPrice;
-    document.getElementById('planCalcPriceOutput').textContent = `Rs. ${fixedPrice.toLocaleString()}`;
-  } else {
-    updatePlanCalculator();
-  }
-}
-
-// ---------- پلان پر ٹیپ کرتے ہی سیدھا Chat with Developer کھل جائے (WhatsApp/SMS/Email چننے کے لیے) —
-// کسٹمر کو الگ سے نیچے کا بٹن دبانے کی ضرورت نہیں رہتی، ایک ٹیپ میں پیغام تیار ----------
-function selectPresetPlanAndChat(days, fixedPrice){
-  selectPresetPlan(days, fixedPrice);
-  document.getElementById('packagePlansModal').classList.remove('show');
-  openDevChat('subscription');
-}
-
-function renderPackagePlansView(){
-  const wrap = document.getElementById('packagePlansWrap');
-
-  // ---------- 💳 Play Store سے نصب شدہ ہو تو یہاں سے صرف اور صرف Google Play کے ذریعے خریداری دکھائیں —
-  // Google Play پالیسی کے مطابق TWA/Play Store انسٹال میں کوئی متبادل (EasyPaisa/Local) پیمنٹ کبھی نہیں دکھانی —
-  // اس لیے ناکامی کی صورت میں بھی نیچے دیے گئے Local سیکشن پر گرنا منع ہے؛ صرف "دوبارہ کوشش کریں" دکھائیں ----------
-  if(isPlayBillingAvailable()){
-    document.getElementById('planCalcWrap').style.display = 'none';
-    document.getElementById('devPaymentAccountWrap').style.display = 'none';
-    if(playBillingLoadFailed){
-      wrap.innerHTML = `
-        <div style="text-align:center; padding:20px 10px;">
-          <div style="color:var(--danger); font-weight:700; margin-bottom:12px;">⚠️ Could not load plans from Google Play. Please check your internet connection.</div>
-          <button class="testPrintBtn" onclick="playBillingLoadFailed=false; playBillingDetailsCache=null; renderPackagePlansView(); loadPlayBillingDetails().then(()=>renderPackagePlansView());">🔄 Try Again</button>
-        </div>`;
-      return;
-    }
-    if(!playBillingDetailsCache){
-      wrap.innerHTML = `<div style="text-align:center; padding:20px 10px; color:var(--muted);">🔍 Loading plans from Google Play…</div>`;
-      return;
-    }
-    wrap.innerHTML = PLAY_BILLING_PRODUCTS.map(p => {
-      const info = playBillingDetailsCache.find(d => d.itemId === p.sku);
-      const priceLabel = info ? `${info.price.currency} ${info.price.value}` : '—';
-      return `
-      <div onclick="purchaseViaPlayBilling('${p.sku}', ${p.days})" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-radius:10px; padding:11px 14px; margin-bottom:8px; cursor:pointer;">
-        <div style="font-weight:800; font-size:14px;">${p.label}</div>
-        <div style="font-weight:700; font-size:13px; color:var(--primary-dark);">${priceLabel}</div>
-      </div>`;
-    }).join('');
-    return;
-  }
-
-  // ---------- یہاں سے نیچے صرف اُس صورت میں چلتا ہے جب ایپ Play Store TWA کے طور پر انسٹال ہی نہ ہو
-  // (عام براؤزر/GitHub/Netlify یا الگ Local سائیڈ لوڈ APK) — Play Store والے ورژن میں یہ حصہ کبھی نظر نہیں آئے گا ----------
-  const plans = AppState.settings.subscriptionPlans || [];
-  const rate = AppState.settings.perDayRate || 0;
-
-  if(rate > 0){
-    document.getElementById('planCalcWrap').style.display = 'block';
-  } else {
-    document.getElementById('planCalcWrap').style.display = 'none';
-  }
-
-  // ---------- ڈویلپر کے پیمنٹ اکاؤنٹس — قیمت کے فوراً نیچے، تاکہ کسٹمر کو الگ سے پوچھنا نہ پڑے؛
-  // ایک سے زیادہ ہوں تو "🔄 Try a Different Wallet/Bank" سے دوسرے اکاؤنٹ پر منتقل ہو سکتے ہیں ----------
-  const s = AppState.settings;
-  const devAccounts = s.devPaymentAccounts || [];
-  if(devAccounts.length > 0){
-    if(devPaymentSelectedIdx >= devAccounts.length) devPaymentSelectedIdx = 0;
-    const acc = devAccounts[devPaymentSelectedIdx];
-    document.getElementById('devPaymentAccountText').textContent = `${acc.type}: ${acc.number}${acc.name ? ' (' + acc.name + ')' : ''}`;
-    document.getElementById('devPaymentAccountWrap').style.display = 'block';
-    document.getElementById('devPaymentSwitchBtn').style.display = devAccounts.length > 1 ? 'inline-block' : 'none';
-  } else {
-    document.getElementById('devPaymentAccountWrap').style.display = 'none';
-  }
-
-  if(plans.length === 0){
-    wrap.innerHTML = rate > 0 ? '' : `<div style="color:var(--muted); font-size:12px; padding:10px 2px;">No plans published yet. Please chat with the developer directly.</div>`;
-    return;
-  }
-  wrap.innerHTML = plans.map(p => {
-    const price = p.price != null ? p.price : (rate > 0 ? p.days * rate : null);
-    const priceLabel = price != null ? 'Rs. ' + price.toLocaleString() : '—';
-    return `
-    <div onclick="selectPresetPlanAndChat(${p.days}, ${p.price != null ? p.price : 'null'})" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-radius:10px; padding:11px 14px; margin-bottom:8px; cursor:pointer;">
-      <div style="font-weight:800; font-size:14px;">${formatPlanDaysLabel(p.days)}</div>
-      <div style="font-weight:700; font-size:13px; color:var(--primary-dark);">${priceLabel}</div>
-    </div>`;
-  }).join('');
-}
-
-// ---------- 📦 Subscription Plans کا خوبصورت، فوری شیئر ایبل پوسٹر — کسٹمر پوچھے تو ایک ٹیپ میں WhatsApp پر بھیج دیں ----------
-async function sharePackagePlansPoster(){
-  const plans = AppState.settings.subscriptionPlans || [];
-  const rate = AppState.settings.perDayRate || 0;
-  const devAccounts = AppState.settings.devPaymentAccounts || [];
-  const acc = devAccounts[devPaymentSelectedIdx] || devAccounts[0] || null;
-
-  const W = 640;
-  const rowH = 62;
-  const headerH = 190;
-  const accountH = acc ? 90 : 0;
-  const footerH = 90;
-  const H = headerH + Math.max(plans.length, 1) * rowH + accountH + footerH;
-
-  const canvas = document.createElement('canvas');
-  canvas.width = W; canvas.height = H;
-  const ctx = canvas.getContext('2d');
-
-  // ---------- پس منظر ----------
-  const theme = THEME_PRESETS.find(t => t.id === AppState.settings.themeId) || THEME_PRESETS[0];
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, W, H);
-
-  let y = 0;
-  ctx.fillStyle = theme.primary;
-  ctx.fillRect(0, 0, W, headerH);
-  ctx.textAlign = 'center';
-  ctx.fillStyle = '#fff';
-  ctx.font = "800 26px Poppins, sans-serif";
-  ctx.fillText(AppState.settings.businessName || 'AIO POS', W/2, 55);
-  ctx.font = "900 30px Poppins, sans-serif";
-  ctx.fillText('📦 Subscription Plans', W/2, 105);
-  ctx.font = "600 14px Poppins, sans-serif";
-  ctx.fillText('Choose the plan that suits you best', W/2, 135);
-  if(rate > 0){
-    ctx.font = "600 13px Poppins, sans-serif";
-    ctx.fillText(`(or any custom duration — Rs. ${rate}/day)`, W/2, 160);
-  }
-
-  y = headerH + 20;
-  ctx.textAlign = 'left';
-  if(plans.length === 0){
-    ctx.fillStyle = '#64748b';
-    ctx.font = "600 15px Poppins, sans-serif";
-    ctx.textAlign = 'center';
-    ctx.fillText('Contact us for pricing details', W/2, y + 20);
-    y += rowH;
-  } else {
-    plans.forEach((p, idx) => {
-      const price = p.price != null ? p.price : (rate > 0 ? p.days * rate : null);
-      const priceLabel = price != null ? 'Rs. ' + price.toLocaleString() : '—';
-      const rowY = y + idx * rowH;
-      ctx.fillStyle = idx % 2 === 0 ? '#f8fafc' : '#ffffff';
-      ctx.fillRect(30, rowY, W - 60, rowH - 10);
-      ctx.fillStyle = '#0f172a';
-      ctx.font = "800 19px Poppins, sans-serif";
-      ctx.textAlign = 'left';
-      ctx.fillText(formatPlanDaysLabel(p.days), 52, rowY + 34);
-      ctx.fillStyle = theme.primary;
-      ctx.font = "800 20px Poppins, sans-serif";
-      ctx.textAlign = 'right';
-      ctx.fillText(priceLabel, W - 52, rowY + 34);
-    });
-    y += plans.length * rowH;
-  }
-
-  y += 10;
-  if(acc){
-    ctx.fillStyle = '#fff7ed';
-    ctx.fillRect(30, y, W - 60, accountH - 15);
-    ctx.textAlign = 'left';
-    ctx.fillStyle = '#9a3412';
-    ctx.font = "700 14px Poppins, sans-serif";
-    ctx.fillText('💳 Send Payment To:', 50, y + 30);
-    ctx.fillStyle = '#7c2d12';
-    ctx.font = "700 16px Poppins, sans-serif";
-    ctx.fillText(`${acc.type}: ${acc.number}${acc.name ? ' (' + acc.name + ')' : ''}`, 50, y + 56);
-    y += accountH;
-  }
-
-  ctx.fillStyle = theme.primaryDark || '#0b4a45';
-  ctx.fillRect(0, H - footerH, W, footerH);
-  ctx.fillStyle = '#fff';
-  ctx.textAlign = 'center';
-  ctx.font = "700 15px Poppins, sans-serif";
-  const contactNum = '+' + (AppState.settings.devWhatsapp || '923206793793').replace(/\D/g, '');
-  ctx.fillText(`💬 Questions? WhatsApp us: ${contactNum}`, W/2, H - footerH/2 + 6);
-
-  showImageSharePreview(canvas, 'Subscription_Plans.png', 'Subscription Plans', 'Here are our subscription plans:');
-}
-
-function renderDayPresetsInAdmin(){
-  const wrap = document.getElementById('dayPresetsWrap');
-  const plans = AppState.settings.subscriptionPlans || [];
-  wrap.innerHTML = plans.map((p, idx) => `
-    <div style="display:flex; gap:6px; margin-bottom:6px;">
-      <input type="number" value="${p.days}" placeholder="Days" onchange="updateSubscriptionPlan(${idx}, 'days', this.value)" style="flex:1; padding:7px; border:1px solid #dbe1ea; border-radius:6px; font-size:12.5px;">
-      <input type="number" value="${p.price != null ? p.price : ''}" placeholder="Price (Rs.)" onchange="updateSubscriptionPlan(${idx}, 'price', this.value)" style="flex:1; padding:7px; border:1px solid #dbe1ea; border-radius:6px; font-size:12.5px;">
-      <button onclick="deleteSubscriptionPlan(${idx})" style="padding:7px 10px; background:#fef2f2; color:var(--danger); border:none; border-radius:6px; font-size:12px; cursor:pointer;">🗑️</button>
-    </div>
-  `).join('');
-}
-
-function updatePerDayRate(value){
-  AppState.settings.perDayRate = parseFloat(value) || 0;
-  persistAllData();
-}
-
-function addSubscriptionPlan(){
-  if(!AppState.settings.subscriptionPlans) AppState.settings.subscriptionPlans = [];
-  AppState.settings.subscriptionPlans.push({days: 30, price: null});
-  persistAllData();
-  renderDayPresetsInAdmin();
-}
-function updateSubscriptionPlan(idx, field, value){
-  if(field === 'price'){
-    AppState.settings.subscriptionPlans[idx].price = value === '' ? null : (parseFloat(value) || 0);
-  } else {
-    AppState.settings.subscriptionPlans[idx][field] = parseInt(value) || 0;
-  }
-  persistAllData();
-}
-function deleteSubscriptionPlan(idx){
-  AppState.settings.subscriptionPlans.splice(idx, 1);
-  persistAllData();
-  renderDayPresetsInAdmin();
 }
 
 // ---------- Home ٹائل سے یہاں پہنچتے ہیں — پہلے فہرست تازہ بنائیں، پھر modal دکھائیں ----------

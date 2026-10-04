@@ -1,7 +1,8 @@
 # AIO POS — زپ فائل اپ لوڈ کریں، باقی کام یہ خود کرے گا
 # 1) ریپو میں جو بھی .zip فائل اپ لوڈ ہو گی، یہ اسے کھولے گا
-# 2) اندر کی فائلیں (index.html, sw.js وغیرہ) پرانی فائلوں کی جگہ رکھے گا
-# 3) زپ فائل ڈیلیٹ کر کے کمٹ کرے گا، اور ویب سائٹ دوبارہ بنوائے گا
+# 2) روٹ پر صرف index.html اور sw.js جائیں گی، باقی فالتو فائلیں چھوڑ دی جائیں گی
+# 3) فولڈر (جیسے tools/) اور ان کی فائلیں اپنی جگہ پر جائیں گی
+# 4) زپ فائل ڈیلیٹ کر کے کمٹ کرے گا، اور ویب سائٹ دوبارہ بنوائے گا
 name: Auto Unzip & Deploy
 
 on:
@@ -28,6 +29,8 @@ jobs:
         id: un
         run: |
           shopt -s nullglob globstar nocaseglob
+          # روٹ پر جو فائلیں جانے دینی ہیں، یہاں لکھیں (سپیس سے الگ)
+          ALLOW_ROOT="index.html sw.js"
           zips=( **/*.zip )
           if [ ${#zips[@]} -eq 0 ]; then echo "none=1" >> "$GITHUB_OUTPUT"; echo "کوئی زپ نہیں ملی"; exit 0; fi
           names=""
@@ -41,6 +44,15 @@ jobs:
             if [ ${#top[@]} -eq 1 ] && [ -d "${top[0]}" ]; then src="${top[0]}"; else src="$tmp"; fi
             # ورک فلو اور git کی فائلیں کبھی نہ بدلیں
             rm -rf "$src/.github" "$src/.git"
+            # روٹ کی فالتو فائلیں ہٹاؤ (فولڈر محفوظ رہیں گے)
+            for f in "$src"/*; do
+              [ -d "$f" ] && continue
+              b=$(basename "$f")
+              case " $ALLOW_ROOT " in
+                *" $b "*) ;;
+                *) echo "⛔ فالتو فائل چھوڑ دی: $b"; rm -f "$f" ;;
+              esac
+            done
             dest=$(dirname "$z")
             cp -a "$src"/. "$dest"/
             git rm -q --cached "$z" 2>/dev/null || true

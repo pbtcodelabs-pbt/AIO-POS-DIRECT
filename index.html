@@ -1830,6 +1830,8 @@
 <div id="loginScreen">
   <div class="loginBox">
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:pointer;">🔐 Login</h2>
+    <!-- ---------- ورژن بیج — لاگ ان پر سب سے اوپر صاف نظر آتا ہے؛ 7 بار ٹیپ کرنے سے ڈویلپر پینل کھلتا ہے ---------- -->
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="display:block; width:fit-content; margin:4px auto 12px; padding:5px 16px; border-radius:999px; background:#eef2ff; border:1px solid #c7d2fe; color:var(--primary-dark); font-size:12px; font-weight:800; letter-spacing:.7px; cursor:pointer; user-select:none;">AIODR410SU002</div>
 
     <!-- ---------- 🎉 خوش آمدید بینر — بیٹا ٹیسٹنگ کی صاف وضاحت، پہلی نظر میں ---------- -->
     <div class="welcomeTrialBanner">
@@ -1873,8 +1875,6 @@
     </div>
 
     <div class="loginHint"><a href="javascript:void(0)" onclick="openPinRecoveryModal()" style="color:var(--primary); font-weight:700; text-decoration:none;">Forgot your PIN? Recover it here.</a></div>
-    <!-- ---------- ورژن بیج — 7 بار ٹیپ کرنے سے ڈویلپر پینل کھلتا ہے ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="margin-top:14px; text-align:center; font-size:10px; font-weight:700; letter-spacing:.4px; color:var(--muted); cursor:pointer; user-select:none;">AIODR410SU001</div>
   </div>
   <button class="devChatBubble" onclick="openDevChat('subscription')" title="Chat with Developer">💬</button>
 </div>
@@ -1982,6 +1982,7 @@
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
+    <div onclick="handleDevPanelTap()" style="display:block; width:fit-content; margin:4px auto 12px; padding:5px 16px; border-radius:999px; background:#eef2ff; border:1px solid #c7d2fe; color:var(--primary-dark); font-size:12px; font-weight:800; letter-spacing:.7px; cursor:pointer; user-select:none;">AIODR410SU002</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -1993,7 +1994,6 @@
     <button onclick="manualRestoreSubscription('subGateMsg')" style="margin-top:8px; background:#eef2ff; color:var(--primary-dark);">♻️ Restore my earlier subscription</button>
     <div id="subGateMsg" style="margin-top:10px; font-size:13px; font-weight:700;"></div>
     <div class="loginHint">No code yet? Tap the 💬 chat bubble below to ask your developer.</div>
-    <div onclick="handleDevPanelTap()" style="margin-top:12px; text-align:center; font-size:10px; font-weight:700; color:var(--muted); cursor:pointer; user-select:none;">AIODR410SU001</div>
   </div>
   <button class="devChatBubble" onclick="openDevChat('subscription')" title="Chat with Developer">💬</button>
 </div>
@@ -2097,7 +2097,7 @@
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="appVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:pointer;">AIODR410SU001</span>
+      <span id="appVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:pointer;">AIODR410SU002</span>
     </div>
   </div>
 
@@ -4486,6 +4486,16 @@
     </div>
 
     <div class="previewStyleControls compactPsc" id="reportStyleControlsWrap">
+      <!-- ---------- 📊 صرف سٹاک سیل پرافٹ رپورٹ کے لیے: کیٹگری منتخب کریں + ترتیب (زیادہ/کم فروخت، زیادہ/کم منافع) ---------- -->
+      <div class="pscCompactRow" id="spFilterRow" style="display:none; gap:6px;">
+        <select id="spCategorySelect" onchange="setStockProfitFilter()" class="pscDropdown" style="flex:1 1 45%; min-width:0;"></select>
+        <select id="spSortSelect" onchange="setStockProfitFilter()" class="pscDropdown" style="flex:1 1 45%; min-width:0;">
+          <option value="profitDesc">💰 زیادہ منافع پہلے</option>
+          <option value="profitAsc">📉 کم منافع پہلے</option>
+          <option value="soldDesc">🔥 زیادہ فروخت پہلے</option>
+          <option value="soldAsc">🐢 کم فروخت پہلے</option>
+        </select>
+      </div>
       <div class="pscCompactRow pscEssentialRow">
         <button id="rpscAlignLeftBtn" class="pscToggleBtn" onclick="setReportAlign('left')">⬅</button>
         <button id="rpscAlignCenterBtn" class="pscToggleBtn" onclick="setReportAlign('center')">↔</button>
@@ -21874,7 +21884,34 @@ function openStockSaleProfitReport(){
 }
 
 // ---------- کنٹرول بٹنوں کو موجودہ محفوظ شدہ سیٹنگز کے مطابق سیٹ کریں ----------
+// ---------- 📊 سٹاک سیل پرافٹ رپورٹ کا فلٹر: کیٹگری اور ترتیب (صرف اسی رپورٹ پر لاگو) ----------
+let stockProfitCategory = '__all__';
+let stockProfitSort = 'profitDesc';
+function setStockProfitFilter(){
+  const cs = document.getElementById('spCategorySelect');
+  const ss = document.getElementById('spSortSelect');
+  if(cs) stockProfitCategory = cs.value;
+  if(ss) stockProfitSort = ss.value;
+  renderReportToCanvas();
+}
+function syncStockProfitFilterControls(){
+  const row = document.getElementById('spFilterRow');
+  if(!row) return;
+  const on = currentReportType === 'stockprofit';
+  row.style.display = on ? 'flex' : 'none';
+  if(!on) return;
+  const cats = [...new Set(getReportFlatItems().map(i => i.category))].sort();
+  if(stockProfitCategory !== '__all__' && !cats.includes(stockProfitCategory)) stockProfitCategory = '__all__';
+  const cs = document.getElementById('spCategorySelect');
+  cs.innerHTML = '';
+  const addOpt = (val, label) => { const o = document.createElement('option'); o.value = val; o.textContent = label; cs.appendChild(o); };
+  addOpt('__all__', '📂 تمام کیٹگریز');
+  cats.forEach(c => addOpt(c, c));
+  cs.value = stockProfitCategory;
+  document.getElementById('spSortSelect').value = stockProfitSort;
+}
 function syncReportStyleControls(){
+  syncStockProfitFilterControls();
   document.getElementById('rpscFontScaleVal').textContent = (AppState.settings.reportFontScale || 100) + '%';
   const zoomSlider = document.getElementById('rpscFontScaleSlider');
   if(zoomSlider) zoomSlider.value = AppState.settings.reportFontScale || 100;
@@ -23177,6 +23214,9 @@ async function renderStockSaleProfitReportToCanvas(){
   }));
   const rows = [];
   productsData.forEach(p => {
+    // ---------- کیٹگری فلٹر: '__all__' ہو تو سب، ورنہ صرف منتخب کیٹگری ---------- -->
+    const pCat = p.category && p.category.trim() ? p.category.trim() : 'Uncategorized';
+    if(stockProfitCategory !== '__all__' && pCat !== stockProfitCategory) return;
     (p.variants || []).forEach(v => {
       const opening = dailyStockSnapshot.opening[v.variant_id] ?? (v.stock || 0);
       const added = dailyStockSnapshot.added[v.variant_id] || 0;
@@ -23185,15 +23225,28 @@ async function renderStockSaleProfitReportToCanvas(){
       const remaining = v.stock || 0;
       const cost = v.purchase || 0;
       // ---------- زیادہ درست منافع: ہر بل کی اپنی unitPrice سے (بجائے صرف موجودہ ریٹ کے) ---------- -->
-      let realProfit = 0;
+      let realProfit = 0, soldRevenue = 0;
       todayInvoices.forEach(inv => (inv.items || []).forEach(it => {
-        if(it.variant_id === v.variant_id) realProfit += (it.qty || 0) * ((it.unitPrice || 0) - cost);
+        if(it.variant_id === v.variant_id){
+          realProfit += (it.qty || 0) * ((it.unitPrice || 0) - cost);
+          soldRevenue += (it.qty || 0) * (it.unitPrice || 0);
+        }
       }));
-      rows.push({name: p.name, label: v.label || '', opening, added, total, sold, remaining, profit: realProfit});
+      // ---------- قیمت فروخت: آج کے بلوں کی اوسط اصل قیمت؛ اگر آج کچھ نہیں بکا تو موجودہ ریٹیل ریٹ ---------- -->
+      const sellPrice = sold > 0 ? (soldRevenue / sold) : (v.retail || 0);
+      rows.push({name: p.name, label: v.label || '', opening, added, total, stock: total, cost, sellPrice, sold, remaining, profit: realProfit});
     });
   });
   // ---------- سب سے زیادہ منافع والا آئٹم سب سے اوپر، سب سے کم (یا نقصان والا) سب سے آخر میں ---------- -->
-  rows.sort((a,b) => b.profit - a.profit);
+  // ---------- ترتیب: منتخب فلٹر کے مطابق؛ برابری پر منافع (زیادہ پہلے) پھر نام ---------- -->
+  const byName = (a,b) => (a.name + ' ' + a.label).localeCompare(b.name + ' ' + b.label);
+  const sorters = {
+    profitDesc: (a,b) => (b.profit - a.profit) || byName(a,b),
+    profitAsc:  (a,b) => (a.profit - b.profit) || byName(a,b),
+    soldDesc:   (a,b) => (b.sold - a.sold) || (b.profit - a.profit) || byName(a,b),
+    soldAsc:    (a,b) => (a.sold - b.sold) || (a.profit - b.profit) || byName(a,b),
+  };
+  rows.sort(sorters[stockProfitSort] || sorters.profitDesc);
   rows.forEach((r, idx) => r.serial = idx + 1);
 
   const fontScale = (AppState.settings.reportFontScale || 100) / 100;
@@ -23208,13 +23261,17 @@ async function renderStockSaleProfitReportToCanvas(){
   try{ await document.fonts.load(`13px ${numFontFam}`); }catch(e){}
   try{ await document.fonts.load(`bold 20px ${fontFam}`); await document.fonts.load(`13px ${fontFam}`); await document.fonts.ready; }catch(e){}
   const digitAlign = AppState.settings.reportAlign || 'left';
-  const alignForCol = (key) => key === 'name' ? 'right' : digitAlign;
+  // ---------- انگلش طرز (بائیں سے دائیں): نام بھی اور ہندسے بھی سیٹنگ کے مطابق — ڈیفالٹ left ----------
+  const alignForCol = (key) => digitAlign;
   const xForCol = (c, align) => {
     const pad = Math.max(3, Math.round(c.width * 0.04));
     if(align === 'right') return c.x + c.width - pad;
     if(align === 'left') return c.x + pad;
     return c.x + c.width/2;
   };
+  const decimals = Math.max(0, AppState.settings.reportPriceDecimals ?? 0);
+  const fmtQty = (n) => String(Math.round((n || 0) * 100) / 100);
+  const fmtMoney = (n) => (n || 0).toLocaleString('en-US', {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
 
   const base = useA4 ? 2.1 : 1.5;
   const fsTitle = Math.round(15 * base * fontScale);
@@ -23229,7 +23286,7 @@ async function renderStockSaleProfitReportToCanvas(){
   const baseRowH = Math.round(fsItem * 2.6 * rowScaleSetting);
   const headerRowH = Math.round(fsHeader * 2.8 * rowScaleSetting);
 
-  // ---------- کالمز: # | نام(+پیکنگ) | پرانا | +آج | ٹوٹل | فروخت | باقی | منافع ---------- -->
+  // ---------- کالمز (بائیں سے دائیں): # | آئٹم/پیکنگ | سٹاک | قیمت خرید | فروخت | قیمت فروخت | باقی سٹاک | منافع ---------- -->
   const wSerial = Math.round(totalW * 0.06);
   ctx.font = `${bold ? 'bold ' : ''}${fsItem}px ${fontFam}`;
   let maxNameTextW = 0;
@@ -23238,24 +23295,24 @@ async function renderStockSaleProfitReportToCanvas(){
     if(w > maxNameTextW) maxNameTextW = w;
   });
   const namePad = Math.max(10, Math.round(fsItem * 0.9));
-  const minNameW = Math.round(totalW * 0.15);
-  const maxNameW = Math.round(totalW * 0.44);
+  const minNameW = Math.round(totalW * 0.18);
+  const maxNameW = Math.round(totalW * 0.36);
   let wName = Math.min(maxNameW, Math.max(minNameW, Math.round(maxNameTextW + namePad)));
   const wNum = Math.round((totalW - wSerial - wName) / 6);
   wName = totalW - wSerial - wNum * 6;
 
   const cols = [
     {key:'serial', label:'#', width:wSerial},
-    {key:'name', label:'نام/پیکنگ', width:wName},
-    {key:'opening', label:'پرانا', width:wNum},
-    {key:'added', label:'+آج', width:wNum},
-    {key:'total', label:'ٹوٹل', width:wNum},
+    {key:'name', label:'آئٹم / پیکنگ', width:wName},
+    {key:'stock', label:'سٹاک', width:wNum},
+    {key:'cost', label:'قیمت خرید', width:wNum},
     {key:'sold', label:'فروخت', width:wNum},
-    {key:'remaining', label:'باقی', width:wNum},
+    {key:'sellPrice', label:'قیمت فروخت', width:wNum},
+    {key:'remaining', label:'باقی سٹاک', width:wNum},
     {key:'profit', label:'منافع', width:wNum},
   ];
-  let cxPos = tableRight;
-  cols.forEach(c => { cxPos -= c.width; c.x = cxPos; });
+  let cxPos = tableLeft;
+  cols.forEach(c => { c.x = cxPos; cxPos += c.width; });
 
   const fitCenteredLines = (text, maxWidth, basePx, weight) => {
     const w = weight ? weight + ' ' : '';
@@ -23315,9 +23372,11 @@ async function renderStockSaleProfitReportToCanvas(){
   cols.forEach(c => {
     const align = alignForCol(c.key);
     ctx.textAlign = align;
-    ctx.font = `bold ${fsHeader}px ${fontFam}`;
+    let hpx = fsHeader;
+    ctx.font = `bold ${hpx}px ${fontFam}`;
+    while(ctx.measureText(c.label).width > c.width - 6 && hpx > 6){ hpx -= 0.5; ctx.font = `bold ${hpx}px ${fontFam}`; }
     ctx.save(); ctx.beginPath(); ctx.rect(c.x, headerTop, c.width, headerRowH); ctx.clip();
-    ctx.fillText(c.label, xForCol(c, align), headerTop + headerRowH/2 + fsHeader*0.32);
+    ctx.fillText(c.label, xForCol(c, align), headerTop + headerRowH/2 + hpx*0.32);
     ctx.restore();
     ctx.beginPath(); ctx.moveTo(c.x+0.5, headerTop); ctx.lineTo(c.x+0.5, headerTop+headerRowH); ctx.stroke();
   });
@@ -23361,7 +23420,8 @@ async function renderStockSaleProfitReportToCanvas(){
         let txt;
         if(c.key === 'serial') txt = String(r.serial);
         else if(c.key === 'name') txt = null;
-        else txt = String(r[c.key]);
+        else if(c.key === 'cost' || c.key === 'sellPrice' || c.key === 'profit') txt = fmtMoney(r[c.key]);
+        else txt = fmtQty(r[c.key]);
         if(c.key === 'name'){
           const px1 = fitCellFont(r.name, c.width-6, fsItem, fontFam);
           ctx.font = `${bold ? 'bold ' : ''}${px1}px ${fontFam}`;
@@ -23387,24 +23447,29 @@ async function renderStockSaleProfitReportToCanvas(){
   }
 
   if(rows.length > 0){
-    let totalProfitSum = 0;
-    rows.forEach(r => { totalProfitSum += r.profit; });
+    let totalProfitSum = 0, totalSoldSum = 0;
+    rows.forEach(r => { totalProfitSum += r.profit; totalSoldSum += r.sold; });
     const trh = Math.round(baseRowH * 1.05);
     ctx.fillStyle = rc.bg;
     ctx.fillRect(tableLeft, y, totalW, trh);
     ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 1.5;
     ctx.strokeRect(tableLeft+0.5, y+0.5, totalW, trh);
-    const profitCol = cols.find(c => c.key === 'profit');
-    const align = alignForCol('profit');
-    ctx.textAlign = align;
-    const tx = xForCol(profitCol, align);
-    const txt = `ٹوٹل منافع: ${Math.round(totalProfitSum).toLocaleString()}`;
-    ctx.fillStyle = totalProfitSum >= 0 ? '#065f2b' : '#991b1b';
-    const px3 = fitCellFont(txt, totalW - 8, fsItem, fontFam);
-    ctx.font = `bold ${px3}px ${fontFam}`;
-    ctx.save(); ctx.beginPath(); ctx.rect(tableLeft, y, totalW, trh); ctx.clip();
-    ctx.fillText(txt, tx, y + trh/2 + fsItem*0.32);
-    ctx.restore();
+    ctx.lineWidth = 1;
+    cols.forEach(c => { ctx.beginPath(); ctx.moveTo(c.x+0.5, y); ctx.lineTo(c.x+0.5, y+trh); ctx.stroke(); });
+    const drawTotalCell = (key, text, color) => {
+      const col = cols.find(c => c.key === key);
+      const align = alignForCol(key);
+      ctx.textAlign = align;
+      ctx.fillStyle = color;
+      const pxT = fitCellFont(text, col.width - 6, fsItem, fontFam);
+      ctx.font = `bold ${pxT}px ${fontFam}`;
+      ctx.save(); ctx.beginPath(); ctx.rect(col.x, y, col.width, trh); ctx.clip();
+      ctx.fillText(text, xForCol(col, align), y + trh/2 + fsItem*0.32);
+      ctx.restore();
+    };
+    drawTotalCell('name', 'ٹوٹل', '#1a1a1a');
+    drawTotalCell('sold', fmtQty(totalSoldSum), '#1a1a1a');
+    drawTotalCell('profit', fmtMoney(totalProfitSum), totalProfitSum >= 0 ? '#065f2b' : '#991b1b');
     y += trh;
   }
 

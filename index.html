@@ -1868,10 +1868,13 @@
       <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:4px;">Activation code (from your developer)</label>
       <input type="text" id="loginActivationCodeInput" placeholder="6-digit code">
       <button onclick="activateFromLoginScreen()" style="margin-top:8px;">✅ Activate</button>
+      <button onclick="manualRestoreSubscription('loginActivationMsg')" style="margin-top:8px; background:#eef2ff; color:var(--primary-dark);">♻️ Restore my earlier subscription</button>
       <div id="loginActivationMsg" style="margin-top:8px; font-size:13px; font-weight:700;"></div>
     </div>
 
     <div class="loginHint"><a href="javascript:void(0)" onclick="openPinRecoveryModal()" style="color:var(--primary); font-weight:700; text-decoration:none;">Forgot your PIN? Recover it here.</a></div>
+    <!-- ---------- ورژن بیج — 7 بار ٹیپ کرنے سے ڈویلپر پینل کھلتا ہے ---------- -->
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="margin-top:14px; text-align:center; font-size:10px; font-weight:700; letter-spacing:.4px; color:var(--muted); cursor:pointer; user-select:none;">AIODR410SU001</div>
   </div>
   <button class="devChatBubble" onclick="openDevChat('subscription')" title="Chat with Developer">💬</button>
 </div>
@@ -1987,8 +1990,10 @@
     <label style="display:block; font-size:12px; color:var(--muted); text-align:left; margin-bottom:4px;">Activation code (from your developer)</label>
     <input type="text" id="subGateCodeInput" placeholder="6-digit code">
     <button onclick="submitActivationCode()" style="margin-top:14px;">✅ Activate</button>
+    <button onclick="manualRestoreSubscription('subGateMsg')" style="margin-top:8px; background:#eef2ff; color:var(--primary-dark);">♻️ Restore my earlier subscription</button>
     <div id="subGateMsg" style="margin-top:10px; font-size:13px; font-weight:700;"></div>
     <div class="loginHint">No code yet? Tap the 💬 chat bubble below to ask your developer.</div>
+    <div onclick="handleDevPanelTap()" style="margin-top:12px; text-align:center; font-size:10px; font-weight:700; color:var(--muted); cursor:pointer; user-select:none;">AIODR410SU001</div>
   </div>
   <button class="devChatBubble" onclick="openDevChat('subscription')" title="Chat with Developer">💬</button>
 </div>
@@ -2092,7 +2097,7 @@
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px;">AIODR20SEPSU0113PM</span>
+      <span id="appVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:pointer;">AIODR410SU001</span>
     </div>
   </div>
 
@@ -5821,8 +5826,30 @@ async function authFirestoreFetch(path, options = {}){
 // ری سیٹ کر کے دوبارہ مفت استعمال نہ کر سکے۔ ٹرائل کا اصل تالا Firestore میں لگتا ہے (نیچے دیکھیں) ----------
 // نوٹ: بالکل پہلی بار (نیا ڈیوائس) پر خودکار 14 دن کا مفت (Beta) ٹرائل بھی شروع ہو جاتا ہے — تاکہ
 // کسی نئے صارف کو فائل کھولتے ہی PIN/Activation کے چکر میں نہ الجھنا پڑے، وہ فوراً ایپ آزما سکے۔
-function getOrCreateDeviceUID(){
-  if(AppState.settings.deviceUID) return AppState.settings.deviceUID;
+// ---------- 📅 مقامی تاریخ کے مددگار — toISOString() UTC دیتا ہے، پاکستان میں رات 12 تا صبح 5 بجے ایک دن کا فرق آ جاتا تھا ----------
+function localDateStr(d){
+  d = d || new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function parseLocalDate(str){
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(str || ''));
+  if(!m) return new Date(NaN);
+  return new Date(Number(m[1]), Number(m[2])-1, Number(m[3]));
+}
+// ---------- آج کی تاریخ — اگر فون کی گھڑی پیچھے کی گئی ہو تو سب سے آخری دیکھی گئی تاریخ استعمال ہو (سبسکرپشن لمبی کرنے کی چال بند) ----------
+function getEffectiveToday(){
+  const real = new Date(); real.setHours(0,0,0,0);
+  const seenStr = AppState.settings.lastSeenDay;
+  const seen = seenStr ? parseLocalDate(seenStr) : null;
+  if(seen && !isNaN(seen) && seen > real) return seen;
+  AppState.settings.lastSeenDay = localDateStr(real); // اگلی persist کے ساتھ خود محفوظ ہو جائے گا
+  return real;
+}
+
+// ---------- ہر انسٹالیشن کی شناخت (نئی انسٹالیشن پر 8 حرفی، مثلاً K7M2-9QX4) — ڈیوائس کی مستقل خصوصیات سے بنتی ہے،
+// اسی لیے اسی فون پر Uninstall/Data Clear کے بعد بھی وہی ID دوبارہ بنتی ہے اور سرور سے پرانی سبسکرپشن بحال ہو سکتی ہے۔
+// پرانی انسٹالیشن جس میں 5 ہندسوں والی ID محفوظ ہے، وہی رہتی ہے ----------
+function computeLegacyUID(){
   const fp = [
     navigator.userAgent.length,
     screen.width, screen.height,
@@ -5833,13 +5860,52 @@ function getOrCreateDeviceUID(){
   ].join('');
   let hash = 0;
   for(let i = 0; i < fp.length; i++){ hash = ((hash << 5) - hash) + fp.charCodeAt(i); hash |= 0; }
-  const uid = String(10000 + (Math.abs(hash) % 90000));
+  return String(10000 + (Math.abs(hash) % 90000));
+}
+function computeStableUID(){
+  let gpu = '';
+  try{
+    const c = document.createElement('canvas');
+    const gl = c.getContext('webgl') || c.getContext('experimental-webgl');
+    if(gl){
+      const ext = gl.getExtension('WEBGL_debug_renderer_info');
+      gpu = ext ? (gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) + '|' + gl.getParameter(ext.UNMASKED_VENDOR_WEBGL)) : '';
+    }
+  }catch(e){}
+  let tz = ''; try{ tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; }catch(e){}
+  const fp = [
+    Math.min(screen.width, screen.height), Math.max(screen.width, screen.height),
+    Math.round((window.devicePixelRatio || 1) * 100),
+    screen.colorDepth || 24,
+    navigator.hardwareConcurrency || 2,
+    navigator.deviceMemory || 4,
+    navigator.maxTouchPoints || 0,
+    navigator.platform || '',
+    tz, gpu
+  ].join('|');
+  // دو الگ الگ 32-بٹ ہیش (FNV-1a اور djb2) ملا کر 40 بٹ — پھر base32 (بغیر الجھانے والے حروف)
+  let h1 = 0x811c9dc5, h2 = 5381;
+  for(let i = 0; i < fp.length; i++){
+    const ch = fp.charCodeAt(i);
+    h1 ^= ch; h1 = Math.imul(h1, 16777619) >>> 0;
+    h2 = (Math.imul(h2, 33) ^ ch) >>> 0;
+  }
+  const alpha = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let n = (BigInt(h1) << 32n) | BigInt(h2);
+  let out = '';
+  for(let i = 0; i < 8; i++){ out = alpha[Number(n & 31n)] + out; n >>= 5n; }
+  return out.slice(0,4) + '-' + out.slice(4);
+}
+function getOrCreateDeviceUID(){
+  if(AppState.settings.deviceUID) return AppState.settings.deviceUID;
+  let uid;
+  try{ uid = computeStableUID(); }catch(e){ uid = computeLegacyUID(); }
   AppState.settings.deviceUID = uid;
   if(!AppState.settings.subscriptionExpiry && !AppState.settings.freeTrialGranted){
     const trialEnd = new Date();
     trialEnd.setDate(trialEnd.getDate() + 14);
-    AppState.settings.subscriptionExpiry = trialEnd.toISOString().slice(0,10);
-    AppState.settings.subscriptionActivatedOn = new Date().toISOString().slice(0,10);
+    AppState.settings.subscriptionExpiry = localDateStr(trialEnd);
+    AppState.settings.subscriptionActivatedOn = localDateStr();
     AppState.settings.freeTrialGranted = true;
     AppState.settings.isOnFreeTrial = true;
   }
@@ -5858,10 +5924,13 @@ async function checkAndLockTrialOnline(){
     const res = await fetch(`${FIRESTORE_BASE}/trials/${uid}?key=${FIREBASE_API_KEY}`);
     if(res.status === 200){
       // ---------- پہلے سے موجود ریکارڈ ملا — یعنی اس ڈیوائس پر ٹرائل پہلے استعمال ہو چکا، دوبارہ نہیں ملے گا ----------
-      AppState.settings.subscriptionExpiry = null;
-      AppState.settings.isOnFreeTrial = false;
-      persistAllData();
-      if(typeof setupLoginScreen === 'function') setupLoginScreen();
+      // (اگر سرور سے ادا شدہ سبسکرپشن بحال ہو چکی ہے تو اسے ہاتھ نہیں لگانا — صرف مقامی ٹرائل ختم ہو)
+      if(AppState.settings.isOnFreeTrial){
+        AppState.settings.subscriptionExpiry = null;
+        AppState.settings.isOnFreeTrial = false;
+        persistAllData();
+        if(typeof setupLoginScreen === 'function') setupLoginScreen();
+      }
       return;
     }
     if(res.status === 404){
@@ -5882,6 +5951,7 @@ async function resyncLicenseOnline(){
   if(AppState.settings.isOnFreeTrial) return;
   const code = AppState.settings.lastActivationCode;
   if(!code) return;
+  if(AppState.settings.deviceRecordPending) saveDeviceRecord(); // پچھلی بار انٹرنیٹ/رولز کی وجہ سے نہ لکھا جا سکا تھا
   try{
     const res = await fetch(`${FIRESTORE_BASE}/licenses/${encodeURIComponent(code)}?key=${FIREBASE_API_KEY}`);
     if(!res.ok) return;
@@ -5899,15 +5969,15 @@ async function resyncLicenseOnline(){
 function isSubscriptionActive(){
   const exp = AppState.settings.subscriptionExpiry;
   if(!exp) return false;
-  const today = new Date(); today.setHours(0,0,0,0);
-  const expDate = new Date(exp); expDate.setHours(0,0,0,0);
-  return expDate >= today;
+  const today = getEffectiveToday();
+  const expDate = parseLocalDate(exp);
+  return !isNaN(expDate) && expDate >= today; // اختتامی تاریخ والا دن بھی شامل
 }
 
 function daysLeftInSubscription(){
   if(!isSubscriptionActive()) return 0;
-  const today = new Date(); today.setHours(0,0,0,0);
-  const expDate = new Date(AppState.settings.subscriptionExpiry); expDate.setHours(0,0,0,0);
+  const today = getEffectiveToday();
+  const expDate = parseLocalDate(AppState.settings.subscriptionExpiry);
   return Math.round((expDate - today) / (1000*60*60*24));
 }
 
@@ -5923,9 +5993,112 @@ function _parseFirestoreFields(fields){
   return out;
 }
 
+// ---------- UID موازنہ: خالی جگہ/چھوٹے بڑے حروف کا فرق نظر انداز ----------
+function sameUid(a, b){
+  return String(a || '').trim().toUpperCase() === String(b || '').trim().toUpperCase();
+}
+
+// ---------- 🗂️ سرور پر اس ڈیوائس کا ریکارڈ (devices/{UID}) — ایپ ڈیلیٹ/دوبارہ انسٹال کے بعد اسی سے سبسکرپشن بحال ہوتی ہے ----------
+async function saveDeviceRecord(){
+  const uid = AppState.settings.deviceUID;
+  const exp = AppState.settings.subscriptionExpiry;
+  if(!uid || !exp || AppState.settings.isOnFreeTrial) return false;
+  try{
+    const res = await authFirestoreFetch(`devices/${encodeURIComponent(uid)}?key=${FIREBASE_API_KEY}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fields: {
+        active: { booleanValue: true },
+        expiryDate: { stringValue: exp },
+        activatedOn: { stringValue: AppState.settings.subscriptionActivatedOn || localDateStr() },
+        lastCode: { stringValue: AppState.settings.lastActivationCode || '' },
+        updatedAt: { integerValue: String(Date.now()) }
+      }})
+    });
+    AppState.settings.deviceRecordPending = !res.ok;
+    persistAllData();
+    return res.ok;
+  }catch(e){
+    AppState.settings.deviceRecordPending = true;
+    persistAllData();
+    return false;
+  }
+}
+
+// ---------- ♻️ ایپ ڈیلیٹ کر کے دوبارہ انسٹال کرنے پر: سرور سے اسی ڈیوائس کی باقی سبسکرپشن خود بحال — کوڈ دوبارہ نہیں مانگا جاتا ----------
+async function restoreSubscriptionFromServer(){
+  const uid = AppState.settings.deviceUID;
+  if(!uid) return {restored:false, reason:'nouid'};
+  try{
+    const res = await fetch(`${FIRESTORE_BASE}/devices/${encodeURIComponent(uid)}?key=${FIREBASE_API_KEY}`);
+    if(res.status === 404) return {restored:false, reason:'none'};
+    if(!res.ok) return {restored:false, reason:'error'};
+    const d = _parseFirestoreFields((await res.json()).fields || {});
+    if(d.active === false || !d.expiryDate) return {restored:false, reason:'none'};
+
+    // ---------- جس کوڈ سے یہ سبسکرپشن بنی تھی وہ ڈیلیٹ یا معطل ہو چکا ہو تو بحال نہ کریں ----------
+    if(d.lastCode){
+      const lr = await fetch(`${FIRESTORE_BASE}/licenses/${encodeURIComponent(d.lastCode)}?key=${FIREBASE_API_KEY}`);
+      if(lr.status === 404) return {restored:false, reason:'revoked'};
+      if(lr.ok){
+        const ld = _parseFirestoreFields((await lr.json()).fields || {});
+        if(ld.active === false) return {restored:false, reason:'revoked'};
+      }
+    }
+    const srvExp = parseLocalDate(d.expiryDate);
+    if(isNaN(srvExp) || srvExp < getEffectiveToday()) return {restored:false, reason:'expired'};
+
+    const localExp = AppState.settings.subscriptionExpiry ? parseLocalDate(AppState.settings.subscriptionExpiry) : null;
+    const localIsPaidAndBetter = isSubscriptionActive() && !AppState.settings.isOnFreeTrial && localExp && localExp >= srvExp;
+    if(localIsPaidAndBetter) return {restored:false, reason:'already'};
+
+    AppState.settings.subscriptionExpiry = d.expiryDate;
+    AppState.settings.subscriptionActivatedOn = d.activatedOn || localDateStr();
+    AppState.settings.isOnFreeTrial = false;
+    AppState.settings.lastActivationCode = d.lastCode || '';
+    persistAllData();
+
+    // ---------- اسکرین تازہ کریں — سبسکرپشن گیٹ کھلا ہو تو بند کر کے ایپ کھولیں؛ ایپ کے اندر ہوں تو صرف بینر تازہ ----------
+    try{
+      const gate = document.getElementById('subscriptionGateScreen');
+      const loginEl = document.getElementById('loginScreen');
+      if(gate && gate.style.display !== 'none'){
+        gate.style.display = 'none';
+        document.getElementById('app').style.display = 'grid';
+        goTo('home');
+      } else if(loginEl && getComputedStyle(loginEl).display !== 'none'){
+        setupLoginScreen();
+      } else if(typeof renderSubscriptionBanner === 'function'){
+        renderSubscriptionBanner();
+      }
+    }catch(e){}
+    return {restored:true, expiry:d.expiryDate, days:daysLeftInSubscription()};
+  }catch(e){
+    return {restored:false, reason:'offline'};
+  }
+}
+
+// ---------- ہاتھ سے "سبسکرپشن بحال کریں" بٹن (Login اور Gate دونوں پر) ----------
+async function manualRestoreSubscription(msgElId){
+  const msgEl = document.getElementById(msgElId);
+  msgEl.style.color = 'var(--muted)';
+  msgEl.textContent = '⏳ Looking for your subscription...';
+  const r = await restoreSubscriptionFromServer();
+  if(r.restored){
+    msgEl.style.color = 'var(--success)';
+    msgEl.textContent = `✅ Subscription restored — ${r.days} day(s) left (valid until ${formatDateDMY(r.expiry)}).`;
+  } else {
+    const why = { none:'No earlier subscription found for this device.', expired:'Your earlier subscription has already ended.',
+      revoked:'Your earlier code is no longer active. Please contact the developer.', offline:'No internet connection.',
+      error:'Could not check right now. Try again.', already:'Your subscription is already active on this device.' }[r.reason] || 'Nothing to restore.';
+    msgEl.style.color = r.reason === 'already' ? 'var(--success)' : 'var(--danger)';
+    msgEl.textContent = (r.reason === 'already' ? '✅ ' : '❌ ') + why;
+  }
+}
+
 // ---------- کسٹمر کا درج کردہ کوڈ Firestore سے آن لائن تصدیق کریں (اب فارمولا فائل کے اندر کہیں نہیں) ----------
 async function activateSubscription(code){
-  const trimmedCode = (code || '').trim();
+  const trimmedCode = (code || '').trim().toUpperCase();
   if(!trimmedCode) return {success:false, message:'Please enter an activation code.'};
 
   const uid = getOrCreateDeviceUID();
@@ -5943,46 +6116,72 @@ async function activateSubscription(code){
   const data = _parseFirestoreFields(doc.fields || {});
 
   if(data.active === false) return {success:false, message:'This code has been revoked. Please contact the developer.'};
-  // ---------- 🎁 اگر کوڈ کسی خاص ڈیوائس سے bound نہیں (boundUid خالی) تو کوئی بھی ڈیوائس ایک بار استعمال کر سکتی ہے ----------
-  if(data.boundUid && data.boundUid !== uid) return {success:false, message:'This code was issued for a different device.'};
-  if(data.activatedAt) return {success:false, message:'This code has already been used.'};
+  // ---------- اگر کوڈ کسی خاص ڈیوائس سے bound نہیں (boundUid خالی) تو کوئی بھی ڈیوائس ایک بار استعمال کر سکتی ہے ----------
+  if(data.boundUid && !sameUid(data.boundUid, uid) && !sameUid(data.boundUid, computeLegacyUID())){
+    return {success:false, message:'This code was issued for a different device.'};
+  }
+
+  const todayD = getEffectiveToday();
+
+  // ---------- ♻️ کوڈ پہلے استعمال ہو چکا: اگر اسی ڈیوائس پر ہوا تھا (ایپ ڈیلیٹ کر کے دوبارہ لگائی) تو نئے دن جمع کیے بغیر
+  // باقی سبسکرپشن بحال کر دیں؛ کسی اور ڈیوائس کے لیے "Already used" ----------
+  if(data.activatedAt){
+    if(data.activatedUid && sameUid(data.activatedUid, uid) && data.expiryDate){
+      const e = parseLocalDate(data.expiryDate);
+      if(!isNaN(e) && e >= todayD){
+        AppState.settings.subscriptionExpiry = data.expiryDate;
+        AppState.settings.subscriptionActivatedOn = AppState.settings.subscriptionActivatedOn || localDateStr();
+        AppState.settings.isOnFreeTrial = false;
+        AppState.settings.lastActivationCode = trimmedCode;
+        persistAllData();
+        saveDeviceRecord();
+        return {success:true, restored:true, expiry:data.expiryDate, daysGranted:0, prevDays:0, totalDays:daysLeftInSubscription()};
+      }
+      return {success:false, message:'This code was already used on this device and its period has ended.'};
+    }
+    return {success:false, message:'This code has already been used.'};
+  }
 
   const daysNum = data.lifetime ? 36500 : (data.days || 0);
   if(!daysNum) return {success:false, message:'This code has invalid duration data. Please contact the developer.'};
 
-  // ---------- اگر پہلے سے فعال ادائیگی شدہ سبسکرپشن ہو تو نئے دن اس میں جوڑ دیں (توسیع/renewal)۔
-  // لیکن اگر ابھی صرف مفت ٹرائل چل رہا ہو تو نیا کوڈ اسی پر جمع نہیں ہونا چاہیے ----------
-  const hasActivePaidSub = isSubscriptionActive() && !AppState.settings.isOnFreeTrial;
-  const base = hasActivePaidSub ? new Date(AppState.settings.subscriptionExpiry) : new Date();
+  // ---------- 📅 دن جمع کرنے کا اصول: اگر پہلے سے کوئی سبسکرپشن یا مفت ٹرائل چل رہا ہو تو اس کے باقی دن بچے رہتے ہیں
+  // اور نئے کوڈ کے پورے دن ان کے اوپر جمع ہوتے ہیں (مثلاً 20 + 30 = 50)۔ نہ چل رہا ہو تو آج کے بعد اگلے دن سے پورے دن گنے جاتے ہیں ----------
+  const prevDays = isSubscriptionActive() ? daysLeftInSubscription() : 0;
+  const base = isSubscriptionActive() ? parseLocalDate(AppState.settings.subscriptionExpiry) : new Date(todayD);
+  base.setHours(0,0,0,0);
   base.setDate(base.getDate() + daysNum);
-  const newExpiryStr = base.toISOString().slice(0,10);
+  const newExpiryStr = localDateStr(base);
 
-  // ---------- Firestore میں کوڈ کو "استعمال شدہ" مارک کریں — دوبارہ استعمال ناممکن ----------
+  // ---------- Firestore میں کوڈ کو "استعمال شدہ" مارک کریں — precondition کے ساتھ: اگر اسی لمحے کسی اور فون نے بھی لگا دیا
+  // تو دوسرا رد ہو جائے گا (ایک کوڈ، ایک ہی ڈیوائس) ----------
   try{
-    const updateRes = await authFirestoreFetch(
-      `licenses/${encodeURIComponent(trimmedCode)}?updateMask.fieldPaths=activatedAt&updateMask.fieldPaths=expiresAt&key=${FIREBASE_API_KEY}`,
-      {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fields: {
-            activatedAt: { integerValue: String(Date.now()) },
-            expiresAt: { integerValue: String(base.getTime()) }
-          }
-        })
-      }
-    );
+    let url = `licenses/${encodeURIComponent(trimmedCode)}?updateMask.fieldPaths=activatedAt&updateMask.fieldPaths=expiresAt&updateMask.fieldPaths=expiryDate&updateMask.fieldPaths=activatedUid&key=${FIREBASE_API_KEY}`;
+    if(doc.updateTime) url += `&currentDocument.updateTime=${encodeURIComponent(doc.updateTime)}`;
+    const updateRes = await authFirestoreFetch(url, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fields: {
+          activatedAt: { integerValue: String(Date.now()) },
+          expiresAt: { integerValue: String(base.getTime()) },
+          expiryDate: { stringValue: newExpiryStr },
+          activatedUid: { stringValue: uid }
+        }
+      })
+    });
     if(!updateRes.ok) return {success:false, message:'This code was already used or is no longer valid.'};
   }catch(e){
     return {success:false, message:'No internet connection. Please connect to the internet and try again.'};
   }
 
   AppState.settings.subscriptionExpiry = newExpiryStr;
-  AppState.settings.subscriptionActivatedOn = new Date().toISOString().slice(0,10);
+  AppState.settings.subscriptionActivatedOn = localDateStr();
   AppState.settings.isOnFreeTrial = false;
-  AppState.settings.lastActivationCode = trimmedCode; // ---------- Remote Revoke کے لیے یاد رکھیں ----------
+  AppState.settings.lastActivationCode = trimmedCode; // ---------- Remote Revoke اور بحالی کے لیے یاد رکھیں ----------
   persistAllData();
-  return {success:true, expiry: newExpiryStr, daysGranted: daysNum};
+  saveDeviceRecord(); // ---------- سرور پر ڈیوائس ریکارڈ — دوبارہ انسٹال پر بحالی کے لیے ----------
+  return {success:true, expiry: newExpiryStr, daysGranted: daysNum, prevDays: prevDays, totalDays: prevDays + daysNum};
 }
 
 /* =====================================================================
@@ -6188,7 +6387,7 @@ function renderIssuedCodesList(){
         <div style="font-size:11px; font-weight:800; color:${statusColor};">${statusLabel}</div>
       </div>
       <div style="font-size:12px; color:var(--muted); margin-bottom:6px;">
-        👤 ${it.customerName || 'نام درج نہیں'} • ⏱️ ${durationLabel}${it.boundUid ? ' • 🔒 UID: '+it.boundUid : ' • 🔓 کوئی بھی ڈیوائس'}
+        👤 ${it.customerName || 'نام درج نہیں'} • ⏱️ ${durationLabel}${it.boundUid ? ' • 🔒 UID: '+it.boundUid : ' • 🔓 کوئی بھی ڈیوائس'}${it.activatedUid ? '<br>📱 لگایا گیا: '+it.activatedUid : ''}${it.expiryDate ? ' • 📅 ختم: '+it.expiryDate : ''}
       </div>
       <div style="display:flex; gap:6px;">
         ${!isRevoked ? `<button onclick="suspendLicenseCode('${it.code}')" style="flex:1; padding:6px; background:#fef3c7; color:#92400e; border:none; border-radius:7px; font-size:11.5px; font-weight:800; cursor:pointer;">⏸️ معطل کریں</button>` : `<button onclick="reactivateLicenseCode('${it.code}')" style="flex:1; padding:6px; background:#dcfce7; color:#15803d; border:none; border-radius:7px; font-size:11.5px; font-weight:800; cursor:pointer;">▶️ دوبارہ فعال کریں</button>`}
@@ -6452,6 +6651,8 @@ function resetDeviceUIDForTesting(){
   delete AppState.settings.subscriptionActivatedOn;
   delete AppState.settings.isOnFreeTrial;
   delete AppState.settings.freeTrialGranted;
+  delete AppState.settings.lastSeenDay;
+  delete AppState.settings.deviceRecordPending;
   persistAllData();
   alert('✅ Device ID reset. The app will reload now.');
   location.reload();
@@ -6716,7 +6917,11 @@ async function submitActivationCode(){
   const result = await activateSubscription(code);
   if(result.success){
     msgEl.style.color = 'var(--success)';
-    msgEl.textContent = `✅ Activated! ${result.daysGranted} day(s) added — valid until ${result.expiry}. Opening app...`;
+    msgEl.textContent = result.restored
+      ? `✅ Subscription restored — valid until ${formatDateDMY(result.expiry)} (${result.totalDays} day(s) left). Opening app...`
+      : (result.prevDays > 0
+          ? `✅ Activated! ${result.prevDays} + ${result.daysGranted} = ${result.totalDays} days — valid until ${formatDateDMY(result.expiry)}. Opening app...`
+          : `✅ Activated! ${result.daysGranted} day(s) added — valid until ${formatDateDMY(result.expiry)}. Opening app...`);
     setTimeout(() => {
       document.getElementById('subscriptionGateScreen').style.display = 'none';
       document.getElementById('app').style.display = 'grid';
@@ -6744,7 +6949,11 @@ async function activateFromLoginScreen(){
   const result = await activateSubscription(code);
   if(result.success){
     msgEl.style.color = 'var(--success)';
-    msgEl.textContent = `✅ Activated! ${result.daysGranted} day(s) added — valid until ${result.expiry}.`;
+    msgEl.textContent = result.restored
+      ? `✅ Subscription restored — valid until ${formatDateDMY(result.expiry)} (${result.totalDays} day(s) left).`
+      : (result.prevDays > 0
+          ? `✅ Activated! ${result.prevDays} + ${result.daysGranted} = ${result.totalDays} days — valid until ${formatDateDMY(result.expiry)}.`
+          : `✅ Activated! ${result.daysGranted} day(s) added — valid until ${formatDateDMY(result.expiry)}.`);
     setTimeout(() => { setupLoginScreen(); }, 1000); // ---------- لاگ ان سکرین کی حیثیت (Trial/Subscribed) فوراً تازہ ہو جائے ----------
   } else {
     msgEl.style.color = 'var(--danger)';
@@ -23845,9 +24054,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ---------- 📡 انٹرنیٹ ملتے ہی خاموشی سے: (1) ٹرائل کا Firestore لاک چیک/محفوظ کریں (2) ادائیگی شدہ
   // سبسکرپشن دور سے منسوخ تو نہیں ہوئی — یوزر کو کوئی لوڈنگ نظر نہیں آئے گی، بیک گراؤنڈ میں ہوتا ہے ----------
-  setTimeout(() => {
-    checkAndLockTrialOnline();
-    resyncLicenseOnline();
+  setTimeout(async () => {
+    await restoreSubscriptionFromServer(); // ---------- پہلے: دوبارہ انسٹال کی صورت میں پرانی سبسکرپشن بحال ----------
+    await checkAndLockTrialOnline();
+    await resyncLicenseOnline();
   }, 2000);
 
   renderProductList();

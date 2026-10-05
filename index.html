@@ -1801,6 +1801,22 @@
   body.nastaleeq-active .kpiLabel,
   body.nastaleeq-active .statLabel,
   body.nastaleeq-active .hLabel{ font-size:12.5px; line-height:1.9; }
+
+  /* ---------- ⭐ ہوم پیج Subscribe بٹن ---------- */
+  .homeSubscribeBtn{ display:block; width:100%; margin:0 0 10px; padding:11px 14px; border:none; border-radius:12px;
+    background:linear-gradient(135deg,#f59e0b 0%,#d97706 100%); color:#fff; font-size:13.5px; font-weight:800; letter-spacing:.2px;
+    box-shadow:0 4px 12px rgba(217,119,6,.28); cursor:pointer; -webkit-tap-highlight-color:transparent; }
+  .homeSubscribeBtn:active{ transform:scale(.98); }
+  /* ---------- 🏷️ ورژن بیج — Login / Subscription اور Home ہیڈر (AIODR610TU002) ---------- */
+  .verBadge{ display:flex; align-items:center; gap:7px; width:fit-content; margin:6px auto 14px; padding:6px 16px 6px 12px;
+    border-radius:999px; background:linear-gradient(135deg,#0f766e 0%,#14b8a6 100%); color:#fff; font-size:12px; font-weight:800;
+    letter-spacing:1.2px; font-family:ui-monospace,Menlo,Consolas,monospace; box-shadow:0 4px 14px rgba(15,118,110,.30), inset 0 1px 0 rgba(255,255,255,.25);
+    border:1px solid rgba(255,255,255,.35); cursor:pointer; user-select:none; -webkit-tap-highlight-color:transparent; transition:transform .12s ease; }
+  .verBadge:active{ transform:scale(.96); }
+  .verDot{ width:7px; height:7px; border-radius:50%; background:#a7f3d0; box-shadow:0 0 0 3px rgba(167,243,208,.30); flex-shrink:0; }
+  .verBadgeHdr{ display:inline-block; margin-top:2px; padding:2px 8px; border-radius:999px; background:rgba(255,255,255,.16);
+    border:1px solid rgba(255,255,255,.35); color:#fff; font-size:9.5px; font-weight:800; letter-spacing:.8px;
+    font-family:ui-monospace,Menlo,Consolas,monospace; cursor:pointer; user-select:none; -webkit-tap-highlight-color:transparent; }
 </style>
   <!-- ---------- یہ الگ style ٹیگ خاص طور پر پرنٹ کے وقت اصل کاغذ کی چوڑائی (58mm/80mm) بتانے کے لیے ہے —
        بغیر اس کے، پرنٹ سسٹم صفحے کا سائز A4/Letter سمجھ کر رسید کو چھوٹا کر کے سکیڑ دیتا تھا،
@@ -1831,7 +1847,7 @@
   <div class="loginBox">
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:pointer;">🔐 Login</h2>
     <!-- ---------- ورژن بیج — لاگ ان پر سب سے اوپر صاف نظر آتا ہے؛ 7 بار ٹیپ کرنے سے ڈویلپر پینل کھلتا ہے ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="display:block; width:fit-content; margin:4px auto 12px; padding:5px 16px; border-radius:999px; background:#eef2ff; border:1px solid #c7d2fe; color:var(--primary-dark); font-size:12px; font-weight:800; letter-spacing:.7px; cursor:pointer; user-select:none;">AIODR410SU002</div>
+    <div id="loginVersionBadge" class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR610TU002</div>
 
     <!-- ---------- 🎉 خوش آمدید بینر — بیٹا ٹیسٹنگ کی صاف وضاحت، پہلی نظر میں ---------- -->
     <div class="welcomeTrialBanner">
@@ -1864,13 +1880,18 @@
 
     <!-- ---------- سیدھا Login سکرین سے ہی Activation Code لگانے کا آپشن — PIN سے پہلے، تاکہ کنفیوژن نہ ہو ---------- -->
     <div class="loginHint" style="margin-top:10px;">
-      <a href="javascript:void(0)" onclick="toggleLoginActivationBox()" style="color:var(--primary); font-weight:700; text-decoration:none;">🔑 Have an activation code? Tap here.</a>
+      <a href="javascript:void(0)" onclick="toggleLoginActivationBox()" style="color:var(--primary); font-weight:700; text-decoration:none;">🔑 Have an activation code / Subscribe now? Tap here.</a>
     </div>
     <div id="loginActivationBox" style="display:none; margin-top:10px; text-align:left;">
       <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:4px;">Activation code (from your developer)</label>
       <input type="text" id="loginActivationCodeInput" placeholder="6-digit code">
       <button onclick="activateFromLoginScreen()" style="margin-top:8px;">✅ Activate</button>
       <button onclick="manualRestoreSubscription('loginActivationMsg')" style="margin-top:8px; background:#eef2ff; color:var(--primary-dark);">♻️ Restore my earlier subscription</button>
+      <div style="margin-top:12px; padding-top:10px; border-top:1px dashed #dbe1ea;">
+        <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:4px; text-align:left;">📱 New phone or reinstalled? Enter your mobile number</label>
+        <input type="tel" id="loginPhoneInput" inputmode="tel" placeholder="03001234567">
+        <button onclick="restoreByPhoneUI('loginPhoneInput','loginActivationMsg')" style="margin-top:8px; background:#e0f2fe; color:#0369a1;">📱 Restore with mobile number</button>
+      </div>
       <div id="loginActivationMsg" style="margin-top:8px; font-size:13px; font-weight:700;"></div>
     </div>
 
@@ -1982,7 +2003,7 @@
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div onclick="handleDevPanelTap()" style="display:block; width:fit-content; margin:4px auto 12px; padding:5px 16px; border-radius:999px; background:#eef2ff; border:1px solid #c7d2fe; color:var(--primary-dark); font-size:12px; font-weight:800; letter-spacing:.7px; cursor:pointer; user-select:none;">AIODR410SU002</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR610TU002</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -1992,6 +2013,11 @@
     <input type="text" id="subGateCodeInput" placeholder="6-digit code">
     <button onclick="submitActivationCode()" style="margin-top:14px;">✅ Activate</button>
     <button onclick="manualRestoreSubscription('subGateMsg')" style="margin-top:8px; background:#eef2ff; color:var(--primary-dark);">♻️ Restore my earlier subscription</button>
+      <div style="margin-top:12px; padding-top:10px; border-top:1px dashed #dbe1ea;">
+        <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:4px; text-align:left;">📱 New phone or reinstalled? Enter your mobile number</label>
+        <input type="tel" id="subGatePhoneInput" inputmode="tel" placeholder="03001234567">
+        <button onclick="restoreByPhoneUI('subGatePhoneInput','subGateMsg')" style="margin-top:8px; background:#e0f2fe; color:#0369a1;">📱 Restore with mobile number</button>
+      </div>
     <div id="subGateMsg" style="margin-top:10px; font-size:13px; font-weight:700;"></div>
     <div class="loginHint">No code yet? Tap the 💬 chat bubble below to ask your developer.</div>
   </div>
@@ -2002,7 +2028,7 @@
      🕵️ DEVELOPER PANEL — چھپا ہوا، دکاندار کے Admin PIN سے بالکل الگ۔
      Login لاک سکرین کے عنوان ("🔐 Login") یا Subscription Required سکرین کے عنوان پر
      7 بار ٹیپ کرنے سے کھلتا ہے (handleDevPanelTap) — ایپ لاک حالت میں ہو تب بھی کھل جاتا ہے،
-     کسی PIN کی ضرورت نہیں۔ ڈیفالٹ پاسورڈ 857766 (نیچے سے کبھی بھی بدلا جا سکتا ہے)۔
+     کسی PIN کی ضرورت نہیں۔ پاسورڈ پینل کے اندر سے بدلا جا سکتا ہے۔
      یہیں سے سبسکرپشن/ایکٹیویشن کوڈز جنریٹ کیے جاتے ہیں — کسی علیحدہ بیرونی Code Generator کی
      اب ضرورت نہیں، Fruit Mandi POS کے پروون نظام سے لیا گیا۔
      ===================================================================== -->
@@ -2021,8 +2047,9 @@
     <div id="devSecretUnlocked" style="display:none; max-height:70vh; overflow-y:auto;">
       <!-- ---------- 🎁 گفٹ/ایکٹیویشن کوڈ جنریٹر — Firestore کے licenses/{code} میں نیا ریکارڈ لکھتا ہے ---------- -->
       <div class="settingsSubLabel" style="margin-top:0; color:#15803d;">🎁 Generate Gift / Activation Code</div>
-      <div class="settingsHint" style="margin-top:0; margin-bottom:6px;">دورانیہ منتخب کریں — کوڈ بن کر نیچے نظر آئے گا، اسی وقت WhatsApp پر شیئر کر سکتے ہیں۔ Device UID خالی چھوڑیں تو کوئی بھی ڈیوائس اسے ایک بار استعمال کر سکے گی۔</div>
+      <div class="settingsHint" style="margin-top:0; margin-bottom:6px;">دورانیہ منتخب کریں — کوڈ بن کر نیچے نظر آئے گا، اسی وقت WhatsApp پر شیئر کر سکتے ہیں۔ موبائل نمبر ضرور لکھیں — نئے موبائل یا دوبارہ انسٹال پر کسٹمر صرف یہی نمبر لکھ کر اپنے باقی دن واپس لے سکے گا۔ Device UID اختیاری ہے (ڈالیں تو کوڈ خود لگ جائے گا)۔</div>
       <input type="text" id="giftCodeNameInput" placeholder="کسٹمر کا نام (مثلاً: احمد سٹور)" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
+      <input type="tel" id="giftCodePhoneInput" inputmode="tel" placeholder="📱 کسٹمر کا موبائل نمبر (مثلاً: 03001234567)" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
       <select id="giftCodeDaysInput" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
         <option value="7">7 دن (Free Trial جتنا)</option>
         <option value="30" selected>30 دن (1 مہینہ)</option>
@@ -2031,7 +2058,7 @@
         <option value="365">365 دن (1 سال)</option>
         <option value="lifetime">🌟 Lifetime (ہمیشہ کے لیے)</option>
       </select>
-      <input type="text" id="giftCodeUidInput" placeholder="مخصوص Device UID (اختیاری — خالی چھوڑ سکتے ہیں)" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
+      <input type="text" id="giftCodeUidInput" placeholder="Device UID (اختیاری — خودکار لگانے کے لیے)" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
       <button class="testPrintBtn" style="background:#dcfce7; color:#15803d;" onclick="generateGiftCode()">🎁 Generate Code</button>
       <div id="giftCodeResultWrap" style="display:none; margin-top:10px; background:#f0fdf4; border:1.5px solid #86efac; border-radius:10px; padding:12px; text-align:center;">
         <div id="giftCodeResultText" style="font-size:20px; font-weight:900; letter-spacing:2px; color:#15803d;"></div>
@@ -2053,6 +2080,7 @@
       <select id="codeMonthFilterSelect" onchange="renderIssuedCodesList()" style="width:100%; padding:8px; margin-bottom:10px; border:1px solid #dbe1ea; border-radius:8px; font-size:12.5px;">
         <option value="all">📅 تمام وقت</option>
       </select>
+      <input type="search" id="codeSearchInput" oninput="renderIssuedCodesList()" placeholder="🔍 نام، موبائل نمبر، UID یا کوڈ سے تلاش کریں" style="width:100%; padding:10px; margin-bottom:10px; border:1.5px solid #c7d2fe; border-radius:10px; font-size:13px; background:#f8faff;">
       <div id="issuedCodesListWrap" style="display:flex; flex-direction:column; gap:8px;"></div>
 
       <div class="settingsSubLabel" style="margin-top:18px; padding-top:14px; border-top:1px solid #eef2f7; color:#b91c1c;">🔑 Change Developer Panel Password</div>
@@ -2097,7 +2125,7 @@
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="appVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:pointer;">AIODR410SU002</span>
+      <span id="appVersionBadge" class="verBadgeHdr" onclick="handleDevPanelTap()">AIODR610TU002</span>
     </div>
   </div>
 
@@ -2194,6 +2222,8 @@
         <div class="subBox" id="subBoxEnd"><div class="subBoxLabel">Expires</div><div class="subBoxVal" id="subBoxEndVal">—</div></div>
         <div class="subBox" id="subBoxDays"><div class="subBoxLabel">Remaining</div><div class="subBoxVal" id="subBoxDaysVal">—</div></div>
       </div>
+
+      <button id="homeSubscribeBtn" class="homeSubscribeBtn" style="display:none;" onclick="openSubscribeModal()">⭐ Subscribe Now</button>
 
       <!-- ---------- 🎁 روزانہ ایک بار، ہلکا سا چمکتا/حرکت کرتا یاد دہانی Toast — کوئی بٹن نہیں، خود بخود 4.5 سیکنڈ میں غائب ---------- -->
       <div id="trialReminderToast" style="display:none;">
@@ -4815,6 +4845,25 @@
 </div>
 
 <!-- ⚠️ Trial Urgent — صرف آخری 1-2 دن میں، روزانہ ایک بار، چمکتی سرخ بارڈر، Subscribe Now / Remind Me Later -->
+<!-- ---------- ⭐ Subscribe / Restore — ہوم پیج سے کسی بھی وقت ---------- -->
+<div class="modalOverlay" id="subscribeNowModal" onclick="if(event.target===this) closeSubscribeModal()">
+  <div class="backupConfirmBox" style="text-align:left;">
+    <h3 style="text-align:center;">⭐ Subscribe</h3>
+    <div id="subscribeGiftNote" style="display:none; background:#f0fdf4; border:1.5px solid #86efac; color:#15803d; border-radius:10px; padding:9px 11px; font-size:12.5px; font-weight:700; margin:8px 0 10px;"></div>
+    <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:4px;">Activation code (from your developer)</label>
+    <input type="text" id="subscribeCodeInput" placeholder="XXXXX-XXXXX" style="width:100%; padding:10px; border:1px solid #dbe1ea; border-radius:8px; font-size:14px; text-transform:uppercase;">
+    <button class="backupConfirmCloseBtn" style="margin-top:10px;" onclick="activateFromSubscribeModal()">✅ Activate</button>
+    <div style="margin-top:12px; padding-top:10px; border-top:1px dashed #dbe1ea;">
+      <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:4px;">📱 New phone or reinstalled? Enter your mobile number</label>
+      <input type="tel" id="subscribePhoneInput" inputmode="tel" placeholder="03001234567" style="width:100%; padding:10px; border:1px solid #dbe1ea; border-radius:8px; font-size:14px;">
+      <button class="backupConfirmCloseBtn" style="margin-top:8px; background:#e0f2fe; color:#0369a1;" onclick="restoreByPhoneUI('subscribePhoneInput','subscribeMsg')">📱 Restore with mobile number</button>
+    </div>
+    <div id="subscribeMsg" style="margin-top:10px; font-size:13px; font-weight:700;"></div>
+    <button class="backupConfirmCloseBtn" style="margin-top:10px; background:#dcfce7; color:#15803d;" onclick="closeSubscribeModal(); openDevChat('subscription');">💬 Get a code from the developer</button>
+    <button class="backupConfirmCloseBtn" style="margin-top:8px; background:#f1f5f9; color:var(--text);" onclick="closeSubscribeModal()">Close</button>
+  </div>
+</div>
+
 <div class="modalOverlay" id="trialUrgentModal" onclick="if(event.target===this) dismissTrialUrgentModal()">
   <div class="backupConfirmBox">
     <div class="backupConfirmIconWrap" style="background:#fee2e2; color:var(--danger);"><span>⚠️</span></div>
@@ -4822,7 +4871,7 @@
     <p style="font-size:12.5px; color:var(--muted); line-height:1.6; margin-top:2px;" id="trialUrgentBody">
       Subscribe to keep using the same reports and features and to continue your business without interruption.
     </p>
-    <button class="backupConfirmCloseBtn" style="background:linear-gradient(155deg,#dc2626,#991b1b); margin-top:14px;" onclick="dismissTrialUrgentModal(); openDevChat('subscription');">🎟️ Subscribe Now</button>
+    <button class="backupConfirmCloseBtn" style="background:linear-gradient(155deg,#dc2626,#991b1b); margin-top:14px;" onclick="dismissTrialUrgentModal(); openSubscribeModal();">🎟️ Subscribe Now</button>
     <button class="backupConfirmCloseBtn" style="background:#f1f5f9; color:var(--text); margin-top:8px;" onclick="dismissTrialUrgentModal()">Remind Me Later</button>
     <div style="margin-top:14px; padding-top:12px; border-top:1px dashed #dbe1ea; text-align:left;">
       <p style="font-size:11.5px; color:var(--muted); line-height:1.6; margin-bottom:8px;">
@@ -5824,6 +5873,72 @@ async function ensureFirebaseAuth(){
 }
 
 // ---------- Firestore کو authenticated (Bearer token) درخواست بھیجنے کا مختصر طریقہ — صرف لکھنے والی کالز کے لیے ----------
+// ---------- 📱 موبائل نمبر کی یکساں شکل: 0300-1234567 / +92 300 1234567 / 923001234567 → 3001234567 ----------
+function normalizePhone(raw){
+  let d = String(raw || '').replace(/\D/g, '');
+  if(d.indexOf('0092') === 0) d = d.slice(4);
+  else if(d.length === 12 && d.indexOf('92') === 0) d = d.slice(2);
+  else if(d.length === 11 && d.indexOf('0') === 0) d = d.slice(1);
+  return d;
+}
+function phoneForWhatsapp(key){
+  return (key && key.length === 10 && key[0] === '3') ? '92' + key : (key || '');
+}
+
+// ---------- 🔐 ڈویلپر کا اپنا Firebase اکاؤنٹ (Email/Password) — کوڈ بنانا/فہرست/معطل/ڈیلیٹ صرف اسی سے ----------
+async function ensureDevAuth(){
+  const a = AppState.settings.devAuth;
+  if(!a || !a.refreshToken) return null;
+  if(a.idToken && a.expiresAt > Date.now() + 60000) return a.idToken;
+  try{
+    const res = await fetch(AUTH_REFRESH_URL, { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:`grant_type=refresh_token&refresh_token=${encodeURIComponent(a.refreshToken)}` });
+    if(!res.ok) return null;
+    const d = await res.json();
+    AppState.settings.devAuth = Object.assign({}, a, { idToken:d.id_token, refreshToken:d.refresh_token,
+      expiresAt: Date.now() + (parseInt(d.expires_in || '3600') * 1000) });
+    persistAllData();
+    return d.id_token;
+  }catch(e){ return null; }
+}
+async function devFirestoreFetch(path, options = {}){
+  const token = await ensureDevAuth();
+  if(!token) throw new Error('انٹرنیٹ چیک کریں اور Developer Panel دوبارہ کھولیں');
+  const headers = Object.assign({}, options.headers, { 'Authorization': `Bearer ${token}` });
+  return fetch(`${FIRESTORE_BASE}/${path}`, Object.assign({}, options, { headers }));
+}
+async function phoneDocCodes(key){
+  const r = await devFirestoreFetch(`phones/${encodeURIComponent(key)}?key=${FIREBASE_API_KEY}`);
+  if(r.status === 404) return { codes: [], name: '' };
+  if(!r.ok) throw new Error('phones read failed (HTTP ' + r.status + ')');
+  const f = _parseFirestoreFields((await r.json()).fields || {});
+  return { codes: f.codes || [], name: f.name || '' };
+}
+async function writePhoneDoc(key, codes, name){
+  if(!codes.length){
+    await devFirestoreFetch(`phones/${encodeURIComponent(key)}?key=${FIREBASE_API_KEY}`, { method:'DELETE' });
+    return;
+  }
+  const r = await devFirestoreFetch(`phones/${encodeURIComponent(key)}?key=${FIREBASE_API_KEY}`, {
+    method:'PATCH', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ fields: {
+      codes: { arrayValue: { values: codes.map(c => ({ stringValue: c })) } },
+      name: { stringValue: name || '' },
+      updatedAt: { integerValue: String(Date.now()) }
+    }})
+  });
+  if(!r.ok) throw new Error('phones write failed (HTTP ' + r.status + ')');
+}
+async function addCodeToPhone(key, code, name){
+  const cur = await phoneDocCodes(key);
+  const codes = [code].concat(cur.codes.filter(c => c !== code));
+  await writePhoneDoc(key, codes, name || cur.name);
+}
+async function removeCodeFromPhone(key, code){
+  const cur = await phoneDocCodes(key);
+  await writePhoneDoc(key, cur.codes.filter(c => c !== code), cur.name);
+}
+
 async function authFirestoreFetch(path, options = {}){
   const token = await ensureFirebaseAuth();
   if(!token) throw new Error('offline-or-auth-failed');
@@ -5972,6 +6087,12 @@ async function resyncLicenseOnline(){
       persistAllData();
       if(typeof setupLoginScreen === 'function') setupLoginScreen();
       alert('⚠️ Your subscription has been revoked by the developer. Please contact support.');
+    } else if(data.activatedUid && !isMyUid(data.activatedUid)){
+      AppState.settings.subscriptionExpiry = null;
+      AppState.settings.lastActivationCode = '';
+      persistAllData();
+      if(typeof setupLoginScreen === 'function') setupLoginScreen();
+      alert('⚠️ This activation code is now active on another device. Please contact the developer.');
     }
   }catch(e){ /* آف لائن — کوئی مسئلہ نہیں، اگلی بار دوبارہ کوشش ہوگی */ }
 }
@@ -5998,6 +6119,7 @@ function _parseFirestoreFields(fields){
     if(v.stringValue !== undefined) out[key] = v.stringValue;
     else if(v.integerValue !== undefined) out[key] = parseInt(v.integerValue);
     else if(v.booleanValue !== undefined) out[key] = v.booleanValue;
+    else if(v.arrayValue !== undefined) out[key] = (v.arrayValue.values || []).map(x => x.stringValue !== undefined ? x.stringValue : (x.integerValue !== undefined ? parseInt(x.integerValue) : null));
     else out[key] = null;
   }
   return out;
@@ -6006,6 +6128,13 @@ function _parseFirestoreFields(fields){
 // ---------- UID موازنہ: خالی جگہ/چھوٹے بڑے حروف کا فرق نظر انداز ----------
 function sameUid(a, b){
   return String(a || '').trim().toUpperCase() === String(b || '').trim().toUpperCase();
+}
+// ---------- یہ UID اسی ڈیوائس کی ہے؟ (موجودہ یا پرانی 5 ہندسوں والی) ----------
+function isMyUid(x){
+  if(!x) return false;
+  if(sameUid(x, AppState.settings.deviceUID)) return true;
+  try{ if(sameUid(x, computeLegacyUID())) return true; }catch(e){}
+  return false;
 }
 
 // ---------- 🗂️ سرور پر اس ڈیوائس کا ریکارڈ (devices/{UID}) — ایپ ڈیلیٹ/دوبارہ انسٹال کے بعد اسی سے سبسکرپشن بحال ہوتی ہے ----------
@@ -6047,13 +6176,15 @@ async function restoreSubscriptionFromServer(){
     if(d.active === false || !d.expiryDate) return {restored:false, reason:'none'};
 
     // ---------- جس کوڈ سے یہ سبسکرپشن بنی تھی وہ ڈیلیٹ یا معطل ہو چکا ہو تو بحال نہ کریں ----------
-    if(d.lastCode){
+    if(!d.lastCode) return {restored:false, reason:'none'};
+    {
       const lr = await fetch(`${FIRESTORE_BASE}/licenses/${encodeURIComponent(d.lastCode)}?key=${FIREBASE_API_KEY}`);
       if(lr.status === 404) return {restored:false, reason:'revoked'};
-      if(lr.ok){
-        const ld = _parseFirestoreFields((await lr.json()).fields || {});
-        if(ld.active === false) return {restored:false, reason:'revoked'};
-      }
+      if(!lr.ok) return {restored:false, reason:'error'};
+      const ld = _parseFirestoreFields((await lr.json()).fields || {});
+      if(ld.active === false) return {restored:false, reason:'revoked'};
+      if(ld.activatedUid && !isMyUid(ld.activatedUid)) return {restored:false, reason:'moved'};
+      if(ld.expiryDate) d.expiryDate = ld.expiryDate; // ---------- اصل مدت license سے ----------
     }
     const srvExp = parseLocalDate(d.expiryDate);
     if(isNaN(srvExp) || srvExp < getEffectiveToday()) return {restored:false, reason:'expired'};
@@ -6088,6 +6219,91 @@ async function restoreSubscriptionFromServer(){
   }
 }
 
+// ---------- 📱 موبائل نمبر سے بحالی — نیا موبائل ہو یا دوبارہ انسٹال، صرف باقی دن واپس (پورا پیکج دوبارہ نہیں) ----------
+async function restoreByPhone(raw){
+  const key = normalizePhone(raw);
+  if(!key || key.length < 7) return {ok:false, msg:'Please enter your correct mobile number.'};
+  let pr;
+  try{ pr = await fetch(`${FIRESTORE_BASE}/phones/${encodeURIComponent(key)}?key=${FIREBASE_API_KEY}`); }
+  catch(e){ return {ok:false, msg:'No internet connection.'}; }
+  if(pr.status === 404) return {ok:false, msg:'No subscription found for this mobile number. Please contact the developer.'};
+  if(!pr.ok) return {ok:false, msg:'Could not check right now. Please try again.'};
+  const codes = (_parseFirestoreFields((await pr.json()).fields || {}).codes) || [];
+  const today = getEffectiveToday();
+  const used = [], fresh = [];
+  for(const c of codes){
+    try{
+      const lr = await fetch(`${FIRESTORE_BASE}/licenses/${encodeURIComponent(c)}?key=${FIREBASE_API_KEY}`);
+      if(!lr.ok) continue;
+      const l = _parseFirestoreFields((await lr.json()).fields || {});
+      if(l.active === false) continue;
+      if(l.activatedAt){
+        const e = l.expiryDate ? parseLocalDate(l.expiryDate) : null;
+        if(e && !isNaN(e) && e >= today) used.push({ code:c, exp:e });
+      } else fresh.push(c);
+    }catch(e){}
+  }
+  if(!used.length && !fresh.length) return {ok:false, msg:'The subscription for this number has ended. Please contact the developer.'};
+  used.sort((a,b) => b.exp - a.exp);
+  let any = false, lastErr = '';
+  if(used.length){ const r = await activateSubscription(used[0].code); if(r.success) any = true; else lastErr = r.message; }
+  for(const c of fresh){ const r = await activateSubscription(c); if(r.success) any = true; else lastErr = r.message; }
+  if(!any) return {ok:false, msg: lastErr || 'Could not restore right now. Please try again.'};
+  return {ok:true, expiry: AppState.settings.subscriptionExpiry, days: daysLeftInSubscription()};
+}
+async function restoreByPhoneUI(inputId, msgId){
+  const msgEl = document.getElementById(msgId);
+  msgEl.style.color = 'var(--muted)';
+  msgEl.textContent = '⏳ Looking for your subscription...';
+  const r = await restoreByPhone(document.getElementById(inputId).value);
+  if(r.ok){
+    msgEl.style.color = 'var(--success)';
+    msgEl.textContent = `✅ Subscription restored — ${r.days} day(s) left (valid until ${formatDateDMY(r.expiry)}).`;
+    setTimeout(() => { closeSubscribeModal(); _refreshScreensAfterSubscription(); }, 1300);
+  } else {
+    msgEl.style.color = 'var(--danger)';
+    msgEl.textContent = '❌ ' + r.msg;
+  }
+}
+
+// ---------- ⭐ ہوم پیج: کسی بھی وقت Subscribe — ٹرائل کے باقی دن تحفے کے طور پر ساتھ جمع ----------
+function openSubscribeModal(){
+  const note = document.getElementById('subscribeGiftNote');
+  if(isSubscriptionActive()){
+    const d = daysLeftInSubscription();
+    note.textContent = AppState.settings.isOnFreeTrial
+      ? `🎁 Your ${d} remaining trial day${d===1?'':'s'} will be added to your subscription as a gift.`
+      : `✅ Your ${d} remaining day${d===1?'':'s'} will be kept — new code days are added on top.`;
+    note.style.display = 'block';
+  } else note.style.display = 'none';
+  document.getElementById('subscribeCodeInput').value = '';
+  document.getElementById('subscribeMsg').textContent = '';
+  document.getElementById('subscribeNowModal').classList.add('show');
+}
+function closeSubscribeModal(){
+  const m = document.getElementById('subscribeNowModal');
+  if(m) m.classList.remove('show');
+}
+async function activateFromSubscribeModal(){
+  const msgEl = document.getElementById('subscribeMsg');
+  msgEl.style.color = 'var(--muted)';
+  msgEl.textContent = '⏳ Checking code online...';
+  const wasTrial = !!AppState.settings.isOnFreeTrial && isSubscriptionActive();
+  const r = await activateSubscription(document.getElementById('subscribeCodeInput').value);
+  if(r.success){
+    msgEl.style.color = 'var(--success)';
+    msgEl.textContent = r.restored
+      ? `✅ Subscription restored — valid until ${formatDateDMY(r.expiry)} (${r.totalDays} day(s) left).`
+      : (r.prevDays > 0
+          ? `✅ Activated! ${r.prevDays} ${wasTrial ? 'gift trial' : 'remaining'} + ${r.daysGranted} = ${r.totalDays} days — valid until ${formatDateDMY(r.expiry)}.`
+          : `✅ Activated! ${r.daysGranted} day(s) — valid until ${formatDateDMY(r.expiry)}.`);
+    setTimeout(() => { closeSubscribeModal(); _refreshScreensAfterSubscription(); }, 1800);
+  } else {
+    msgEl.style.color = 'var(--danger)';
+    msgEl.textContent = '❌ ' + r.message;
+  }
+}
+
 // ---------- ہاتھ سے "سبسکرپشن بحال کریں" بٹن (Login اور Gate دونوں پر) ----------
 async function manualRestoreSubscription(msgElId){
   const msgEl = document.getElementById(msgElId);
@@ -6100,11 +6316,68 @@ async function manualRestoreSubscription(msgElId){
   } else {
     const why = { none:'No earlier subscription found for this device.', expired:'Your earlier subscription has already ended.',
       revoked:'Your earlier code is no longer active. Please contact the developer.', offline:'No internet connection.',
-      error:'Could not check right now. Try again.', already:'Your subscription is already active on this device.' }[r.reason] || 'Nothing to restore.';
+      error:'Could not check right now. Try again.', moved:'Your code is active on another device. Enter your code again to move it here.', already:'Your subscription is already active on this device.' }[r.reason] || 'Nothing to restore.';
     msgEl.style.color = r.reason === 'already' ? 'var(--success)' : 'var(--danger)';
     msgEl.textContent = (r.reason === 'already' ? '✅ ' : '❌ ') + why;
   }
 }
+
+/* =====================================================================
+   ⚡ خودکار کوڈ — اگر ڈویلپر نے اس ڈیوائس کی UID کے ساتھ کوڈ بنایا ہے تو کسٹمر کو
+   لکھنے کی ضرورت نہیں: ایپ سرور (licenses میں boundUid == اپنی UID) سے خود ڈھونڈ کر لگا لیتی ہے۔
+   ===================================================================== */
+let _autoApplyBusy = false;
+async function autoApplyBoundCodesFromServer(){
+  if(_autoApplyBusy || !navigator.onLine) return;
+  _autoApplyBusy = true;
+  try{
+    const uid = getOrCreateDeviceUID();
+    const ids = [uid]; try{ const lg = computeLegacyUID(); if(lg && !sameUid(lg, uid)) ids.push(lg); }catch(e){}
+    let applied = 0, lastRes = null;
+    for(const id of ids){
+      const pr = await fetch(`${FIRESTORE_BASE}/pending/${encodeURIComponent(String(id).toUpperCase())}?key=${FIREBASE_API_KEY}`);
+      if(!pr.ok) continue;
+      const pd = _parseFirestoreFields((await pr.json()).fields || {});
+      if(!pd.code) continue;
+      const lr = await fetch(`${FIRESTORE_BASE}/licenses/${encodeURIComponent(pd.code)}?key=${FIREBASE_API_KEY}`);
+      if(!lr.ok) continue;
+      const ld = _parseFirestoreFields((await lr.json()).fields || {});
+      if(ld.active === false || ld.activatedAt) continue; // ---------- صرف نیا، غیر استعمال شدہ کوڈ ----------
+      const r = await activateSubscription(pd.code);
+      if(r.success){ applied++; lastRes = r; }
+    }
+    if(applied){
+      _refreshScreensAfterSubscription();
+      alert(`✅ Your subscription has been activated automatically by the developer.\n\nValid until ${formatDateDMY(lastRes.expiry)} (${daysLeftInSubscription()} day(s) left).`);
+    }
+  }catch(e){ /* آف لائن — اگلی بار دوبارہ */ }
+  finally{ _autoApplyBusy = false; }
+}
+function _refreshScreensAfterSubscription(){
+  try{
+    const gate = document.getElementById('subscriptionGateScreen');
+    const loginEl = document.getElementById('loginScreen');
+    if(gate && gate.style.display !== 'none'){
+      gate.style.display = 'none';
+      document.getElementById('app').style.display = 'grid';
+      goTo('home');
+    } else if(loginEl && getComputedStyle(loginEl).display !== 'none'){
+      setupLoginScreen();
+    } else if(typeof renderSubscriptionBanner === 'function'){
+      renderSubscriptionBanner();
+    }
+  }catch(e){}
+}
+// ---------- لاک/لاگ ان سکرین کھلی ہو تو ہر 30 سیکنڈ بعد چیک — ڈویلپر کوڈ بنائے تو ایپ خود کھل جائے ----------
+setInterval(() => {
+  try{
+    const gate = document.getElementById('subscriptionGateScreen');
+    const loginEl = document.getElementById('loginScreen');
+    const locked = (gate && gate.style.display !== 'none') || (loginEl && getComputedStyle(loginEl).display !== 'none');
+    if(locked) autoApplyBoundCodesFromServer();
+  }catch(e){}
+}, 30000);
+window.addEventListener('online', () => autoApplyBoundCodesFromServer());
 
 // ---------- کسٹمر کا درج کردہ کوڈ Firestore سے آن لائن تصدیق کریں (اب فارمولا فائل کے اندر کہیں نہیں) ----------
 async function activateSubscription(code){
@@ -6126,10 +6399,7 @@ async function activateSubscription(code){
   const data = _parseFirestoreFields(doc.fields || {});
 
   if(data.active === false) return {success:false, message:'This code has been revoked. Please contact the developer.'};
-  // ---------- اگر کوڈ کسی خاص ڈیوائس سے bound نہیں (boundUid خالی) تو کوئی بھی ڈیوائس ایک بار استعمال کر سکتی ہے ----------
-  if(data.boundUid && !sameUid(data.boundUid, uid) && !sameUid(data.boundUid, computeLegacyUID())){
-    return {success:false, message:'This code was issued for a different device.'};
-  }
+  // ---------- UID کی کوئی پابندی نہیں — boundUid صرف خودکار ترسیل (Auto-Apply) کے لیے ہے، کوڈ ہر فون پر لگ سکتا ہے ----------
 
   const todayD = getEffectiveToday();
 
@@ -6149,7 +6419,32 @@ async function activateSubscription(code){
       }
       return {success:false, message:'This code was already used on this device and its period has ended.'};
     }
-    return {success:false, message:'This code has already been used.'};
+    // ---------- ♻️ منتقلی: کوڈ پہلے کسی اور UID پر لگا تھا (UID بدل گئی، فون بدلا، یا ایپ دوبارہ انسٹال ہوئی) —
+    // باقی دن اسی ڈیوائس پر منتقل، پرانی ڈیوائس اگلی بار انٹرنیٹ پر خود بند ہو جائے گی (ایک کوڈ، ایک وقت میں ایک فون) ----------
+    const tExp = data.expiryDate ? parseLocalDate(data.expiryDate) : null;
+    if(!tExp || isNaN(tExp) || tExp < todayD) return {success:false, message:'This code has already been used and its period has ended.'};
+    try{
+      let turl = `licenses/${encodeURIComponent(trimmedCode)}?updateMask.fieldPaths=activatedUid&updateMask.fieldPaths=transferredAt&key=${FIREBASE_API_KEY}`;
+      if(doc.updateTime) turl += `&currentDocument.updateTime=${encodeURIComponent(doc.updateTime)}`;
+      const tRes = await authFirestoreFetch(turl, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fields: {
+          activatedUid: { stringValue: uid },
+          transferredAt: { integerValue: String(Date.now()) }
+        }})
+      });
+      if(!tRes.ok) return {success:false, message:'Could not restore this code right now. Please try again.'};
+    }catch(e){
+      return {success:false, message:'No internet connection. Please connect to the internet and try again.'};
+    }
+    AppState.settings.subscriptionExpiry = data.expiryDate;
+    AppState.settings.subscriptionActivatedOn = AppState.settings.subscriptionActivatedOn || localDateStr();
+    AppState.settings.isOnFreeTrial = false;
+    AppState.settings.lastActivationCode = trimmedCode;
+    persistAllData();
+    saveDeviceRecord();
+    return {success:true, restored:true, expiry:data.expiryDate, daysGranted:0, prevDays:0, totalDays:daysLeftInSubscription()};
   }
 
   const daysNum = data.lifetime ? 36500 : (data.days || 0);
@@ -6202,7 +6497,8 @@ async function activateSubscription(code){
    لیا گیا، اب اس ایپ کی اپنی Firestore (aio-pos-backup) پر کام کرتا ہے — کسی علیحدہ بیرونی
    Code Generator ٹول کی اب ضرورت نہیں۔
    ===================================================================== */
-const DEFAULT_DEV_PANEL_PASSWORD_HASH = '8b5a43764420e5af43f7c4623ad3a6699a628be06269051d38f494f9f4b22a9a'; // ڈیفالٹ پاسورڈ: 857766
+// ---------- ڈویلپر کا Firebase اکاؤنٹ — اس کا پاسورڈ وہی ہے جو Developer Panel کا پاسورڈ ہے (الگ لاگ ان نہیں) ----------
+const DEV_EMAIL = 'developer@aioposdirect.app';
 
 let devPanelTapCount = 0, devPanelTapTimer = null;
 function handleDevPanelTap(){
@@ -6228,14 +6524,34 @@ function closeDevSecretPanel(){
 }
 
 async function unlockDevSecretPanel(){
-  const entered = document.getElementById('devSecretPasswordInput').value;
+  const entered = document.getElementById('devSecretPasswordInput').value.trim();
+  const errEl = document.getElementById('devSecretError');
+  if(!entered){ errEl.style.color = 'var(--danger)'; errEl.textContent = '❌ پاسورڈ لکھیں'; return; }
+  errEl.style.color = 'var(--muted)'; errEl.textContent = '⏳ چیک ہو رہا ہے...';
   const enteredHash = await hashPin(entered);
-  const validHash = AppState.settings.devPanelPasswordHash || DEFAULT_DEV_PANEL_PASSWORD_HASH;
-  if(enteredHash !== validHash){
-    document.getElementById('devSecretError').textContent = '❌ Incorrect password.';
-    return;
+  let ok = false;
+  try{
+    const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FIREBASE_API_KEY}`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ email: DEV_EMAIL, password: entered, returnSecureToken: true }) });
+    const d = await res.json();
+    if(res.ok){
+      AppState.settings.devAuth = { localId:d.localId, idToken:d.idToken, refreshToken:d.refreshToken,
+        expiresAt: Date.now() + (parseInt(d.expiresIn || '3600') * 1000) };
+      AppState.settings.devPanelPasswordHash = enteredHash; // ---------- آف لائن کھولنے کے لیے صرف اسی فون پر ----------
+      persistAllData();
+      ok = true;
+    } else {
+      const m = (d.error && d.error.message) || '';
+      if(m.indexOf('TOO_MANY_ATTEMPTS') === 0){ errEl.style.color='var(--danger)'; errEl.textContent = '❌ بہت زیادہ غلط کوششیں — کچھ دیر بعد دوبارہ کوشش کریں'; return; }
+      if(m.indexOf('OPERATION_NOT_ALLOWED') === 0){ errEl.style.color='var(--danger)'; errEl.textContent = '❌ Firebase میں Email/Password فعال نہیں'; return; }
+    }
+  }catch(e){
+    // ---------- آف لائن: اسی فون پر پہلے کامیاب پاسورڈ سے پینل کھل جائے (کوڈ بنانے کے لیے انٹرنیٹ پھر بھی چاہیے) ----------
+    ok = !!AppState.settings.devPanelPasswordHash && AppState.settings.devPanelPasswordHash === enteredHash;
   }
-  document.getElementById('devSecretError').textContent = '';
+  if(!ok){ errEl.style.color = 'var(--danger)'; errEl.textContent = '❌ Incorrect password.'; return; }
+  errEl.textContent = '';
   document.getElementById('devSecretPasswordInput').value = '';
   document.getElementById('devSecretLocked').style.display = 'none';
   document.getElementById('devSecretUnlocked').style.display = 'block';
@@ -6243,21 +6559,36 @@ async function unlockDevSecretPanel(){
   loadIssuedCodesList();
 }
 
+// ---------- پاسورڈ بدلیں — Firebase اکاؤنٹ اور پینل دونوں کا ایک ساتھ ----------
 async function saveDevSecretPanel(){
-  const newPw = document.getElementById('devSecretNewPasswordInput').value;
-  if(newPw && newPw.trim()){
-    AppState.settings.devPanelPasswordHash = await hashPin(newPw.trim());
+  const msg = document.getElementById('devSecretSaveMsg');
+  const newPw = document.getElementById('devSecretNewPasswordInput').value.trim();
+  if(!newPw){ msg.style.color='var(--danger)'; msg.textContent = '⚠️ Enter a new password first.'; return; }
+  if(newPw.length < 6){ msg.style.color='var(--danger)'; msg.textContent = '⚠️ کم از کم 6 حروف/ہندسے'; return; }
+  msg.style.color='var(--muted)'; msg.textContent = '⏳ محفوظ ہو رہا ہے...';
+  try{
+    const token = await ensureDevAuth();
+    if(!token) throw new Error('انٹرنیٹ چیک کریں، پینل دوبارہ کھولیں');
+    const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:update?key=${FIREBASE_API_KEY}`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ idToken: token, password: newPw, returnSecureToken: true }) });
+    const d = await res.json();
+    if(!res.ok){
+      const m = (d.error && d.error.message) || 'Error';
+      throw new Error(m.indexOf('CREDENTIAL_TOO_OLD') === 0 ? 'پینل بند کر کے دوبارہ کھولیں، پھر بدلیں' : m);
+    }
+    AppState.settings.devAuth = Object.assign({}, AppState.settings.devAuth, { idToken:d.idToken, refreshToken:d.refreshToken,
+      expiresAt: Date.now() + (parseInt(d.expiresIn || '3600') * 1000) });
+    AppState.settings.devPanelPasswordHash = await hashPin(newPw);
     persistAllData();
     document.getElementById('devSecretNewPasswordInput').value = '';
-    document.getElementById('devSecretSaveMsg').textContent = '✅ Saved!';
-  } else {
-    document.getElementById('devSecretSaveMsg').textContent = '⚠️ Enter a new password first.';
-  }
-  setTimeout(() => { document.getElementById('devSecretSaveMsg').textContent = ''; }, 2000);
+    msg.style.color='var(--success)'; msg.textContent = '✅ Saved!';
+  }catch(e){ msg.style.color='var(--danger)'; msg.textContent = '❌ ' + e.message; }
+  setTimeout(() => { msg.textContent = ''; }, 3000);
 }
 
 // ---------- 🎁 فری/رعایتی ایڈمن گفٹ کوڈ جنریٹر — Firestore کے licenses/{code} میں نیا ریکارڈ لکھتا ہے ----------
-let lastGeneratedGiftCode = '';
+let lastGeneratedGiftCode = '', lastGeneratedGiftPhone = '';
 function generateRandomGiftCode(){
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // ---------- مشکل حروف (0/O, 1/I) جان بوجھ کر نکال دیے تاکہ کوڈ لکھنے/پڑھنے میں غلطی نہ ہو ----------
   let code = '';
@@ -6268,9 +6599,12 @@ function generateRandomGiftCode(){
   return code;
 }
 async function generateGiftCode(){
+  if(!(await ensureDevAuth())){ alert('⚠️ پہلے Developer Panel میں Developer Login کریں۔'); return; }
   const daysVal = document.getElementById('giftCodeDaysInput').value;
-  const uidVal = document.getElementById('giftCodeUidInput').value.trim();
+  const uidVal = document.getElementById('giftCodeUidInput').value.trim().toUpperCase();
   const nameVal = document.getElementById('giftCodeNameInput').value.trim();
+  const phoneKey = normalizePhone(document.getElementById('giftCodePhoneInput').value);
+  if(phoneKey && phoneKey.length < 7){ alert('⚠️ موبائل نمبر درست نہیں — دوبارہ چیک کریں۔'); return; }
   const isLifetime = daysVal === 'lifetime';
   const code = generateRandomGiftCode();
 
@@ -6282,17 +6616,33 @@ async function generateGiftCode(){
   else fields.days = { integerValue: daysVal };
   if(uidVal) fields.boundUid = { stringValue: uidVal };
   if(nameVal) fields.customerName = { stringValue: nameVal };
+  if(phoneKey) fields.customerPhone = { stringValue: phoneKey };
 
   try{
-    const res = await authFirestoreFetch(`licenses/${encodeURIComponent(code)}?key=${FIREBASE_API_KEY}`, {
+    const res = await devFirestoreFetch(`licenses/${encodeURIComponent(code)}?currentDocument.exists=false&key=${FIREBASE_API_KEY}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ fields })
     });
-    if(!res.ok) throw new Error('Firestore write failed');
+    if(!res.ok) throw new Error('Firestore write failed (HTTP ' + res.status + ')');
+    if(phoneKey){
+      try{ await addCodeToPhone(phoneKey, code, nameVal); }
+      catch(pe){ alert('⚠️ کوڈ بن گیا مگر موبائل نمبر محفوظ نہیں ہو سکا — فہرست میں "📱 نمبر" سے دوبارہ لگائیں۔'); }
+    }
+    // ---------- UID دی گئی ہو تو کسٹمر کی ایپ کے لیے خودکار ترسیل ----------
+    if(uidVal){
+      await devFirestoreFetch(`pending/${encodeURIComponent(uidVal)}?key=${FIREBASE_API_KEY}`, {
+        method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fields: { code: { stringValue: code }, createdAt: { integerValue: String(Date.now()) } } })
+      }).catch(()=>{});
+    }
     lastGeneratedGiftCode = code;
     document.getElementById('giftCodeResultText').textContent = code;
     document.getElementById('giftCodeResultWrap').style.display = 'block';
+    document.getElementById('giftCodeNameInput').value = '';
+    document.getElementById('giftCodePhoneInput').value = '';
+    document.getElementById('giftCodeUidInput').value = '';
+    lastGeneratedGiftPhone = phoneKey;
     loadIssuedCodesList(); // ---------- نیا کوڈ فہرست میں فوراً نظر آ جائے ----------
   }catch(e){
     alert('⚠️ کوڈ نہیں بن سکا — انٹرنیٹ چیک کریں اور دوبارہ کوشش کریں۔ (' + e.message + ')');
@@ -6302,10 +6652,39 @@ function copyGiftCode(){
   if(!lastGeneratedGiftCode) return;
   navigator.clipboard?.writeText(lastGeneratedGiftCode).catch(()=>{});
 }
+function _codeShareMessage(code){
+  return `🧾 AIO POS — آپ کا ایکٹیویشن کوڈ:\n\n${code}\n\nایپ میں "Have an activation code?" یا ہوم پیج پر "Subscribe" میں جا کر یہ کوڈ درج کریں۔\nنیا موبائل یا ایپ دوبارہ انسٹال؟ وہی کوڈ یا اپنا موبائل نمبر لکھیں — آپ کے باقی دن واپس مل جائیں گے۔`;
+}
+function shareCodeWhatsapp(code, phoneKey){
+  window.open(`https://wa.me/${phoneForWhatsapp(phoneKey)}?text=${encodeURIComponent(_codeShareMessage(code))}`, '_blank');
+}
 function shareGiftCodeWhatsapp(){
   if(!lastGeneratedGiftCode) return;
-  const msg = `🧾 AIO POS — آپ کا ایکٹیویشن کوڈ:\n\n${lastGeneratedGiftCode}\n\nایپ میں لاگ ان سکرین سے "Have an activation code?" میں جا کر یہ کوڈ درج کریں۔`;
-  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+  shareCodeWhatsapp(lastGeneratedGiftCode, lastGeneratedGiftPhone);
+}
+function copyCodeFromList(code, btn){
+  const done = () => { if(btn){ const t = btn.textContent; btn.textContent = '✅ کاپی ہو گیا'; setTimeout(() => { btn.textContent = t; }, 1500); } };
+  if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code).then(done).catch(() => { prompt('کاپی کریں:', code); });
+  else prompt('کاپی کریں:', code);
+}
+// ---------- پرانے/موجودہ کوڈ کے ساتھ موبائل نمبر لگائیں یا بدلیں ----------
+async function editLicensePhone(code){
+  const it = _issuedCodesCache.find(x => x.code === code) || {};
+  const oldKey = it.customerPhone || '';
+  const raw = prompt(`کوڈ ${code} کے لیے کسٹمر کا موبائل نمبر:`, oldKey ? '0' + oldKey : '');
+  if(raw === null) return;
+  const newKey = normalizePhone(raw);
+  if(raw.trim() && newKey.length < 7){ alert('⚠️ موبائل نمبر درست نہیں۔'); return; }
+  try{
+    const r = await devFirestoreFetch(`licenses/${encodeURIComponent(code)}?updateMask.fieldPaths=customerPhone&key=${FIREBASE_API_KEY}`, {
+      method:'PATCH', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ fields: newKey ? { customerPhone: { stringValue: newKey } } : {} })
+    });
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    if(oldKey && oldKey !== newKey) await removeCodeFromPhone(oldKey, code);
+    if(newKey) await addCodeToPhone(newKey, code, it.customerName || '');
+    loadIssuedCodesList();
+  }catch(e){ alert('⚠️ نمبر محفوظ نہیں ہو سکا: ' + e.message); }
 }
 
 // ---------- 📋 تمام جاری کردہ کوڈز کی فہرست — نام، حالت، معطل/ڈیلیٹ کا اختیار — فلٹر حالت + مہینہ ----------
@@ -6324,7 +6703,7 @@ async function loadIssuedCodesList(){
   const wrap = document.getElementById('issuedCodesListWrap');
   wrap.innerHTML = '<div style="text-align:center; color:var(--muted); font-size:12.5px; padding:10px;">⏳ لوڈ ہو رہا ہے...</div>';
   try{
-    const res = await authFirestoreFetch(`licenses?key=${FIREBASE_API_KEY}&pageSize=300`);
+    const res = await devFirestoreFetch(`licenses?key=${FIREBASE_API_KEY}&pageSize=300`);
     if(!res.ok) throw new Error('فہرست نہیں مل سکی');
     const data = await res.json();
     const docs = data.documents || [];
@@ -6364,7 +6743,16 @@ function renderIssuedCodesList(){
   }
 
   const monthVal = document.getElementById('codeMonthFilterSelect')?.value || 'all';
+  const q = (document.getElementById('codeSearchInput')?.value || '').trim().toLowerCase();
+  const qDigits = q.replace(/\D/g, '');
+  const qPhone = qDigits.length >= 3 ? normalizePhone(qDigits) || qDigits : '';
   let items = _issuedCodesCache.filter(it => {
+    if(q){
+      const hay = [it.customerName, it.code, it.boundUid, it.activatedUid].map(x => String(x || '').toLowerCase());
+      const textHit = hay.some(h => h.indexOf(q) !== -1);
+      const phoneHit = !!qPhone && !!it.customerPhone && (it.customerPhone.indexOf(qPhone) !== -1 || it.customerPhone.indexOf(qDigits) !== -1);
+      if(!textHit && !phoneHit) return false;
+    }
     const isRevoked = it.active === false;
     const isUsed = !!it.activatedAt;
     if(_codeStatusFilter === 'green' && (isRevoked || isUsed)) return false;
@@ -6397,7 +6785,12 @@ function renderIssuedCodesList(){
         <div style="font-size:11px; font-weight:800; color:${statusColor};">${statusLabel}</div>
       </div>
       <div style="font-size:12px; color:var(--muted); margin-bottom:6px;">
-        👤 ${it.customerName || 'نام درج نہیں'} • ⏱️ ${durationLabel}${it.boundUid ? ' • 🔒 UID: '+it.boundUid : ' • 🔓 کوئی بھی ڈیوائس'}${it.activatedUid ? '<br>📱 لگایا گیا: '+it.activatedUid : ''}${it.expiryDate ? ' • 📅 ختم: '+it.expiryDate : ''}
+        👤 ${it.customerName || 'نام درج نہیں'}${it.customerPhone ? ' • 📞 0' + it.customerPhone : ''} • ⏱️ ${durationLabel}${it.boundUid ? ' • 🔒 UID: '+it.boundUid : ' • 🔓 کوئی بھی ڈیوائس'}${it.activatedUid ? '<br>📱 لگایا گیا: '+it.activatedUid : ''}${it.expiryDate ? ' • 📅 ختم: '+it.expiryDate : ''}
+      </div>
+      <div style="display:flex; gap:6px; margin-bottom:6px;">
+        <button onclick="copyCodeFromList('${it.code}', this)" style="flex:1; padding:6px; background:#eef2ff; color:#3730a3; border:none; border-radius:7px; font-size:11.5px; font-weight:800; cursor:pointer;">📋 کاپی</button>
+        <button onclick="shareCodeWhatsapp('${it.code}', '${it.customerPhone || ''}')" style="flex:1; padding:6px; background:#dcfce7; color:#15803d; border:none; border-radius:7px; font-size:11.5px; font-weight:800; cursor:pointer;">📤 WhatsApp</button>
+        <button onclick="editLicensePhone('${it.code}')" style="flex:1; padding:6px; background:#e0f2fe; color:#0369a1; border:none; border-radius:7px; font-size:11.5px; font-weight:800; cursor:pointer;">📱 نمبر</button>
       </div>
       <div style="display:flex; gap:6px;">
         ${!isRevoked ? `<button onclick="suspendLicenseCode('${it.code}')" style="flex:1; padding:6px; background:#fef3c7; color:#92400e; border:none; border-radius:7px; font-size:11.5px; font-weight:800; cursor:pointer;">⏸️ معطل کریں</button>` : `<button onclick="reactivateLicenseCode('${it.code}')" style="flex:1; padding:6px; background:#dcfce7; color:#15803d; border:none; border-radius:7px; font-size:11.5px; font-weight:800; cursor:pointer;">▶️ دوبارہ فعال کریں</button>`}
@@ -6407,23 +6800,28 @@ function renderIssuedCodesList(){
     }).join('');
 }
 async function suspendLicenseCode(code){
+  if(!(await ensureDevAuth())){ alert('⚠️ پہلے Developer Login کریں۔'); return; }
   if(!confirm(`کوڈ ${code} معطل کریں؟ یہ اب کسی کے لیے بھی کام نہیں کرے گا۔`)) return;
-  await authFirestoreFetch(`licenses/${encodeURIComponent(code)}?updateMask.fieldPaths=active&key=${FIREBASE_API_KEY}`, {
+  await devFirestoreFetch(`licenses/${encodeURIComponent(code)}?updateMask.fieldPaths=active&key=${FIREBASE_API_KEY}`, {
     method: 'PATCH', headers: {'Content-Type':'application/json'},
     body: JSON.stringify({ fields: { active: { booleanValue: false } } })
   });
   loadIssuedCodesList();
 }
 async function reactivateLicenseCode(code){
-  await authFirestoreFetch(`licenses/${encodeURIComponent(code)}?updateMask.fieldPaths=active&key=${FIREBASE_API_KEY}`, {
+  if(!(await ensureDevAuth())){ alert('⚠️ پہلے Developer Login کریں۔'); return; }
+  await devFirestoreFetch(`licenses/${encodeURIComponent(code)}?updateMask.fieldPaths=active&key=${FIREBASE_API_KEY}`, {
     method: 'PATCH', headers: {'Content-Type':'application/json'},
     body: JSON.stringify({ fields: { active: { booleanValue: true } } })
   });
   loadIssuedCodesList();
 }
 async function deleteLicenseCode(code){
+  if(!(await ensureDevAuth())){ alert('⚠️ پہلے Developer Login کریں۔'); return; }
   if(!confirm(`کوڈ ${code} مکمل طور پر ڈیلیٹ کریں؟ یہ واپس نہیں آ سکے گا۔`)) return;
-  await authFirestoreFetch(`licenses/${encodeURIComponent(code)}?key=${FIREBASE_API_KEY}`, { method: 'DELETE' });
+  await devFirestoreFetch(`licenses/${encodeURIComponent(code)}?key=${FIREBASE_API_KEY}`, { method: 'DELETE' });
+  const delIt = _issuedCodesCache.find(x => x.code === code);
+  if(delIt && delIt.customerPhone){ try{ await removeCodeFromPhone(delIt.customerPhone, code); }catch(e){} }
   loadIssuedCodesList();
 }
 
@@ -6435,6 +6833,11 @@ function renderSubscriptionBanner(){
   // ---------- صرف Home صفحے پر نظر آئے — باقی تمام صفحات (بشمول Billing) پر چھپی رہے ----------
   const activeScreen = document.querySelector('.screen.active');
   const isHomePage = activeScreen && activeScreen.id === 'screen-home';
+  const subBtn = document.getElementById('homeSubscribeBtn');
+  if(subBtn){
+    subBtn.style.display = isHomePage ? 'block' : 'none';
+    subBtn.textContent = (AppState.settings.isOnFreeTrial || !isSubscriptionActive()) ? '⭐ Subscribe Now — trial days added as gift' : '🔄 Renew / Add Code';
+  }
   if(!isHomePage || !isSubscriptionActive()){ row.style.display = 'none'; return; }
 
   const daysLeft = daysLeftInSubscription();
@@ -24122,6 +24525,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(async () => {
     await restoreSubscriptionFromServer(); // ---------- پہلے: دوبارہ انسٹال کی صورت میں پرانی سبسکرپشن بحال ----------
     await checkAndLockTrialOnline();
+    await autoApplyBoundCodesFromServer(); // ---------- ⚡ UID والا نیا کوڈ خود بخود لگائیں ----------
     await resyncLicenseOnline();
   }, 2000);
 

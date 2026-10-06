@@ -1807,7 +1807,7 @@
     background:linear-gradient(135deg,#f59e0b 0%,#d97706 100%); color:#fff; font-size:13.5px; font-weight:800; letter-spacing:.2px;
     box-shadow:0 4px 12px rgba(217,119,6,.28); cursor:pointer; -webkit-tap-highlight-color:transparent; }
   .homeSubscribeBtn:active{ transform:scale(.98); }
-  /* ---------- 🏷️ ورژن بیج — Login / Subscription اور Home ہیڈر (AIODR610TU002) ---------- */
+  /* ---------- 🏷️ ورژن بیج — Login / Subscription اور Home ہیڈر (AIODR610TU003) ---------- */
   .verBadge{ display:flex; align-items:center; gap:7px; width:fit-content; margin:6px auto 14px; padding:6px 16px 6px 12px;
     border-radius:999px; background:linear-gradient(135deg,#0f766e 0%,#14b8a6 100%); color:#fff; font-size:12px; font-weight:800;
     letter-spacing:1.2px; font-family:ui-monospace,Menlo,Consolas,monospace; box-shadow:0 4px 14px rgba(15,118,110,.30), inset 0 1px 0 rgba(255,255,255,.25);
@@ -1847,7 +1847,7 @@
   <div class="loginBox">
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:pointer;">🔐 Login</h2>
     <!-- ---------- ورژن بیج — لاگ ان پر سب سے اوپر صاف نظر آتا ہے؛ 7 بار ٹیپ کرنے سے ڈویلپر پینل کھلتا ہے ---------- -->
-    <div id="loginVersionBadge" class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR610TU002</div>
+    <div id="loginVersionBadge" class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR610TU003</div>
 
     <!-- ---------- 🎉 خوش آمدید بینر — بیٹا ٹیسٹنگ کی صاف وضاحت، پہلی نظر میں ---------- -->
     <div class="welcomeTrialBanner">
@@ -2003,7 +2003,7 @@
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR610TU002</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR610TU003</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -2049,7 +2049,7 @@
       <div class="settingsSubLabel" style="margin-top:0; color:#15803d;">🎁 Generate Gift / Activation Code</div>
       <div class="settingsHint" style="margin-top:0; margin-bottom:6px;">دورانیہ منتخب کریں — کوڈ بن کر نیچے نظر آئے گا، اسی وقت WhatsApp پر شیئر کر سکتے ہیں۔ موبائل نمبر ضرور لکھیں — نئے موبائل یا دوبارہ انسٹال پر کسٹمر صرف یہی نمبر لکھ کر اپنے باقی دن واپس لے سکے گا۔ Device UID اختیاری ہے (ڈالیں تو کوڈ خود لگ جائے گا)۔</div>
       <input type="text" id="giftCodeNameInput" placeholder="کسٹمر کا نام (مثلاً: احمد سٹور)" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
-      <input type="tel" id="giftCodePhoneInput" inputmode="tel" placeholder="📱 کسٹمر کا موبائل نمبر (مثلاً: 03001234567)" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
+      <input type="tel" id="giftCodePhoneInput" inputmode="tel" placeholder="📱 کسٹمر کا موبائل نمبر (03001234567 یا +971501234567)" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
       <select id="giftCodeDaysInput" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
         <option value="7">7 دن (Free Trial جتنا)</option>
         <option value="30" selected>30 دن (1 مہینہ)</option>
@@ -2125,7 +2125,7 @@
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="appVersionBadge" class="verBadgeHdr" onclick="handleDevPanelTap()">AIODR610TU002</span>
+      <span id="appVersionBadge" class="verBadgeHdr" onclick="handleDevPanelTap()">AIODR610TU003</span>
     </div>
   </div>
 
@@ -5873,17 +5873,70 @@ async function ensureFirebaseAuth(){
 }
 
 // ---------- Firestore کو authenticated (Bearer token) درخواست بھیجنے کا مختصر طریقہ — صرف لکھنے والی کالز کے لیے ----------
-// ---------- 📱 موبائل نمبر کی یکساں شکل: 0300-1234567 / +92 300 1234567 / 923001234567 → 3001234567 ----------
-function normalizePhone(raw){
-  let d = String(raw || '').replace(/\D/g, '');
-  if(d.indexOf('0092') === 0) d = d.slice(4);
-  else if(d.length === 12 && d.indexOf('92') === 0) d = d.slice(2);
-  else if(d.length === 11 && d.indexOf('0') === 0) d = d.slice(1);
-  return d;
+// ---------- 🌍 ملکوں کی فہرست — نمبر ہمیشہ بین الاقوامی شکل میں محفوظ (مثلاً 923001234567، 971501234567) ----------
+const PHONE_COUNTRIES = [
+  ['🇵🇰','Pakistan','92'],['🇦🇪','UAE','971'],['🇸🇦','Saudi Arabia','966'],['🇶🇦','Qatar','974'],['🇴🇲','Oman','968'],
+  ['🇰🇼','Kuwait','965'],['🇧🇭','Bahrain','973'],['🇬🇧','UK','44'],['🇺🇸','USA / Canada','1'],['🇦🇫','Afghanistan','93'],
+  ['🇮🇳','India','91'],['🇧🇩','Bangladesh','880'],['🇮🇷','Iran','98'],['🇮🇶','Iraq','964'],['🇹🇷','Turkey','90'],
+  ['🇲🇾','Malaysia','60'],['🇨🇳','China','86'],['🇩🇪','Germany','49'],['🇮🇹','Italy','39'],['🇪🇸','Spain','34'],
+  ['🇫🇷','France','33'],['🇬🇷','Greece','30'],['🇳🇱','Netherlands','31'],['🇧🇪','Belgium','32'],['🇳🇴','Norway','47'],
+  ['🇸🇪','Sweden','46'],['🇩🇰','Denmark','45'],['🇨🇭','Switzerland','41'],['🇦🇹','Austria','43'],['🇵🇹','Portugal','351'],
+  ['🇮🇪','Ireland','353'],['🇵🇱','Poland','48'],['🇷🇺','Russia','7'],['🇦🇺','Australia','61'],['🇳🇿','New Zealand','64'],
+  ['🇯🇵','Japan','81'],['🇰🇷','South Korea','82'],['🇸🇬','Singapore','65'],['🇭🇰','Hong Kong','852'],['🇿🇦','South Africa','27'],
+  ['🇪🇬','Egypt','20'],['🇯🇴','Jordan','962'],['🇱🇧','Lebanon','961'],['🇰🇪','Kenya','254'],['🇳🇬','Nigeria','234']
+];
+// ---------- + یا 00 سے لکھے نمبر سے ملک کا کوڈ پہچانیں (لمبا کوڈ پہلے) ----------
+function detectCountryCode(intlDigits){
+  const codes = PHONE_COUNTRIES.map(c => c[2]).sort((a,b) => b.length - a.length);
+  for(const c of codes){ if(intlDigits.indexOf(c) === 0) return c; }
+  return '';
 }
-function phoneForWhatsapp(key){
-  return (key && key.length === 10 && key[0] === '3') ? '92' + key : (key || '');
+// ---------- نمبر کی پکی شکل: ملک کا کوڈ + نمبر (شروع کا صفر ہٹا کر) ----------
+function normalizePhone(raw, defCode){
+  defCode = defCode || '92';
+  const str = String(raw || '').trim();
+  let d = str.replace(/\D/g, '');
+  if(!d) return '';
+  if(str.indexOf('+') === 0) return d;                    // +971501234567
+  if(d.indexOf('00') === 0) return d.slice(2);            // 00971501234567
+  if(d.indexOf(defCode) === 0 && d.length >= defCode.length + 9) return d; // 923001234567 (بغیر +)
+  d = d.replace(/^0+/, '');                               // 0501234567 → 501234567
+  return defCode + d;
 }
+function phoneForWhatsapp(key){ return key || ''; }
+// ---------- ہر نمبر والے خانے کے ساتھ ملک کا انتخاب — + لکھنے پر خود بدل جاتا ہے ----------
+function initPhoneCountryFields(){
+  ['giftCodePhoneInput','loginPhoneInput','subGatePhoneInput','subscribePhoneInput'].forEach(id => {
+    const inp = document.getElementById(id);
+    if(!inp || document.getElementById(id + 'Cc')) return;
+    const sel = document.createElement('select');
+    sel.id = id + 'Cc';
+    sel.innerHTML = PHONE_COUNTRIES.map(c => `<option value="${c[2]}">${c[0]} ${c[1]} +${c[2]}</option>`).join('');
+    sel.value = '92';
+    sel.style.cssText = 'width:100%; padding:9px; margin-bottom:6px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px; background:#fff;';
+    inp.parentNode.insertBefore(sel, inp);
+    inp.addEventListener('input', () => {
+      const v = inp.value.trim();
+      if(v.indexOf('+') === 0 || v.replace(/\s/g,'').indexOf('00') === 0){
+        const cc = detectCountryCode(v.replace(/\D/g,'').replace(/^00/,''));
+        if(cc) sel.value = cc;
+      }
+    });
+  });
+}
+function getPhoneKeyFromField(id){
+  const inp = document.getElementById(id);
+  const sel = document.getElementById(id + 'Cc');
+  return normalizePhone(inp ? inp.value : '', sel ? sel.value : '92');
+}
+function formatPhoneKey(key){
+  if(!key) return '';
+  const cc = detectCountryCode(key);
+  const flag = (PHONE_COUNTRIES.find(c => c[2] === cc) || [''])[0];
+  return `${flag} +${cc ? cc + ' ' + key.slice(cc.length) : key}`;
+}
+document.addEventListener('DOMContentLoaded', initPhoneCountryFields);
+setTimeout(initPhoneCountryFields, 1500);
 
 // ---------- 🔐 ڈویلپر کا اپنا Firebase اکاؤنٹ (Email/Password) — کوڈ بنانا/فہرست/معطل/ڈیلیٹ صرف اسی سے ----------
 async function ensureDevAuth(){
@@ -6220,9 +6273,8 @@ async function restoreSubscriptionFromServer(){
 }
 
 // ---------- 📱 موبائل نمبر سے بحالی — نیا موبائل ہو یا دوبارہ انسٹال، صرف باقی دن واپس (پورا پیکج دوبارہ نہیں) ----------
-async function restoreByPhone(raw){
-  const key = normalizePhone(raw);
-  if(!key || key.length < 7) return {ok:false, msg:'Please enter your correct mobile number.'};
+async function restoreByPhone(key){
+  if(!key || key.length < 9) return {ok:false, msg:'Please enter your correct mobile number.'};
   let pr;
   try{ pr = await fetch(`${FIRESTORE_BASE}/phones/${encodeURIComponent(key)}?key=${FIREBASE_API_KEY}`); }
   catch(e){ return {ok:false, msg:'No internet connection.'}; }
@@ -6255,7 +6307,7 @@ async function restoreByPhoneUI(inputId, msgId){
   const msgEl = document.getElementById(msgId);
   msgEl.style.color = 'var(--muted)';
   msgEl.textContent = '⏳ Looking for your subscription...';
-  const r = await restoreByPhone(document.getElementById(inputId).value);
+  const r = await restoreByPhone(getPhoneKeyFromField(inputId));
   if(r.ok){
     msgEl.style.color = 'var(--success)';
     msgEl.textContent = `✅ Subscription restored — ${r.days} day(s) left (valid until ${formatDateDMY(r.expiry)}).`;
@@ -6603,8 +6655,8 @@ async function generateGiftCode(){
   const daysVal = document.getElementById('giftCodeDaysInput').value;
   const uidVal = document.getElementById('giftCodeUidInput').value.trim().toUpperCase();
   const nameVal = document.getElementById('giftCodeNameInput').value.trim();
-  const phoneKey = normalizePhone(document.getElementById('giftCodePhoneInput').value);
-  if(phoneKey && phoneKey.length < 7){ alert('⚠️ موبائل نمبر درست نہیں — دوبارہ چیک کریں۔'); return; }
+  const phoneKey = document.getElementById('giftCodePhoneInput').value.trim() ? getPhoneKeyFromField('giftCodePhoneInput') : '';
+  if(phoneKey && phoneKey.length < 9){ alert('⚠️ موبائل نمبر درست نہیں — دوبارہ چیک کریں۔'); return; }
   const isLifetime = daysVal === 'lifetime';
   const code = generateRandomGiftCode();
 
@@ -6671,10 +6723,10 @@ function copyCodeFromList(code, btn){
 async function editLicensePhone(code){
   const it = _issuedCodesCache.find(x => x.code === code) || {};
   const oldKey = it.customerPhone || '';
-  const raw = prompt(`کوڈ ${code} کے لیے کسٹمر کا موبائل نمبر:`, oldKey ? '0' + oldKey : '');
+  const raw = prompt(`کوڈ ${code} کے لیے کسٹمر کا موبائل نمبر:\n(پاکستانی نمبر سیدھا لکھیں، مثلاً 03001234567 — باہر کا نمبر + اور ملک کے کوڈ کے ساتھ، مثلاً +971501234567)`, oldKey ? '+' + oldKey : '');
   if(raw === null) return;
   const newKey = normalizePhone(raw);
-  if(raw.trim() && newKey.length < 7){ alert('⚠️ موبائل نمبر درست نہیں۔'); return; }
+  if(raw.trim() && newKey.length < 9){ alert('⚠️ موبائل نمبر درست نہیں۔'); return; }
   try{
     const r = await devFirestoreFetch(`licenses/${encodeURIComponent(code)}?updateMask.fieldPaths=customerPhone&key=${FIREBASE_API_KEY}`, {
       method:'PATCH', headers:{'Content-Type':'application/json'},
@@ -6745,7 +6797,7 @@ function renderIssuedCodesList(){
   const monthVal = document.getElementById('codeMonthFilterSelect')?.value || 'all';
   const q = (document.getElementById('codeSearchInput')?.value || '').trim().toLowerCase();
   const qDigits = q.replace(/\D/g, '');
-  const qPhone = qDigits.length >= 3 ? normalizePhone(qDigits) || qDigits : '';
+  const qPhone = qDigits.length >= 3 ? (q.replace(/\s/g,'').indexOf('0') === 0 && q.indexOf('00') !== 0 ? '92' + qDigits.replace(/^0+/,'') : qDigits.replace(/^00/,'')) : '';
   let items = _issuedCodesCache.filter(it => {
     if(q){
       const hay = [it.customerName, it.code, it.boundUid, it.activatedUid].map(x => String(x || '').toLowerCase());
@@ -6785,7 +6837,7 @@ function renderIssuedCodesList(){
         <div style="font-size:11px; font-weight:800; color:${statusColor};">${statusLabel}</div>
       </div>
       <div style="font-size:12px; color:var(--muted); margin-bottom:6px;">
-        👤 ${it.customerName || 'نام درج نہیں'}${it.customerPhone ? ' • 📞 0' + it.customerPhone : ''} • ⏱️ ${durationLabel}${it.boundUid ? ' • 🔒 UID: '+it.boundUid : ' • 🔓 کوئی بھی ڈیوائس'}${it.activatedUid ? '<br>📱 لگایا گیا: '+it.activatedUid : ''}${it.expiryDate ? ' • 📅 ختم: '+it.expiryDate : ''}
+        👤 ${it.customerName || 'نام درج نہیں'}${it.customerPhone ? ' • 📞 ' + formatPhoneKey(it.customerPhone) : ''} • ⏱️ ${durationLabel}${it.boundUid ? ' • 🔒 UID: '+it.boundUid : ' • 🔓 کوئی بھی ڈیوائس'}${it.activatedUid ? '<br>📱 لگایا گیا: '+it.activatedUid : ''}${it.expiryDate ? ' • 📅 ختم: '+it.expiryDate : ''}
       </div>
       <div style="display:flex; gap:6px; margin-bottom:6px;">
         <button onclick="copyCodeFromList('${it.code}', this)" style="flex:1; padding:6px; background:#eef2ff; color:#3730a3; border:none; border-radius:7px; font-size:11.5px; font-weight:800; cursor:pointer;">📋 کاپی</button>

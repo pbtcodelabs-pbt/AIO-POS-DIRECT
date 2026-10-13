@@ -227,6 +227,11 @@
   .hbcSettingsGearBtn:active{ transform:scale(.92); }
   /* ===================== AIO1210MO021: ہوم کا اوپری حصہ کمپیکٹ — آئیکنز کے لیے زیادہ جگہ =====================
      بزنس کا نام اب اوپر والی پٹی میں (AIO POS کی جگہ)، کارڈ ایک ہی قطار میں چھوٹا */
+  /* AIO1310TU044: اوپر ایپ کا نام */
+  .topBrandStack{flex:1 1 auto; min-width:0; display:flex; flex-direction:column; justify-content:center; line-height:1.1;}
+  .topBrandStack .mobileBrand{flex:none !important;}
+  .appNameTag{align-self:flex-start; font-size:9.5px; font-weight:900; letter-spacing:.8px; text-transform:uppercase; color:#0b3b36;
+    background:linear-gradient(180deg,#fde68a,#f59e0b); border-radius:999px; padding:1px 8px; margin-bottom:2px; box-shadow:0 1px 0 rgba(0,0,0,.25);}
   #mobileTopbar #mobileBrandText{min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:17px; font-weight:800;}
   .homeBusinessCard{flex-direction:row; flex-wrap:wrap; align-items:center; gap:6px 8px; padding:8px 10px; margin-bottom:6px; border-radius:14px;}
   .homeBusinessCard .hbcTopRow{flex:1 1 0; min-width:0; gap:8px; order:1;}
@@ -2554,7 +2559,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1310TU004</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1310TU005</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -2749,7 +2754,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1310TU004</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1310TU005</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -2853,7 +2858,11 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   <!-- ---------- MOBILE TOPBAR (صرف چھوٹی اسکرین پر نظر آتی ہے) ---------- -->
   <div id="mobileTopbar">
     <button id="hamburgerBtn" onclick="toggleSidebar()">☰</button>
-    <span id="mobileBrandText" class="mobileBrand" style="display:inline;">🧾 AIO POS</span>
+    <!-- AIO1310TU044: ایپ کا نام (AIO POS / AIO POS DIRECT) دکان کے نام کے اوپر چھوٹا سا — پتا رہے کون سی ایپ کھلی ہے -->
+    <div class="topBrandStack">
+      <span class="appNameTag">AIO POS DIRECT</span>
+      <span id="mobileBrandText" class="mobileBrand" style="display:inline;">🧾 AIO POS</span>
+    </div>
     <!-- ---------- 🧪 صرف ٹیسٹ فائل میں: یہ لیبل "AIO POS" کی بالکل اسی جگہ، اسی بڑے سائز میں کھڑا ہو کر اسے ڈھانپ لیتا ہے —
          آئیکن کے بغیر، مسلسل چمکتا ہوا۔ دائیں طرف والا اصل ماسٹر ورژن اس سے بالکل بے اثر رہتا ہے۔
          (پہلے یہاں ایک ٹائم اسٹیمپ بیج بھی تھا، مگر ٹائم زون/گھڑی کے فرق سے کبھی الجھن پیدا کرتا تھا —
@@ -2864,7 +2873,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1310TU004</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1310TU005</span>
     </div>
   </div>
 
@@ -28561,7 +28570,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR1310TU004';
+  const APP_VERSION = 'AIODR1310TU005';
   const UPD_KEY = 'aioUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }

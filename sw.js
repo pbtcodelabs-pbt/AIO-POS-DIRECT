@@ -1,4 +1,4 @@
-const CACHE_NAME = 'AIODR1710SA017';
+const CACHE_NAME = 'AIODR1810SU018';
 const CORE_ASSETS = [
   './',
   './index.html',
@@ -7,57 +7,89 @@ const CORE_ASSETS = [
   './icon-512.png',
   './icon-512-maskable.png'
 ];
+// ---------- سست انٹرنیٹ پر سفید اسکرین کا علاج: اپنی فائلوں کے لیے نیٹ ورک کو صرف اتنی دیر دیں،
+// پھر فون میں محفوظ کاپی سے فوراً کھولیں — تازہ فائل پیچھے خاموشی سے آتی رہے اور اگلی بار کام آئے ----------
+const NET_TIMEOUT_MS = 3500;
 
-// ---------- ⚠️ اہم درستگی: پہلے cache.addAll() استعمال ہوتا تھا — اس کا اصول یہ ہے کہ اگر ایک بھی فائل
-// (مثلاً کوئی آئیکن) نیٹ ورک کی معمولی رکاوٹ سے لوڈ نہ ہو سکے، تو پوری کیشنگ ناکام ہو جاتی ہے۔
-// پہلے اس ناکامی کو .catch(()=>{}) سے خاموشی سے چھپا دیا جاتا تھا اور skipWaiting() پھر بھی چل جاتا تھا —
-// نتیجہ: ایپ "کامیابی سے انسٹال" ظاہر ہوتی مگر کیشے اندر سے خالی رہ جاتا، اور آف لائن کچھ کام نہ کرتا۔
-// اب ہر فائل الگ الگ، آزادانہ طور پر کیش ہوتی ہے — ایک فائل ناکام ہو بھی جائے تو باقی سب محفوظ ہو جاتی ہیں ----------
+// ---------- انسٹال: بنیادی فائلیں الگ الگ کیش کریں (ایک ناکام ہو تو باقی متاثر نہ ہوں) ----------
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) =>
-      Promise.allSettled(
-        CORE_ASSETS.map((asset) =>
-          cache.add(asset).catch((err) => console.warn('Cache failed for', asset, err))
+    caches.open(CACHE_NAME)
+      .then((cache) => Promise.all(
+        CORE_ASSETS.map((url) =>
+          cache.add(url).catch((err) => console.warn('Precache failed for', url, err))
         )
-      )
-    ).then(() => self.skipWaiting())
+      ))
+      .then(() => self.skipWaiting())
   );
 });
 
+// ---------- ایکٹیویٹ: پرانے کیش صاف کریں — مگر نئے کیش میں index.html نہ ہو تو پہلے پرانی کاپی منتقل کریں
+// تاکہ آف لائن/سست نیٹ پر ایپ کبھی خالی نہ کھلے ----------
 self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
-      )
-    ).then(() => self.clients.claim())
-  );
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    const cache = await caches.open(CACHE_NAME);
+    for (const url of ['./', './index.html']) {
+      if (await cache.match(url)) continue;
+      for (const k of keys) {
+        if (k === CACHE_NAME) continue;
+        const old = await (await caches.open(k)).match(url);
+        if (old) { await cache.put(url, old); break; }
+      }
+    }
+    await Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)));
+    await self.clients.claim();
+  })());
 });
+
+function cachedFallback(req) {
+  return caches.match(req).then((c) => c || (req.mode === 'navigate' ? (caches.match('./index.html').then((i) => i || caches.match('./'))) : null));
+}
 
 self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
-  event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-        return response;
-      })
-      .catch(() =>
-        // ---------- آف لائن: پہلے اسی درخواست کی exact کیش شدہ فائل تلاش کریں —
-        // اگر نہ ملے اور یہ صفحہ کھولنے کی درخواست (navigation) ہو، تبھی index.html واپس دیں۔
-        // ورنہ (جیسے کوئی ناکام ہونے والی script/font فائل) خالی/ناکام رہنے دیں —
-        // ورنہ غلطی سے HTML کسی JS فائل کی جگہ مل کر ایپ الجھا سکتی ہے ----------
-        caches.match(event.request).then((cached) => {
-          if (cached) return cached;
-          if (event.request.mode === 'navigate') return caches.match('./index.html');
-          return new Response('', {status: 504, statusText: 'Offline'});
+  const req = event.request;
+  if (req.method !== 'GET') return;
+  const sameOrigin = new URL(req.url).origin === self.location.origin;
+
+  // ---------- دوسری ویب سائٹس (فونٹس وغیرہ): پہلے جیسا — نیٹ ورک، ناکامی پر کیش ----------
+  if (!sameOrigin) {
+    event.respondWith(
+      fetch(req)
+        .then((response) => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
+          return response;
         })
-      )
-  );
+        .catch(() => caches.match(req).then((c) => c || new Response('', { status: 504, statusText: 'Offline' })))
+    );
+    return;
+  }
+
+  // ---------- اپنی فائلیں: نیٹ ورک اور 3.5 سیکنڈ کی دوڑ — نیٹ جلدی جواب دے تو تازہ، ورنہ محفوظ کاپی ----------
+  const network = fetch(req).then((res) => {
+    if (res && res.ok) {
+      const clone = res.clone();
+      caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
+    }
+    return res;
+  });
+  event.waitUntil(network.then(() => {}, () => {})); // پیچھے تازہ کاپی مکمل ڈاؤن لوڈ ہو کر محفوظ ہوتی رہے
+
+  event.respondWith(new Promise((resolve) => {
+    let done = false;
+    const finish = (r) => { if (!done && r) { done = true; resolve(r); } };
+    const timer = setTimeout(() => { cachedFallback(req).then(finish); }, NET_TIMEOUT_MS);
+    network
+      .then((res) => { clearTimeout(timer); finish(res); })
+      .catch(() => {
+        clearTimeout(timer);
+        cachedFallback(req).then((c) => finish(c || new Response('', { status: 504, statusText: 'Offline' })));
+      });
+  }));
 });
 
+// ---------- "ابھی اپڈیٹ کریں" بٹن سے فوری کنٹرول سنبھالیں ----------
 self.addEventListener('message', (event) => {
   if (event.data === 'SKIP_WAITING') self.skipWaiting();
 });

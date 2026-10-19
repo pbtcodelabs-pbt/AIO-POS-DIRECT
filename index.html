@@ -2771,7 +2771,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1910MO027</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1910MO028</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -2966,7 +2966,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1910MO027</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1910MO028</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3010,7 +3010,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div id="devSecretUnlocked" style="display:none; max-height:70vh; overflow-y:auto;">
       <!-- ---------- 🎁 گفٹ/ایکٹیویشن کوڈ جنریٹر — Firestore کے licenses/{code} میں نیا ریکارڈ لکھتا ہے ---------- -->
       <div class="settingsSubLabel" style="margin-top:0; color:#15803d;">🎁 Generate Gift / Activation Code</div>
-      <div class="settingsHint" style="margin-top:0; margin-bottom:6px;">دورانیہ منتخب کریں — کوڈ بن کر نیچے نظر آئے گا، اسی وقت WhatsApp پر شیئر کر سکتے ہیں۔ موبائل نمبر ضرور لکھیں — نئے موبائل یا دوبارہ انسٹال پر کسٹمر صرف یہی نمبر لکھ کر اپنے باقی دن واپس لے سکے گا۔ Device UID اختیاری ہے (ڈالیں تو کوڈ خود لگ جائے گا)۔</div>
+      <div class="settingsHint" style="margin-top:0; margin-bottom:6px;">دورانیہ منتخب کریں — کوڈ بن کر نیچے نظر آئے گا، اسی وقت WhatsApp پر شیئر کر سکتے ہیں۔ نام، موبائل نمبر اور Device UID تینوں لازمی ہیں (کسٹمر کا پیغام پیلے خانے میں پیسٹ کریں تو خود بھر جاتے ہیں)۔ UID کی وجہ سے کوڈ کسٹمر کی ایپ میں خود لگ جاتا ہے، اور نمبر سے نئے موبائل پر باقی دن واپس ملتے ہیں۔</div>
       <!-- ---------- AIODR1910MO023: کسٹمر کا پورا پیغام یہاں پیسٹ کریں — نام، نمبر اور UID خود الگ ہو جائیں ---------- -->
       <div style="background:#fffbeb; border:1.5px dashed #f59e0b; border-radius:10px; padding:10px; margin-bottom:10px;">
         <div style="font-size:12.5px; font-weight:800; color:#92400e; margin-bottom:6px;">📋 کسٹمر کا پیغام پیسٹ کریں</div>
@@ -3021,8 +3021,8 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
         </div>
         <div id="giftCodePasteMsg" style="font-size:12px; font-weight:700; margin-top:6px;"></div>
       </div>
-      <input type="text" id="giftCodeNameInput" placeholder="کسٹمر کا نام (مثلاً: احمد سٹور)" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
-      <input type="tel" id="giftCodePhoneInput" inputmode="tel" placeholder="📱 کسٹمر کا موبائل نمبر (03001234567 یا +971501234567)" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
+      <input type="text" id="giftCodeNameInput" placeholder="👤 کسٹمر کا نام * (مثلاً: احمد سٹور)" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
+      <input type="tel" id="giftCodePhoneInput" inputmode="tel" placeholder="📱 کسٹمر کا موبائل نمبر * (03001234567 یا +971501234567)" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
       <select id="giftCodeDaysInput" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
         <option value="1">1 دن (ٹیسٹ)</option>
         <option value="2">2 دن (ٹیسٹ)</option>
@@ -3034,7 +3034,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
         <option value="365">365 دن (1 سال)</option>
         <option value="lifetime">🌟 Lifetime (ہمیشہ کے لیے)</option>
       </select>
-      <input type="text" id="giftCodeUidInput" placeholder="Device UID (اختیاری — خودکار لگانے کے لیے)" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
+      <input type="text" id="giftCodeUidInput" placeholder="🔒 Device UID * (مثلاً ABCD-2345)" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
       <button class="testPrintBtn" style="background:#dcfce7; color:#15803d;" onclick="generateGiftCode()">🎁 Generate Code</button>
       <div id="giftCodeResultWrap" style="display:none; margin-top:10px; background:#f0fdf4; border:1.5px solid #86efac; border-radius:10px; padding:12px; text-align:center;">
         <div id="giftCodeResultText" style="font-size:20px; font-weight:900; letter-spacing:2px; color:#15803d;"></div>
@@ -3098,7 +3098,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1910MO027</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1910MO028</span>
     </div>
   </div>
 
@@ -6171,7 +6171,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     </div>
     <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:4px;">👤 Your name / shop name <b style="color:var(--danger);">*</b></label>
     <input type="text" id="reqCodeNameInput" autocomplete="name" placeholder="e.g. Ahmed Store" style="width:100%; padding:10px; border:1px solid #dbe1ea; border-radius:8px; font-size:14px; margin-bottom:8px;">
-    <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:4px;">📱 Mobile number (to restore on a new phone)</label>
+    <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:4px;">📱 Mobile number <b style="color:var(--danger);">*</b> (to restore on a new phone)</label>
     <input type="tel" id="reqCodePhoneInput" inputmode="tel" placeholder="03001234567" style="width:100%; padding:10px; border:1px solid #dbe1ea; border-radius:8px; font-size:14px; margin-bottom:8px;">
     <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:4px;">🏙️ City (optional)</label>
     <input type="text" id="reqCodeCityInput" placeholder="e.g. Lahore" style="width:100%; padding:10px; border:1px solid #dbe1ea; border-radius:8px; font-size:14px;">
@@ -8693,7 +8693,14 @@ async function generateGiftCode(){
   const uidVal = document.getElementById('giftCodeUidInput').value.trim().toUpperCase();
   const nameVal = document.getElementById('giftCodeNameInput').value.trim();
   const phoneKey = document.getElementById('giftCodePhoneInput').value.trim() ? getPhoneKeyFromField('giftCodePhoneInput') : '';
-  if(phoneKey && phoneKey.length < 9){ alert('⚠️ موبائل نمبر درست نہیں — دوبارہ چیک کریں۔'); return; }
+  // ---------- AIODR1910MO028: نام، موبائل نمبر اور UID تینوں لازمی — ہر کوڈ کا پورا ریکارڈ فہرست میں رہے ----------
+  const missing = [];
+  if(!nameVal) missing.push('👤 کسٹمر کا نام');
+  if(!phoneKey) missing.push('📱 موبائل نمبر');
+  if(!uidVal) missing.push('🔒 Device UID');
+  if(missing.length){ alert('⚠️ یہ خانے ضرور بھریں:\n\n' + missing.join('\n') + '\n\nآسان طریقہ: کسٹمر کا "Request Activation Code" والا پیغام اوپر پیلے خانے میں پیسٹ کریں — سب خود بھر جائے گا۔'); return; }
+  if(phoneKey.length < 9){ alert('⚠️ موبائل نمبر درست نہیں — دوبارہ چیک کریں۔'); return; }
+  if(!/^([A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}|\d{5})$/.test(uidVal)){ alert('⚠️ Device UID درست نہیں — یہ ایسی ہوتی ہے: ABCD-2345'); return; }
   const isLifetime = daysVal === 'lifetime';
   const code = generateRandomGiftCode();
 
@@ -8982,7 +8989,8 @@ function sendCodeRequest(channel){
   if(!name){ msgEl.textContent = '⚠️ Please enter your name first.'; document.getElementById('reqCodeNameInput').focus(); return; }
   const phoneRaw = document.getElementById('reqCodePhoneInput').value.trim();
   const phoneKey = phoneRaw ? getPhoneKeyFromField('reqCodePhoneInput') : '';
-  if(phoneKey && phoneKey.length < 9){ msgEl.textContent = '⚠️ Mobile number looks wrong — please check.'; return; }
+  if(!phoneKey){ msgEl.textContent = '⚠️ Please enter your mobile number.'; document.getElementById('reqCodePhoneInput').focus(); return; }
+  if(phoneKey.length < 9){ msgEl.textContent = '⚠️ Mobile number looks wrong — please check.'; return; }
   msgEl.textContent = '';
   AppState.settings.contactName = name;
   AppState.settings.contactCity = city;
@@ -29845,9 +29853,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR1910MO027';
+  const APP_VERSION = 'AIODR1910MO028';
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Update popup now shows the full note — no text cut off';
+  const UPDATE_NOTE = 'Name, mobile number and Device ID are now required for every activation code';
   const UPD_KEY = 'aioUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }

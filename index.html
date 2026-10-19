@@ -75,6 +75,23 @@
     box-shadow:0 25px 60px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.08);
     animation:loginBoxIn .45s cubic-bezier(.2,.8,.2,1);
   }
+  /* ---------- AIODR1910MO026: 🎉 کوڈ لگنے پر مبارکباد کا پاپ اپ ---------- */
+  #actCelebrateModal{ z-index:4200; overflow:hidden; }
+  #actCelebrateModal .acBox{ position:relative; z-index:2; background:#fff; border-radius:22px; max-width:360px; width:calc(100% - 32px); padding:22px 18px 18px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,.35); animation:acPop .45s cubic-bezier(.2,1.4,.4,1); }
+  #actCelebrateModal .acGift{ font-size:58px; line-height:1; animation:acBounce 1.2s ease-in-out infinite; }
+  #actCelebrateModal .acTitle{ font-size:22px; font-weight:900; color:#b91c1c; margin:6px 0 2px; }
+  #actCelebrateModal .acSub{ font-size:13px; color:#475569; font-weight:700; margin-bottom:12px; }
+  #actCelebrateModal .acSum{ display:flex; align-items:stretch; justify-content:center; gap:6px; margin:8px 0 12px; }
+  #actCelebrateModal .acCell{ flex:1; border-radius:12px; padding:8px 4px; font-weight:800; font-size:11px; }
+  #actCelebrateModal .acCell b{ display:block; font-size:22px; font-weight:900; }
+  #actCelebrateModal .acOp{ align-self:center; font-size:20px; font-weight:900; color:#64748b; }
+  #actCelebrateModal .acDates{ background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:9px 12px; font-size:13px; font-weight:700; text-align:left; line-height:1.8; }
+  #actCelebrateModal .acEnter{ margin-top:14px; width:100%; padding:14px; border:none; border-radius:14px; font-size:17px; font-weight:900; color:#fff; background:linear-gradient(155deg,#16a34a,#15803d); box-shadow:0 6px 18px rgba(22,163,74,.4); cursor:pointer; animation:acPulse 1.6s ease-in-out infinite; }
+  #actCelebrateModal .acPiece{ position:absolute; top:-40px; z-index:1; pointer-events:none; animation:acFall linear forwards; }
+  @keyframes acPop{ from{ transform:scale(.6); opacity:0; } to{ transform:scale(1); opacity:1; } }
+  @keyframes acBounce{ 0%,100%{ transform:translateY(0) rotate(-6deg); } 50%{ transform:translateY(-10px) rotate(6deg); } }
+  @keyframes acPulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.04); } }
+  @keyframes acFall{ to{ transform:translateY(110vh) rotate(540deg); } }
   @keyframes loginBoxIn{ from{ opacity:0; transform:translateY(16px) scale(.98); } to{ opacity:1; transform:translateY(0) scale(1); } }
   .loginLogoBadge{
     width:58px; height:58px; margin:0 auto 12px; border-radius:18px;
@@ -2754,7 +2771,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1910MO025</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1910MO026</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -2949,7 +2966,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1910MO025</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1910MO026</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3081,7 +3098,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1910MO025</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1910MO026</span>
     </div>
   </div>
 
@@ -6165,6 +6182,18 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   </div>
 </div>
 
+<!-- ---------- AIODR1910MO026: 🎉 کوڈ لگنے پر مبارکباد — پچھلے دن + نئے دن = کُل، تاریخیں، اور Enter ---------- -->
+<div class="modalOverlay" id="actCelebrateModal">
+  <div class="acBox">
+    <div class="acGift">🎁</div>
+    <div class="acTitle">🎉 Congratulations! مبارک ہو</div>
+    <div class="acSub" id="acSubText"></div>
+    <div class="acSum" id="acSumRow"></div>
+    <div class="acDates" id="acDatesBox"></div>
+    <button class="acEnter" id="acEnterBtn" onclick="enterAfterCelebration()">✅ Enter — start using the app</button>
+  </div>
+</div>
+
 <div class="modalOverlay" id="trialUrgentModal" onclick="if(event.target===this) dismissTrialUrgentModal()">
   <div class="backupConfirmBox">
     <div class="backupConfirmIconWrap" id="trialUrgentIconWrap" style="background:#fee2e2; color:var(--danger);"><span id="trialUrgentIcon">⚠️</span></div>
@@ -8299,6 +8328,7 @@ async function activateFromSubscribeModal(){
   const wasTrial = !!AppState.settings.isOnFreeTrial && isSubscriptionActive();
   const r = await activateSubscription(document.getElementById('subscribeCodeInput').value);
   if(r.success){
+    showActivationCelebration(r);
     msgEl.style.color = 'var(--success)';
     msgEl.textContent = r.restored
       ? `✅ Subscription restored — valid until ${formatDateDMY(r.expiry)} (${r.totalDays} day(s) left).`
@@ -8310,6 +8340,55 @@ async function activateFromSubscribeModal(){
     msgEl.style.color = 'var(--danger)';
     msgEl.textContent = '❌ ' + r.message;
   }
+}
+
+// ---------- AIODR1910MO026: 🎉 کوڈ لگتے ہی (خودکار یا ہاتھ سے) مبارکباد کا پاپ اپ — حساب صاف: پچھلے + نئے = کُل ----------
+function showActivationCelebration(r, auto){
+  try{
+    const m = document.getElementById('actCelebrateModal');
+    if(!m || !r) return;
+    const left = daysLeftInSubscription();
+    const startStr = r.activatedOn || localDateStr();
+    document.getElementById('acSubText').textContent = r.restored
+      ? 'Your subscription has been restored on this phone.'
+      : (auto ? 'Your activation code was applied automatically.' : 'Your activation code has been applied.');
+    const cell = (bg, fg, label, val) => `<div class="acCell" style="background:${bg}; color:${fg};">${label}<b>${val}</b></div>`;
+    let sum;
+    if(r.lifetime) sum = cell('#fef3c7', '#92400e', 'Your license', '♾️ Lifetime');
+    else if(r.restored) sum = cell('#dcfce7', '#15803d', 'Days left', left);
+    else sum = cell('#e0f2fe', '#0369a1', r.prevWasTrial ? 'Trial days left' : 'Days left before', r.prevDays || 0)
+      + '<div class="acOp">+</div>' + cell('#fef3c7', '#92400e', 'New code', r.daysGranted)
+      + '<div class="acOp">=</div>' + cell('#dcfce7', '#15803d', 'Total days', r.totalDays);
+    document.getElementById('acSumRow').innerHTML = sum;
+    document.getElementById('acDatesBox').innerHTML =
+      (r.restored ? '' : `📅 Activated on: <b>${formatDateDMY(startStr)}</b><br>`)
+      + (r.lifetime ? '⏳ Expires: <b>Never</b>' : `⏳ Expires on: <b>${formatDateDMY(r.expiry)}</b><br>🗓️ Days left: <b>${left}</b>`);
+    m.querySelectorAll('.acPiece').forEach(x => x.remove());
+    const pieces = ['🍬','🍭','🍫','🧁','🎉','🎊','🎀','🎈','🍬','🎀'];
+    for(let i = 0; i < 34; i++){
+      const el = document.createElement('div');
+      el.className = 'acPiece';
+      const red = i % 3 === 0;
+      if(red){ el.style.cssText = `width:8px; height:16px; border-radius:2px; background:${['#dc2626','#ef4444','#b91c1c','#f59e0b'][i % 4]};`; }
+      else { el.textContent = pieces[i % pieces.length]; el.style.fontSize = (18 + Math.random() * 14) + 'px'; }
+      el.style.left = (Math.random() * 100) + '%';
+      el.style.animationDuration = (2.6 + Math.random() * 2.6) + 's';
+      el.style.animationDelay = (Math.random() * 1.2) + 's';
+      m.appendChild(el);
+    }
+    m.classList.add('show');
+  }catch(e){}
+}
+function enterAfterCelebration(){
+  document.getElementById('actCelebrateModal').classList.remove('show');
+  try{
+    const ls = document.getElementById('loginScreen');
+    if(ls && getComputedStyle(ls).display !== 'none'){
+      setupLoginScreen();
+      const btn = document.getElementById('loginEnterBtn');
+      if(btn && btn.offsetParent !== null && !btn.disabled) login();
+    }
+  }catch(e){}
 }
 
 // ---------- ہاتھ سے "سبسکرپشن بحال کریں" بٹن (Login اور Gate دونوں پر) ----------
@@ -8356,7 +8435,7 @@ async function autoApplyBoundCodesFromServer(){
     }
     if(applied){
       _refreshScreensAfterSubscription();
-      alert(`✅ Your subscription has been activated automatically by the developer.\n\nValid until ${formatDateDMY(lastRes.expiry)} (${daysLeftInSubscription()} day(s) left).`);
+      showActivationCelebration(lastRes, true);
     }
   }catch(e){ /* آف لائن — اگلی بار دوبارہ */ }
   finally{ _autoApplyBusy = false; }
@@ -8461,6 +8540,7 @@ async function activateSubscription(code){
   // ---------- 📅 دن جمع کرنے کا اصول: اگر پہلے سے کوئی سبسکرپشن یا مفت ٹرائل چل رہا ہو تو اس کے باقی دن بچے رہتے ہیں
   // اور نئے کوڈ کے پورے دن ان کے اوپر جمع ہوتے ہیں (مثلاً 20 + 30 = 50)۔ نہ چل رہا ہو تو آج کے بعد اگلے دن سے پورے دن گنے جاتے ہیں ----------
   const prevDays = isSubscriptionActive() ? daysLeftInSubscription() : 0;
+  const prevWasTrial = prevDays > 0 && !!AppState.settings.isOnFreeTrial;
   const base = isSubscriptionActive() ? parseLocalDate(AppState.settings.subscriptionExpiry) : new Date(todayD);
   base.setHours(0,0,0,0);
   base.setDate(base.getDate() + daysNum);
@@ -8494,7 +8574,8 @@ async function activateSubscription(code){
   AppState.settings.lastActivationCode = trimmedCode; // ---------- Remote Revoke اور بحالی کے لیے یاد رکھیں ----------
   persistAllData();
   saveDeviceRecord(); // ---------- سرور پر ڈیوائس ریکارڈ — دوبارہ انسٹال پر بحالی کے لیے ----------
-  return {success:true, expiry: newExpiryStr, daysGranted: daysNum, prevDays: prevDays, totalDays: prevDays + daysNum};
+  return {success:true, expiry: newExpiryStr, daysGranted: daysNum, prevDays: prevDays, totalDays: prevDays + daysNum,
+    prevWasTrial: prevWasTrial, lifetime: !!data.lifetime, activatedOn: AppState.settings.subscriptionActivatedOn};
 }
 
 /* =====================================================================
@@ -8974,6 +9055,7 @@ async function submitActivationCode(){
   msgEl.textContent = '⏳ Checking code online...';
   const result = await activateSubscription(code);
   if(result.success){
+    showActivationCelebration(result);
     msgEl.style.color = 'var(--success)';
     msgEl.textContent = result.restored
       ? `✅ Subscription restored — valid until ${formatDateDMY(result.expiry)} (${result.totalDays} day(s) left). Opening app...`
@@ -9006,6 +9088,7 @@ async function activateFromLoginScreen(){
   msgEl.textContent = '⏳ Checking code online...';
   const result = await activateSubscription(code);
   if(result.success){
+    showActivationCelebration(result);
     msgEl.style.color = 'var(--success)';
     msgEl.textContent = result.restored
       ? `✅ Subscription restored — valid until ${formatDateDMY(result.expiry)} (${result.totalDays} day(s) left).`
@@ -18291,7 +18374,7 @@ function applyCustomerBillFilter(field, value){
 // ---------- تاریخ کو 'YYYY-MM-DD' سے 'DD-MM-YYYY' میں بدلیں (پاکستان/برصغیر کا معیاری انداز) ----------
 // ---------- مقامی (پاکستانی) وقت کی تاریخ 'YYYY-MM-DD' — toISOString() UTC دیتا ہے جس سے رات 12 سے صبح 5 بجے تک کے بل پچھلی تاریخ میں چلے جاتے تھے ----------
 function localDateStr(d){
-  d = d instanceof Date ? d : new Date(d);
+  d = d == null ? new Date() : (d instanceof Date ? d : new Date(d)); // AIODR1910MO026: بغیر تاریخ کے آج کی تاریخ (پہلے خالی آتی تھی)
   if(isNaN(d)) return '';
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
@@ -29762,9 +29845,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR1910MO025';
+  const APP_VERSION = 'AIODR1910MO026';
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Developer panel: 1, 2 and 3-day codes added for testing';
+  const UPDATE_NOTE = 'Congratulations popup when your code is applied — old + new days, total and expiry date';
   const UPD_KEY = 'aioUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }

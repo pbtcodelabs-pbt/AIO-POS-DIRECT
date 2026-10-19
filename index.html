@@ -2771,7 +2771,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1910MO028</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1910MO029</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -2966,7 +2966,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1910MO028</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1910MO029</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3098,7 +3098,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1910MO028</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1910MO029</span>
     </div>
   </div>
 
@@ -8700,7 +8700,7 @@ async function generateGiftCode(){
   if(!uidVal) missing.push('🔒 Device UID');
   if(missing.length){ alert('⚠️ یہ خانے ضرور بھریں:\n\n' + missing.join('\n') + '\n\nآسان طریقہ: کسٹمر کا "Request Activation Code" والا پیغام اوپر پیلے خانے میں پیسٹ کریں — سب خود بھر جائے گا۔'); return; }
   if(phoneKey.length < 9){ alert('⚠️ موبائل نمبر درست نہیں — دوبارہ چیک کریں۔'); return; }
-  if(!/^([A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}|\d{5})$/.test(uidVal)){ alert('⚠️ Device UID درست نہیں — یہ ایسی ہوتی ہے: ABCD-2345'); return; }
+  if(!/^[A-Z0-9][A-Z0-9-]{3,23}$/.test(uidVal)){ alert('⚠️ Device UID درست نہیں — کسٹمر کی ایپ میں جو UID لکھی ہے وہی ڈالیں (مثلاً ABCD-2345 یا 37613282)'); return; }
   const isLifetime = daysVal === 'lifetime';
   const code = generateRandomGiftCode();
 
@@ -9011,7 +9011,7 @@ function _extractCodeRequest(text){
   const mobile = pick(/^\s*Mobile\s*:\s*(.+)$/im);
   let uid = pick(/^\s*UID\s*:\s*([A-Za-z0-9-]+)/im);
   if(!uid){ const m = t.match(/\b([A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4})\b/); if(m) uid = m[1]; }
-  if(!uid){ const m = t.match(/^\s*(\d{5})\s*$/m); if(m) uid = m[1]; }
+  if(!uid){ const m = t.match(/^\s*(\d{5,10})\s*$/m); if(m) uid = m[1]; }
   return { name, mobile, uid: uid.toUpperCase() };
 }
 function parseCodeRequestPaste(quiet){
@@ -29853,9 +29853,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR1910MO028';
+  const APP_VERSION = 'AIODR1910MO029';
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Name, mobile number and Device ID are now required for every activation code';
+  const UPDATE_NOTE = 'Code generator accepts all Device ID formats, including older numeric IDs';
   const UPD_KEY = 'aioUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }

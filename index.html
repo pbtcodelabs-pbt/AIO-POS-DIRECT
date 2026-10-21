@@ -2771,7 +2771,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR2110WE031</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR2110WE032</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -2966,7 +2966,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR2110WE031</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR2110WE032</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3098,7 +3098,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR2110WE031</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR2110WE032</span>
     </div>
   </div>
 
@@ -24251,7 +24251,7 @@ async function renderInvoiceToA4Canvas(invoice, highlightMatchKey = null){
     const summary = getBillSummaryRows(invoice);
     estimatedHeight += 24 + Math.round(34*rowScale) + ((summary.rows.length + 1) * Math.round(28*rowScale)) + 8 + 40; // Payment Summary باکس (متحرک اونچائی)
   }
-  estimatedHeight += Math.round(130*fscale); // دستخط کی جگہ
+  estimatedHeight += Math.round(50*fscale); // آخری خالی جگہ (دستخط والی لائن ہٹا دی گئی)
   estimatedHeight += Math.round(50*fscale); // فوٹر
 
   canvas.width = pxWidth;
@@ -24535,19 +24535,8 @@ async function renderInvoiceToA4Canvas(invoice, highlightMatchKey = null){
     y = boxTop + boxH + 40;
   }
 
-  // ---------- دستخط کی جگہ ----------
-  y += Math.round(60*fscale);
-  ctx.strokeStyle = rc.border;
-  ctx.beginPath();
-  ctx.moveTo(tableRight - 220, y);
-  ctx.lineTo(tableRight, y);
-  ctx.stroke();
-  ctx.font = F('13px');
-  ctx.fillStyle = '#666';
-  ctx.textAlign = 'center';
-  ctx.fillText('Authorized Signature', tableRight - 110, y + Math.round(20*fscale));
-
-  y += Math.round(60*fscale);
+  // ---------- AIODR2110WE032: "Authorized Signature" والی لائن ہٹا دی (مالک کی ہدایت) ----------
+  y += Math.round(40*fscale);
   ctx.font = F('14px');
   ctx.fillStyle = '#1a1a1a';
   ctx.textAlign = 'center';
@@ -29920,9 +29909,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR2110WE031';
+  const APP_VERSION = 'AIODR2110WE032';
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Bill now shows Cash Received and Change Return when the customer pays more than the bill';
+  const UPDATE_NOTE = 'A4 bill: Authorized Signature line removed';
   const UPD_KEY = 'aioUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'AIODR2310FR049';
+const CACHE_NAME = 'AIODR2310FR050';
 const CORE_ASSETS = [
   './',
   './index.html',
@@ -26,6 +26,8 @@ self.addEventListener('install', (event) => {
 
 // ---------- ایکٹیویٹ: پرانے کیش صاف کریں — مگر نئے کیش میں index.html نہ ہو تو پہلے پرانی کاپی منتقل کریں
 // تاکہ آف لائن/سست نیٹ پر ایپ کبھی خالی نہ کھلے ----------
+// 🛡️ ایک ہی ویب سائٹ پر دوسری ایپس بھی ہیں — صرف اسی ایپ کے پرانے کیش مٹائیں، کسی دوسری ایپ کا کبھی نہیں
+const isOwnCache = (k) => /^AIODR\d/.test(k);
 self.addEventListener('activate', (event) => {
   event.waitUntil((async () => {
     const keys = await caches.keys();
@@ -33,12 +35,12 @@ self.addEventListener('activate', (event) => {
     for (const url of ['./', './index.html']) {
       if (await cache.match(url)) continue;
       for (const k of keys) {
-        if (k === CACHE_NAME) continue;
+        if (k === CACHE_NAME || !isOwnCache(k)) continue;
         const old = await (await caches.open(k)).match(url);
         if (old) { await cache.put(url, old); break; }
       }
     }
-    await Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)));
+    await Promise.all(keys.filter((k) => isOwnCache(k) && k !== CACHE_NAME).map((k) => caches.delete(k)));
     await self.clients.claim();
   })());
 });

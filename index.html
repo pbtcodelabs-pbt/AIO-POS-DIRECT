@@ -2846,7 +2846,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR2310FR049</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR2310FR050</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -3041,7 +3041,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR2310FR049</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR2310FR050</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3173,7 +3173,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR2310FR049</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR2310FR050</span>
     </div>
   </div>
 
@@ -6354,7 +6354,30 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 // اصل مسئلہ: پہلے پورا ایپ صرف رن ٹائم میموری میں چلتا تھا — نئی پراڈکٹس، کسٹمرز، انوائسز وغیرہ
 // ایپ بند ہوتے ہی ضائع ہو جاتے تھے اور صرف شروعاتی Demo ڈیٹا (Lipton, Sugar) واپس آتا تھا۔
 // اب یہ سب localStorage میں مستقل محفوظ ہوتا ہے — بند/دوبارہ کھولنے پر بھی موجود رہے گا۔
-const STORAGE_PREFIX = 'aioPos_';
+// 🛡️ AIODR2310FR050: AIO (پلے اسٹور) اور Direct ایک ہی ویب سائٹ پر چلتی ہیں — پہلے دونوں 'aioPos_' استعمال کرتی تھیں،
+// اس لیے ایک فون پر دونوں ہوں تو حساب آپس میں مل جاتا تھا۔ اب Direct کا اپنا خانہ 'aioDr_'۔
+// پہلی بار پرانا ڈیٹا صرف کاپی ہوتا ہے (مٹایا نہیں جاتا، تاکہ AIO کا حساب ویسا ہی رہے)۔
+// جگہ کم ہو تو کاپی واپس اور اس بار پرانے خانے سے ہی چلیں — کچھ ضائع نہیں ہوتا، اگلی بار دوبارہ کوشش۔
+let STORAGE_PREFIX = 'aioDr_';
+(function migrateDirectStorage(){
+  const OLD = 'aioPos_', DONE = 'aioDr___migrated';
+  try{
+    if(localStorage.getItem(DONE)) return;
+    const keys = [];
+    for(let i = 0; i < localStorage.length; i++){ const k = localStorage.key(i); if(k && k.indexOf(OLD) === 0) keys.push(k); }
+    const copied = [];
+    try{
+      keys.forEach(k => {
+        const nk = STORAGE_PREFIX + k.slice(OLD.length);
+        if(localStorage.getItem(nk) === null){ localStorage.setItem(nk, localStorage.getItem(k)); copied.push(nk); }
+      });
+      localStorage.setItem(DONE, new Date().toISOString());
+    }catch(e){
+      copied.forEach(k => { try{ localStorage.removeItem(k); }catch(_){} });
+      STORAGE_PREFIX = OLD;
+    }
+  }catch(e){}
+})();
 
 /* =====================================================================
    ☁️ CLOUD SYNC — Multi-Device / Multi-Employee (Fruit Mandi کے ثابت شدہ
@@ -6891,7 +6914,9 @@ async function hashPin(pin){
 // بغیر کسی تبدیلی کے ویسے ہی کام کرتے ہیں) — صرف localStorage میں SAVE کرتے وقت تصویر الگ کر کے
 // IndexedDB میں بھیجی جاتی ہے، اور شروع میں LOAD کے بعد واپس میموری میں جوڑ دی جاتی ہے۔
 // =====================================================================
-const AIO_IMG_DB_NAME = 'aiopos_images_v1';
+const AIO_IMG_DB_NAME = 'aiodr_images_v1'; // 🛡️ AIODR2310FR050: Direct کی تصویریں الگ — پہلے AIO والی 'aiopos_images_v1' میں تھیں
+const AIO_IMG_DB_OLD = 'aiopos_images_v1';
+const AIO_IMG_MIGRATED_KEY = 'aioDr___imgMigrated';
 const AIO_IMG_STORE = 'images';
 let aioImgDbPromise = null;
 function openImgDb(){
@@ -6903,10 +6928,46 @@ function openImgDb(){
       const db = req.result;
       if(!db.objectStoreNames.contains(AIO_IMG_STORE)) db.createObjectStore(AIO_IMG_STORE);
     };
-    req.onsuccess = () => resolve(req.result);
+    req.onsuccess = () => {
+      const db = req.result;
+      let done = false; try{ done = !!localStorage.getItem(AIO_IMG_MIGRATED_KEY); }catch(e){ done = true; }
+      if(done){ resolve(db); return; }
+      copyOldDirectImages(db).then((ok) => { if(ok){ try{ localStorage.setItem(AIO_IMG_MIGRATED_KEY, '1'); }catch(e){} } resolve(db); });
+    };
     req.onerror = () => reject(req.error);
   });
   return aioImgDbPromise;
+}
+// ---------- پرانی مشترکہ تصویریں ('aiopos_images_v1') Direct کے اپنے خانے میں کاپی — پرانی جگہ سے کچھ نہیں مٹتا؛
+// جو تصویر نئے خانے میں پہلے سے ہو وہ نہیں بدلتی ----------
+function copyOldDirectImages(db){
+  return new Promise((done) => {
+    let oreq;
+    try{ oreq = indexedDB.open(AIO_IMG_DB_OLD); }catch(e){ done(true); return; }
+    let missing = false;
+    oreq.onupgradeneeded = () => { missing = true; try{ oreq.transaction.abort(); }catch(e){} }; // پرانا خانہ تھا ہی نہیں
+    oreq.onerror = () => done(missing);
+    oreq.onblocked = () => done(false);
+    oreq.onsuccess = () => {
+      const old = oreq.result;
+      if(!old.objectStoreNames.contains(AIO_IMG_STORE)){ old.close(); done(true); return; }
+      const items = [];
+      const rt = old.transaction(AIO_IMG_STORE, 'readonly');
+      const cur = rt.objectStore(AIO_IMG_STORE).openCursor();
+      cur.onsuccess = () => { const c = cur.result; if(c){ items.push([c.key, c.value]); c.continue(); } };
+      rt.onerror = () => { old.close(); done(false); };
+      rt.oncomplete = () => {
+        old.close();
+        if(!items.length){ done(true); return; }
+        const wt = db.transaction(AIO_IMG_STORE, 'readwrite');
+        const st = wt.objectStore(AIO_IMG_STORE);
+        items.forEach(([k, v]) => { const r = st.add(v, k); r.onerror = (ev) => { ev.preventDefault(); ev.stopPropagation(); }; });
+        wt.oncomplete = () => done(true);
+        wt.onerror = () => {};
+        wt.onabort = () => done(false);
+      };
+    };
+  });
 }
 async function idbSetImage(key, dataUrl){
   try{
@@ -10816,7 +10877,7 @@ async function loginWithTouchId(){
       return;
     }
     resetLoginSecurity();
-    try{ sessionStorage.setItem('aioBioOk','1'); }catch(e){} // 👆 اسی سیشن میں دوبارہ خودکار پاپ اپ نہ آئے
+    try{ sessionStorage.setItem('aioDrBioOk','1'); }catch(e){} // 👆 اسی سیشن میں دوبارہ خودکار پاپ اپ نہ آئے
     await playTouchIdSuccess(); // ---------- ✅ مختصر کنفرمیشن اینیمیشن، پھر ایپ میں داخل ----------
     finishLogin(user, true); // ---------- Touch ID سے آنے والا لاگ ان ہمیشہ سیشن یاد رکھے ----------
   }catch(err){
@@ -10851,7 +10912,7 @@ async function refreshTouchIdUI(){
     if(turnOffHint) turnOffHint.style.display = 'block';
     // ---------- 👆 لاگ اِن اسکرین کھلتے ہی خودبخود فون کا فنگر پرنٹ پاپ اپ — صرف ایک بار فی سیشن،
     //   تاکہ ریفریش/اوپر کھینچنے پر بار بار نہ آئے۔ ایپ مکمل بند کر کے کھولنے پر نشانی مٹ جاتی ہے ----------
-    let _ses = false; try{ _ses = sessionStorage.getItem('aioBioOk') === '1'; }catch(e){}
+    let _ses = false; try{ _ses = sessionStorage.getItem('aioDrBioOk') === '1'; }catch(e){}
     // Quick mode (PIN لاک بند) میں خودکار پاپ اپ نہیں — وہاں بے رکاوٹ داخلہ مقصود ہے؛ بٹن پھر بھی دکھتا ہے تاکہ بندہ چاہے تو فنگر پرنٹ استعمال کرے
     const _isQuick = document.getElementById('loginScreen').classList.contains('loginQuick');
     if(!_ses && !_aioBioAutoTried && !_tidBusy && !AppState.currentUser && !_isQuick){
@@ -11137,7 +11198,7 @@ function logout(){
   renderPendingBillsBanner(); // ---------- بینر فوری چھپا دیں تاکہ اگلے یوزر کو پرانی حالت نظر نہ آئے ----------
   clearLoginPinFields();
   saveToStorage('rememberedSession', null); // ---------- لاگ آؤٹ پر یاد رکھا ہوا سیشن ختم — اگلی بار پن دوبارہ مانگا جائے گا ----------
-  try{ sessionStorage.removeItem('aioBioOk'); }catch(e){} _aioBioAutoTried = false; // 👆 فنگر پرنٹ سیشن نشانی صاف — اگلی بار خودکار فنگر پرنٹ دوبارہ
+  try{ sessionStorage.removeItem('aioDrBioOk'); }catch(e){} _aioBioAutoTried = false; // 👆 فنگر پرنٹ سیشن نشانی صاف — اگلی بار خودکار فنگر پرنٹ دوبارہ
   document.getElementById('app').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
   refreshTouchIdUI(); // ---------- 🛠️ فکس: لاگ ان اسکرین دوبارہ نظر آتے ہی Touch ID بٹن اور _tidBusy کو تازہ/ری سیٹ کریں ----------
@@ -11153,7 +11214,7 @@ function fullLogoutAllAccounts(){
   AppState.currentUser = null;
   AppState.currentRole = null;
   saveToStorage('rememberedSession', null);
-  try{ sessionStorage.removeItem('aioBioOk'); }catch(e){} _aioBioAutoTried = false; // 👆 فنگر پرنٹ سیشن نشانی صاف
+  try{ sessionStorage.removeItem('aioDrBioOk'); }catch(e){} _aioBioAutoTried = false; // 👆 فنگر پرنٹ سیشن نشانی صاف
   document.getElementById('app').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
   clearLoginPinFields();
@@ -30560,10 +30621,10 @@ document.addEventListener('DOMContentLoaded', () => {
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR2310FR049';
+  const APP_VERSION = 'AIODR2310FR050';
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Chromebook / large screen: roomier Stock Adjustment columns';
-  const UPD_KEY = 'aioUpdateFromVersion';
+  const UPDATE_NOTE = 'Your data now has its own separate space (never mixes with AIO)';
+  const UPD_KEY = 'aioDrUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
   function lsDel(k){ try{ localStorage.removeItem(k); }catch(e){} }

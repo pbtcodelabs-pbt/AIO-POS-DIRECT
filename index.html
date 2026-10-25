@@ -1619,6 +1619,8 @@
   .qsOpenBtn:active{transform:translateY(2px); box-shadow:none;}
   #quickScanModal .qsBox{width:min(440px, calc(100vw - 20px));}
   .qsHead{display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;}
+  .qsMoreBtn, .npMoreBtn{width:100%; margin:8px 0 4px; border:1.5px dashed #cbd5e1; background:#f8fafc; color:#475569; border-radius:10px; padding:8px; font-size:12.5px; font-weight:700; cursor:pointer;}
+  .productCard.npJustAdded .productHead{box-shadow:0 0 0 3px #f59e0b; transition:box-shadow .3s;}
   .qsCount{font-size:12px; font-weight:800; color:#166534; min-height:16px;}
   .qsLbl{display:block; font-size:12px; font-weight:800; color:#475569; margin:6px 0 3px;}
   .qsLbl small{font-weight:600; color:var(--muted);}
@@ -2888,7 +2890,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR2510SU063</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR2510SU064</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -3083,7 +3085,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR2510SU063</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR2510SU064</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3215,7 +3217,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR2510SU063</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR2510SU064</span>
     </div>
   </div>
 
@@ -3693,7 +3695,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
           <input type="text" id="npCategory" placeholder="e.g. Beverages" list="categoryDatalist" autocomplete="off">
         </div>
         <datalist id="categoryDatalist"></datalist>
-        <div class="vcFieldWrap vcFieldFull npExtra">
+        <div class="vcFieldWrap vcFieldFull">
           <span class="vcFieldLabel">Barcode (optional)</span>
           <div class="vcInputRow">
             <input id="npBarcode" placeholder="Scan or type">
@@ -3718,7 +3720,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
             <span class="vcFieldLabel">Wholesale Price</span>
             <input type="number" id="npWholesale" value="0" onfocus="this.select()">
           </div>
-          <div class="vcFieldWrap npExtra">
+          <div class="vcFieldWrap">
             <span class="vcFieldLabel">Stock</span>
             <input type="number" id="npStock" value="0" onfocus="this.select()">
           </div>
@@ -3731,7 +3733,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
             <input type="date" id="npExpiry">
           </div>
         </div>
-        <div class="vcFieldWrap vcFieldFull" id="npUnitWrap">
+        <div class="vcFieldWrap vcFieldFull npExtra" id="npUnitWrap">
           <span class="vcFieldLabel">Unit</span>
           <select id="npUnit" class="npUnitSelect" onchange="npUnitChanged()"></select>
           <input type="text" id="npUnitCustom" placeholder="Type your unit, e.g. peti" maxlength="20" style="display:none;" autocomplete="off">
@@ -3740,6 +3742,8 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
           <span class="vcFieldLabel">Location (Aisle / Shelf / Warehouse)</span>
           <input type="text" id="npLocation" placeholder="e.g. Aisle 4, Shelf B">
         </div>
+        <!-- نئی چیز: صرف ضروری خانے؛ باقی (تصویر، کیٹیگری، ہول سیل، ایکسپائری، یونٹ…) اختیاری — بٹن دبانے پر -->
+        <button type="button" id="npMoreBtn" class="npMoreBtn" onclick="npShowMore()">➕ More details (optional) — photo, category, wholesale, low-stock, expiry, unit, location</button>
         <div class="settingsHint" id="npAddVariantHint" style="margin-top:0; margin-bottom:14px;"></div>
 
         <div class="modalBtns">
@@ -4114,6 +4118,9 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
           <div class="qsGrid">
             <div><label class="qsLbl">Sale price (Rs.)</label><input type="number" id="qsRetail" inputmode="decimal" onfocus="this.select()" onkeydown="if(event.key==='Enter'){event.preventDefault(); document.getElementById('qsStock').focus();}"></div>
             <div><label class="qsLbl" id="qsStockLbl">Stock</label><input type="number" id="qsStock" inputmode="decimal" onfocus="this.select()" onkeydown="if(event.key==='Enter'){event.preventDefault(); qsSave();}"></div>
+          </div>
+          <button type="button" class="qsMoreBtn" id="qsMoreBtn" onclick="this.style.display='none'; document.getElementById('qsMore').style.display='grid';">➕ Purchase price / Category (optional)</button>
+          <div class="qsGrid" id="qsMore" style="display:none;">
             <div><label class="qsLbl">Purchase price <small>(optional)</small></label><input type="number" id="qsPurchase" inputmode="decimal" onfocus="this.select()"></div>
             <div><label class="qsLbl">Category <small>(optional)</small></label><input type="text" id="qsCategory" list="categoryDatalist" autocomplete="off"></div>
           </div>
@@ -17383,7 +17390,13 @@ function openNewProductModal(productId = null){
 
   // ---------- نئی پراڈکٹ میں صرف نام، خرید اور فروخت کی قیمت — باقی خانے صرف ایڈٹ میں ----------
   document.querySelectorAll('#newProductModal .npExtra').forEach(el => { el.style.display = productId ? '' : 'none'; });
+  document.getElementById('npMoreBtn').style.display = productId ? 'none' : '';
   document.getElementById('newProductModal').classList.add('show');
+  if(!productId) setTimeout(() => document.getElementById('npName').focus(), 150);
+}
+function npShowMore(){
+  document.querySelectorAll('#newProductModal .npExtra').forEach(el => { el.style.display = ''; });
+  document.getElementById('npMoreBtn').style.display = 'none';
 }
 function closeNewProductModal(){
   document.getElementById('newProductModal').classList.remove('show');
@@ -17473,14 +17486,13 @@ function saveNewProduct(){
   persistAllData();
 
   closeNewProductModal();
-  // ---------- نیا پراڈکٹ بنتے ہی اسی کا کارڈ کھول دیں اور مین ویرینٹ سامنے رکھیں — تاکہ اسٹاک، ایکسپائری، لو اسٹاک، بارکوڈ وغیرہ فوراً بھر سکیں،
-  // اور وہیں سے "+ Add New Variant" بھی دبایا جا سکے ----------
-  openProductCards.add(newProduct.product_id);
-  activeVariantIndexByProduct.set(newProduct.product_id, 0);
-  renderProductList();
+  // ---------- مالک کی ہدایت: نئی چیز بنتے ہی لمبا ویرینٹ کارڈ نہ کھلے — بس محفوظ؛ ویرینٹ/ایکسپائری بعد میں کارڈ کھول کر ----------
+  renderProductList(document.getElementById('productSearchInput')?.value || '');
+  try{ renderBillingProductGrid(); }catch(e){}
+  if(typeof hbToast === 'function') hbToast(`✅ "${newProduct.name}" saved — tap it later to add variants`);
   setTimeout(() => {
     const el = document.getElementById('pcard-' + newProduct.product_id);
-    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    if(el){ el.scrollIntoView({behavior:'smooth', block:'center'}); el.classList.add('npJustAdded'); setTimeout(() => el.classList.remove('npJustAdded'), 2200); }
   }, 120);
 }
 
@@ -31408,9 +31420,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR2510SU063';
+  const APP_VERSION = 'AIODR2510SU064';
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Demo items removed: app starts empty, old sample products and suppliers cleaned';
+  const UPDATE_NOTE = 'New Product is now short: name, barcode, prices, stock → Create (more details optional)';
   const UPD_KEY = 'aioDrUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }

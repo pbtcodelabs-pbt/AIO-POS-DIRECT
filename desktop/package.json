@@ -1,0 +1,33 @@
+{
+  "name": "aio-pos-direct-desktop",
+  "productName": "AIO POS Direct",
+  "version": "1.0.0",
+  "description": "AIO POS Direct for Windows — billing, inventory and business management",
+  "author": "PBT Code Labs",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis --x64 --publish never"
+  },
+  "devDependencies": {
+    "electron": "31.3.1",
+    "electron-builder": "24.13.3"
+  },
+  "build": {
+    "appId": "com.pbtcodelabs.aioposdirect.desktop",
+    "productName": "AIO POS Direct",
+    "copyright": "PBT Code Labs",
+    "directories": { "output": "dist", "buildResources": "build" },
+    "files": ["main.js", "preload.js", "offline.html", "app-config.json", "build/icon.png"],
+    "win": { "target": ["nsis"], "icon": "build/icon.png" },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "AIO POS Direct",
+      "artifactName": "AIO-POS-Direct-Setup.exe"
+    }
+  }
+}

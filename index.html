@@ -1252,6 +1252,10 @@
   .pgListHead{position:sticky; top:0; z-index:3; background:linear-gradient(180deg,#14532d,#166534); color:#fff; padding:8px 8px;
     border-radius:14px 14px 0 0; border-bottom:3px solid #facc15; font-size:12px; font-weight:800; text-align:center; margin-bottom:5px;}
   .pgListHead span:nth-child(2){text-align:left; padding-left:4px;}
+  .productGridCard[onclick]{cursor:pointer; -webkit-tap-highlight-color:transparent;}
+  .productGridCard[onclick]:active:not(.dragging){filter:brightness(.94);}
+  .pgRow.pgTapAdd{cursor:pointer; -webkit-tap-highlight-color:transparent;}
+  .pgRow.pgTapAdd:active:not(.dragging){filter:brightness(.96);}
   .pgRow{margin:0 0 6px; padding:3px 6px; border:1.5px solid #a7d7bd; border-radius:14px; touch-action:pan-y;
     background:linear-gradient(180deg,#ffffff 0%,#f0fbf4 45%,#d9f2e3 100%);
     box-shadow:0 3px 0 #9fd1b5, 0 4px 8px rgba(20,83,45,.12), inset 0 1px 0 #ffffff;}
@@ -2969,7 +2973,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR2710TU069</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR2710TU070</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -3164,7 +3168,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR2710TU069</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR2710TU070</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3296,7 +3300,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR2710TU069</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR2710TU070</span>
     </div>
   </div>
 
@@ -12875,6 +12879,12 @@ function addNewCategoryFromDropdown(e){
    نوٹ: Long-press (تھوڑی دیر دبائے رکھنا) درکار ہے تاکہ عام سکرول میں رکاوٹ نہ آئے۔
    Pointer Events استعمال کیے ہیں کیونکہ یہ ٹچ اور ماؤس دونوں پر یکساں کام کرتے ہیں۔
    ===================================================================== */
+// ---------- بلنگ کارڈ/لائن ٹچ کرنے پر آئٹم شامل — مگر لمبا دبا کر ترتیب بدلنے (ڈریگ) کے فوراً بعد نہیں ----------
+let billCardDragEndedAt = 0;
+function billCardTap(variantId){
+  if(Date.now() - billCardDragEndedAt < 450) return;
+  addToCart(variantId);
+}
 function initCardDragHandlers(){
   const grid = document.getElementById('billingProductGrid');
   if(!grid || grid.dataset.dragInit) return; // ایک بار سے زیادہ نہ لگے
@@ -12933,6 +12943,7 @@ function initCardDragHandlers(){
       document.removeEventListener('pointerup', onUp);
       document.removeEventListener('pointercancel', onUp);
       if(activated){
+        billCardDragEndedAt = Date.now();
         card.classList.remove('dragging');
         card.style.transform = '';
         card.style.zIndex = '';
@@ -13217,9 +13228,10 @@ function renderBillingProductGrid(){
       priceLabel = `Rs. ${price}`;
       qtyBadgeHtml = qtyInCart > 0 ? `<div class="pgQtyBadge">${qtyInCart}</div>` : '';
       actionAreaHtml = `
-        <button class="pgMinusBtn" onclick="changeQty(${v.variant_id}, -1)">−</button>
-        <button class="pgPlusBtn" onclick="addToCart(${v.variant_id})">+</button>
+        <button class="pgMinusBtn" onclick="event.stopPropagation(); changeQty(${v.variant_id}, -1)">−</button>
+        <button class="pgPlusBtn" onclick="event.stopPropagation(); addToCart(${v.variant_id})">+</button>
       `;
+      cardOnClick = `onclick="billCardTap(${v.variant_id})"`; // ---------- کارڈ کو جتنی بار ٹچ کریں، اتنی بار شامل ----------
     } else {
       // ---------- کئی ویریئنٹس ہوں تو کارڈ پر صرف "N sizes" دکھائیں — دبانے پر انتخاب کھلے ----------
       const totalQtyInCart = p.variants.reduce((sum, v) => {
@@ -13239,7 +13251,7 @@ function renderBillingProductGrid(){
         : `<div class="pgStockBadge normalBadge${stackedCls2}">Qty: ${totalStockAllVariants}</div>`;
       priceLabel = `${p.variants.length} variants`;
       qtyBadgeHtml = totalQtyInCart > 0 ? `<div class="pgQtyBadge">${totalQtyInCart}</div>` : '';
-      actionAreaHtml = `<button class="pgChooseBtn" onclick="openVariantChooser(${p.product_id})">Choose ▾</button>`;
+      actionAreaHtml = `<button class="pgChooseBtn" onclick="event.stopPropagation(); openVariantChooser(${p.product_id})">Choose ▾</button>`;
       cardOnClick = `onclick="openVariantChooser(${p.product_id})"`;
     }
 
@@ -13289,7 +13301,7 @@ function renderBillingProductGrid(){
       priceTxt = fmtP(getModePrice(v));
       stockVal = v.stock;
       stockCls = v.stock <= 0 ? 'out' : (v.stock <= (v.lowStockAt ?? 0) ? 'low' : '');
-      actionHtml = `<div class="pgRowQty">
+      actionHtml = `<div class="pgRowQty" onclick="event.stopPropagation()">
           <button type="button" class="pgRowMinus" onclick="changeQty(${v.variant_id}, -1)">−</button>
           <span class="${qtyInCart ? '' : 'zero'}">${qtyInCart}</span>
           <button type="button" onclick="addToCart(${v.variant_id})">+</button>
@@ -13306,7 +13318,7 @@ function renderBillingProductGrid(){
       actionHtml = `<button type="button" class="pgRowVar" onclick="openVariantChooser(${p.product_id})">${qtyInCart ? `<em>${qtyInCart}</em>` : ''}${p.variants.length} Variants ▾</button>`;
     }
     return `
-      <div class="pgRow ${idx % 2 ? 'alt' : ''} ${qtyInCart ? 'inCart' : ''} ${isHot ? 'pgLocked' : ''}" data-product-id="${p.product_id}">
+      <div class="pgRow ${idx % 2 ? 'alt' : ''} ${qtyInCart ? 'inCart' : ''} ${isHot ? 'pgLocked' : ''} ${isSingle ? 'pgTapAdd' : ''}" data-product-id="${p.product_id}" ${isSingle ? `onclick="billCardTap(${p.variants[0].variant_id})"` : ''}>
         <div class="pgRowMain">
           ${(p.image && String(p.image).trim())
             ? `<span class="pgRowThumb" ${isSingle ? '' : `onclick="openVariantChooser(${p.product_id})"`}><img src="${p.image}" alt="" loading="lazy"></span>`
@@ -16615,7 +16627,7 @@ function restoreStockForItem(item, qty){
 
 function deductVariantStock(v, qty){
   if(!v || qty <= 0) return;
-  // ---------- AIODR2710TU069: صفر پر نہ روکیں — مال آنے سے پہلے بیچا تو اسٹاک مائنس دکھے، تاکہ بعد میں آنے والا مال پہلے یہ کمی پوری کرے (−10 + 20 = 10) ----------
+  // ---------- AIODR2710TU070: صفر پر نہ روکیں — مال آنے سے پہلے بیچا تو اسٹاک مائنس دکھے، تاکہ بعد میں آنے والا مال پہلے یہ کمی پوری کرے (−10 + 20 = 10) ----------
   v.stock = roundStock((v.stock || 0) - qty);
   if(v.batches && v.batches.length){
     let remaining = qty;
@@ -20679,9 +20691,10 @@ function renderPoBrowseList(){
       priceLabel = `Rs. ${v.purchase}`;
       qtyBadgeHtml = qtyInCart > 0 ? `<div class="pgQtyBadge">${qtyInCart}</div>` : '';
       actionAreaHtml = `
-        <button class="pgMinusBtn" onclick="changePoCartQty(${v.variant_id}, -1)">−</button>
-        <button class="pgPlusBtn" onclick="addToPoCartGrid(${v.variant_id})">+</button>
+        <button class="pgMinusBtn" onclick="event.stopPropagation(); changePoCartQty(${v.variant_id}, -1)">−</button>
+        <button class="pgPlusBtn" onclick="event.stopPropagation(); addToPoCartGrid(${v.variant_id})">+</button>
       `;
+      cardOnClick = `onclick="addToPoCartGrid(${v.variant_id})"`;
     } else {
       const totalQtyInCart = p.variants.reduce((sum, v) => {
         const ci = poCart.find(c => c.variant_id === v.variant_id);
@@ -20698,7 +20711,7 @@ function renderPoBrowseList(){
         : `<div class="pgStockBadge normalBadge${stackedCls2}">Qty: ${totalStockAllVariants}</div>`;
       priceLabel = `${p.variants.length} variants`;
       qtyBadgeHtml = totalQtyInCart > 0 ? `<div class="pgQtyBadge">${totalQtyInCart}</div>` : '';
-      actionAreaHtml = `<button class="pgChooseBtn" onclick="openPoVariantChooser(${p.product_id})">Choose ▾</button>`;
+      actionAreaHtml = `<button class="pgChooseBtn" onclick="event.stopPropagation(); openPoVariantChooser(${p.product_id})">Choose ▾</button>`;
       cardOnClick = `onclick="openPoVariantChooser(${p.product_id})"`;
     }
 
@@ -21291,9 +21304,10 @@ function renderAdvOrderProductGrid(){
       priceLabel = `Rs. ${price}`;
       qtyBadgeHtml = qtyInCart > 0 ? `<div class="pgQtyBadge">${qtyInCart}</div>` : '';
       actionAreaHtml = `
-        <button class="pgMinusBtn" onclick="changeAdvOrderCartQty(${v.variant_id}, -1)">−</button>
-        <button class="pgPlusBtn" onclick="addToAdvOrderCartGrid(${v.variant_id})">+</button>
+        <button class="pgMinusBtn" onclick="event.stopPropagation(); changeAdvOrderCartQty(${v.variant_id}, -1)">−</button>
+        <button class="pgPlusBtn" onclick="event.stopPropagation(); addToAdvOrderCartGrid(${v.variant_id})">+</button>
       `;
+      cardOnClick = `onclick="addToAdvOrderCartGrid(${v.variant_id})"`;
     } else {
       const totalQtyInCart = p.variants.reduce((sum, v) => {
         const ci = advOrderCart.find(c => c.variant_id === v.variant_id);
@@ -21301,7 +21315,7 @@ function renderAdvOrderProductGrid(){
       }, 0);
       priceLabel = `${p.variants.length} variants`;
       qtyBadgeHtml = totalQtyInCart > 0 ? `<div class="pgQtyBadge">${totalQtyInCart}</div>` : '';
-      actionAreaHtml = `<button class="pgChooseBtn" onclick="openAdvOrderVariantChooser(${p.product_id})">Choose ▾</button>`;
+      actionAreaHtml = `<button class="pgChooseBtn" onclick="event.stopPropagation(); openAdvOrderVariantChooser(${p.product_id})">Choose ▾</button>`;
       cardOnClick = `onclick="openAdvOrderVariantChooser(${p.product_id})"`;
     }
 
@@ -31885,9 +31899,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR2710TU069';
+  const APP_VERSION = 'AIODR2710TU070';
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Selling before stock arrives now shows minus stock; new stock first covers it (−10 + 20 = 10)';
+  const UPDATE_NOTE = 'Tap a product card in Billing to add it — every tap adds one more (+ / − still work)';
   const UPD_KEY = 'aioDrUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }

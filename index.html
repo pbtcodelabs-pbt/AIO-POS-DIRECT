@@ -1406,6 +1406,10 @@
   .mdBigBtn.danger{background:#fff; color:#b91c1c; border:1.5px solid #fca5a5; box-shadow:none;}
   .mdCode{display:flex; gap:8px; align-items:center; margin:6px 0;}
   .mdCode b{flex:1; text-align:center; padding:11px; border-radius:12px; background:#f0fdfa; border:1.5px dashed #14b8a6; font:900 16px/1.2 ui-monospace,Menlo,Consolas,monospace; letter-spacing:1px; color:#0f766e; word-break:break-all;}
+  .mdPlan{display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; padding:9px 12px; border-radius:14px; background:linear-gradient(135deg,#f5f3ff,#ede9fe); border:1.5px solid #c4b5fd; color:#5b21b6; font-size:13px; font-weight:700; margin:8px 0;}
+  .mdPlan span:first-child{flex:1;}
+  .mdPlan.full{background:linear-gradient(135deg,#fff7ed,#ffedd5); border-color:#fdba74; color:#9a3412;}
+  .mdPlan button{width:auto; margin:0; padding:6px 12px; border-radius:999px; border:none; background:linear-gradient(155deg,#7c3aed,#5b21b6); color:#fff; font-size:12px; font-weight:800; cursor:pointer;}
   .mdDev{display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:14px; background:#fff; border:1.5px solid #e2e8f0; margin-bottom:6px;}
   .mdDev .mdIco{width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:#eef2ff; font-size:18px; flex:0 0 auto;}
   .mdDev .mdTxt{flex:1; min-width:0; font-size:13px; font-weight:800; color:var(--text,#0f172a);}
@@ -3049,7 +3053,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR2710TU078</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR2710TU079</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -3245,7 +3249,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR2710TU078</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR2710TU079</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3324,6 +3328,12 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
         <option value="365">365 دن (1 سال)</option>
         <option value="lifetime">🌟 Lifetime (ہمیشہ کے لیے)</option>
       </select>
+      <select id="giftCodeDevicesInput" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px; font-weight:800;">
+        <option value="1" selected>📦 P1+0 — صرف مالک (1 فون/PC)</option>
+        <option value="2">📦 P1+1 — مالک + 1 ملازم (2 فون/PC)</option>
+        <option value="3">📦 P1+2 — مالک + 2 ملازم (3 فون/PC)</option>
+        <option value="4">📦 P1+3 — مالک + 3 ملازم (4 فون/PC)</option>
+      </select>
       <input type="text" id="giftCodeUidInput" placeholder="🔒 Device UID * (مثلاً AIO-URP0-TYS2)" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
       <button class="testPrintBtn" style="background:#dcfce7; color:#15803d;" onclick="generateGiftCode()">🎁 Generate Code</button>
       <div id="giftCodeResultWrap" style="display:none; margin-top:10px; background:#f0fdf4; border:1.5px solid #86efac; border-radius:10px; padding:12px; text-align:center;">
@@ -3393,7 +3403,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR2710TU078</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR2710TU079</span>
     </div>
   </div>
 
@@ -6641,7 +6651,14 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:4px;">📱 Mobile number <b style="color:var(--danger);">*</b> (to restore on a new phone)</label>
     <input type="tel" id="reqCodePhoneInput" inputmode="tel" placeholder="03001234567" style="width:100%; padding:10px; border:1px solid #dbe1ea; border-radius:8px; font-size:14px; margin-bottom:8px;">
     <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:4px;">🏙️ City (optional)</label>
-    <input type="text" id="reqCodeCityInput" placeholder="e.g. Lahore" style="width:100%; padding:10px; border:1px solid #dbe1ea; border-radius:8px; font-size:14px;">
+    <input type="text" id="reqCodeCityInput" placeholder="e.g. Lahore" style="width:100%; padding:10px; border:1px solid #dbe1ea; border-radius:8px; font-size:14px; margin-bottom:8px;">
+    <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:4px;">📦 Package — how many people will use the app?</label>
+    <select id="reqCodePlanInput" style="width:100%; padding:10px; border:1px solid #dbe1ea; border-radius:8px; font-size:14px; font-weight:700;">
+      <option value="1">P1+0 — Owner only (1 device)</option>
+      <option value="2">P1+1 — Owner + 1 staff (2 devices)</option>
+      <option value="3">P1+2 — Owner + 2 staff (3 devices)</option>
+      <option value="4">P1+3 — Owner + 3 staff (4 devices)</option>
+    </select>
     <div id="reqCodeMsg" style="margin-top:8px; font-size:12.5px; font-weight:700; color:var(--danger);"></div>
     <button class="backupConfirmCloseBtn" style="margin-top:8px; background:#16a34a;" onclick="sendCodeRequest('whatsapp')">💬 Send on WhatsApp</button>
     <button class="backupConfirmCloseBtn" style="margin-top:8px; background:#e0f2fe; color:#0369a1;" onclick="sendCodeRequest('sms')">✉️ Send by SMS</button>
@@ -7206,14 +7223,32 @@ function syncPushShopInfo(){
   if(!aioMultiOn() || AppState.settings.syncJoined) return;
   const s = AppState.settings, cur = shopInfo();
   const rec = Object.assign({}, cur, {id: 'shop', businessName: s.businessName || '', subscriptionExpiry: s.subscriptionExpiry || '', lifetime: !!s.lifetimeLicense,
-    staffApproval: cur.staffApproval === true, maxDevices: cur.maxDevices || 0});
+    staffApproval: cur.staffApproval === true, maxDevices: planMaxDevices()});
   if(syncEq(rec, cur)) return;
   shopInfoData = [rec]; saveToStorage('syncShopInfo', shopInfoData); scheduleSync(800);
+}
+// ---------- AIODR2710TU079: 📦 پیکج — P1+0 (صرف مالک)، P1+1، P1+2، P1+3 (مالک + ملازم)؛ کوڈ کے ساتھ آتا ہے (licenses.devices) ----------
+const PLAN_MAX_PACK = 4;
+function planName(n){ n = Math.max(1, parseInt(n) || 1); return 'P1+' + (n - 1); }
+function planDevicesFromLicense(d){ const n = parseInt(d && d.devices); return n >= 1 ? Math.min(PLAN_MAX_PACK, n) : 1; } // پرانے کوڈ = P1+0
+function planMaxDevices(){
+  const s = AppState.settings;
+  if(s.developerUnlock) return 99;
+  if(s.isOnFreeTrial) return PLAN_MAX_PACK; // مفت ٹرائل میں سب آزما سکیں
+  return Math.max(1, parseInt(s.planDevices) || 1);
+}
+// جڑے ہوئے فون: سلاٹ کی ترتیب میں پیکج سے زیادہ والا فون بند (مالک نے پیکج چھوٹا کیا ہو)
+function syncOverPlanLimit(){
+  const max = shopInfo().maxDevices; if(!max) return false;
+  const devs = devicesData.slice().sort((a, b) => (a.slot || 0) - (b.slot || 0));
+  const i = devs.findIndex(d => d.uid === syncDeviceUid());
+  return i >= max;
 }
 function linkedShopActive(){
   try{
     if(!aioMultiOn() || !AppState.settings.syncJoined) return false;
     const sh = shopInfo();
+    if(syncOverPlanLimit()) return false;
     if(sh.lifetime) return true;
     if(!sh.subscriptionExpiry) return false;
     const exp = new Date(sh.subscriptionExpiry + 'T23:59:59');
@@ -8968,6 +9003,10 @@ async function resyncLicenseOnline(){
       persistAllData();
       if(typeof setupLoginScreen === 'function') setupLoginScreen();
       alert('⚠️ This activation code is now active on another device. Please contact the developer.');
+    } else {
+      // ڈویلپر نے پیکج بدلا ہو (اپگریڈ) تو یہاں خود لگ جائے
+      const pd = planDevicesFromLicense(data);
+      if(pd !== AppState.settings.planDevices){ AppState.settings.planDevices = pd; persistAllData(); try{ syncPushShopInfo(); renderStaffDevicesCard(); }catch(e){} }
     }
   }catch(e){ /* آف لائن — کوئی مسئلہ نہیں، اگلی بار دوبارہ کوشش ہوگی */ }
 }
@@ -9062,6 +9101,7 @@ async function restoreSubscriptionFromServer(){
       if(ld.active === false) return {restored:false, reason:'revoked'};
       if(ld.activatedUid && !isMyUid(ld.activatedUid)) return {restored:false, reason:'moved'};
       if(ld.expiryDate) d.expiryDate = ld.expiryDate; // ---------- اصل مدت license سے ----------
+      d.planDevices = planDevicesFromLicense(ld);
     }
     const srvExp = parseLocalDate(d.expiryDate);
     if(isNaN(srvExp) || srvExp < getEffectiveToday()) return {restored:false, reason:'expired'};
@@ -9074,6 +9114,7 @@ async function restoreSubscriptionFromServer(){
     AppState.settings.subscriptionActivatedOn = d.activatedOn || localDateStr();
     AppState.settings.isOnFreeTrial = false;
     AppState.settings.lastActivationCode = d.lastCode || '';
+    if(d.planDevices) AppState.settings.planDevices = d.planDevices;
     persistAllData();
 
     // ---------- اسکرین تازہ کریں — سبسکرپشن گیٹ کھلا ہو تو بند کر کے ایپ کھولیں؛ ایپ کے اندر ہوں تو صرف بینر تازہ ----------
@@ -9201,7 +9242,8 @@ function showActivationCelebration(r, auto){
     document.getElementById('acSumRow').innerHTML = sum;
     document.getElementById('acDatesBox').innerHTML =
       (r.restored ? '' : `📅 Activated on: <b>${formatDateDMY(startStr)}</b><br>`)
-      + (r.lifetime ? '⏳ Expires: <b>Never</b>' : `⏳ Expires on: <b>${formatDateDMY(r.expiry)}</b><br>🗓️ Days left: <b>${left}</b>`);
+      + (r.lifetime ? '⏳ Expires: <b>Never</b>' : `⏳ Expires on: <b>${formatDateDMY(r.expiry)}</b><br>🗓️ Days left: <b>${left}</b>`)
+      + `<br>📦 Package: <b>${planName(AppState.settings.planDevices)}</b> (${Math.max(1, parseInt(AppState.settings.planDevices) || 1)} device${(parseInt(AppState.settings.planDevices) || 1) > 1 ? 's' : ''})`;
     m.querySelectorAll('.acPiece').forEach(x => x.remove());
     const pieces = ['🍬','🍭','🍫','🧁','🎉','🎊','🎀','🎈','🍬','🎀'];
     for(let i = 0; i < 34; i++){
@@ -9339,6 +9381,7 @@ async function activateSubscription(code){
         AppState.settings.subscriptionActivatedOn = AppState.settings.subscriptionActivatedOn || localDateStr();
         AppState.settings.isOnFreeTrial = false;
         AppState.settings.lastActivationCode = trimmedCode;
+        AppState.settings.planDevices = planDevicesFromLicense(data);
         persistAllData();
         saveDeviceRecord();
         return {success:true, restored:true, expiry:data.expiryDate, daysGranted:0, prevDays:0, totalDays:daysLeftInSubscription()};
@@ -9368,6 +9411,7 @@ async function activateSubscription(code){
     AppState.settings.subscriptionActivatedOn = AppState.settings.subscriptionActivatedOn || localDateStr();
     AppState.settings.isOnFreeTrial = false;
     AppState.settings.lastActivationCode = trimmedCode;
+    AppState.settings.planDevices = planDevicesFromLicense(data);
     persistAllData();
     saveDeviceRecord();
     return {success:true, restored:true, expiry:data.expiryDate, daysGranted:0, prevDays:0, totalDays:daysLeftInSubscription()};
@@ -9410,11 +9454,12 @@ async function activateSubscription(code){
   AppState.settings.subscriptionExpiry = newExpiryStr;
   AppState.settings.subscriptionActivatedOn = localDateStr();
   AppState.settings.isOnFreeTrial = false;
+  AppState.settings.planDevices = planDevicesFromLicense(data);
   AppState.settings.lastActivationCode = trimmedCode; // ---------- Remote Revoke اور بحالی کے لیے یاد رکھیں ----------
   persistAllData();
   saveDeviceRecord(); // ---------- سرور پر ڈیوائس ریکارڈ — دوبارہ انسٹال پر بحالی کے لیے ----------
   return {success:true, expiry: newExpiryStr, daysGranted: daysNum, prevDays: prevDays, totalDays: prevDays + daysNum,
-    prevWasTrial: prevWasTrial, lifetime: !!data.lifetime, activatedOn: AppState.settings.subscriptionActivatedOn};
+    prevWasTrial: prevWasTrial, lifetime: !!data.lifetime, devices: AppState.settings.planDevices, activatedOn: AppState.settings.subscriptionActivatedOn};
 }
 
 /* =====================================================================
@@ -9596,6 +9641,7 @@ async function generateGiftCode(){
   if(phoneKey.length < 9){ alert('⚠️ موبائل نمبر درست نہیں — دوبارہ چیک کریں۔'); return; }
   if(!/^[A-Z0-9][A-Z0-9-]{3,23}$/.test(uidVal)){ alert('⚠️ Device UID درست نہیں\n\nUID کی شکل ایسی ہوتی ہے:\nAIO-URP0-TYS2\n(پہلے 3 حروف — ڈیش — 4 حروف/ہندسے — ڈیش — 4 حروف/ہندسے)\n\nکسٹمر کی ایپ میں جو UID لکھی ہے، بالکل وہی ڈالیں۔'); return; }
   const isLifetime = daysVal === 'lifetime';
+  const devNum = Math.min(PLAN_MAX_PACK, Math.max(1, parseInt(document.getElementById('giftCodeDevicesInput').value) || 1));
   const code = generateRandomGiftCode();
 
   const fields = {
@@ -9604,6 +9650,7 @@ async function generateGiftCode(){
   };
   if(isLifetime) fields.lifetime = { booleanValue: true };
   else fields.days = { integerValue: daysVal };
+  fields.devices = { integerValue: String(devNum) }; // AIODR2710TU079: پیکج — کل فون/PC (مالک سمیت)
   if(uidVal) fields.boundUid = { stringValue: uidVal };
   if(nameVal) fields.customerName = { stringValue: nameVal };
   if(phoneKey) fields.customerPhone = { stringValue: phoneKey };
@@ -9627,7 +9674,7 @@ async function generateGiftCode(){
       }).catch(()=>{});
     }
     lastGeneratedGiftCode = code;
-    document.getElementById('giftCodeResultText').textContent = code;
+    document.getElementById('giftCodeResultText').textContent = code + '  •  ' + planName(devNum);
     document.getElementById('giftCodeResultWrap').style.display = 'block';
     document.getElementById('giftCodeNameInput').value = '';
     document.getElementById('giftCodePhoneInput').value = '';
@@ -9658,6 +9705,25 @@ function copyCodeFromList(code, btn){
   const done = () => { if(btn){ const t = btn.textContent; btn.textContent = '✅ کاپی ہو گیا'; setTimeout(() => { btn.textContent = t; }, 1500); } };
   if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code).then(done).catch(() => { prompt('کاپی کریں:', code); });
   else prompt('کاپی کریں:', code);
+}
+// ---------- AIODR2710TU079: کوڈ کا پیکج بدلیں (اپگریڈ/ڈاؤن گریڈ) — کسٹمر کی ایپ اگلی بار کھلنے پر خود لے لیتی ہے ----------
+async function editLicensePlan(code){
+  if(!(await ensureDevAuth())){ alert('⚠️ پہلے Developer Login کریں۔'); return; }
+  const it = _issuedCodesCache.find(x => x.code === code) || {};
+  const cur = planDevicesFromLicense(it);
+  const raw = prompt(`کوڈ ${code} — موجودہ پیکج: ${planName(cur)}\n\nنیا پیکج لکھیں (ملازم کتنے):\n0 = P1+0 صرف مالک\n1 = P1+1\n2 = P1+2\n3 = P1+3`, String(cur - 1));
+  if(raw === null) return;
+  const staff = parseInt(raw);
+  if(isNaN(staff) || staff < 0 || staff > PLAN_MAX_PACK - 1){ alert('⚠️ 0 سے ' + (PLAN_MAX_PACK - 1) + ' تک لکھیں۔'); return; }
+  try{
+    const r = await devFirestoreFetch(`licenses/${encodeURIComponent(code)}?updateMask.fieldPaths=devices&key=${FIREBASE_API_KEY}`, {
+      method:'PATCH', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ fields: { devices: { integerValue: String(staff + 1) } } })
+    });
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    alert(`✅ پیکج ${planName(staff + 1)} ہو گیا — کسٹمر کی ایپ انٹرنیٹ کے ساتھ اگلی بار کھلنے پر خود لگ جائے گا۔`);
+    loadIssuedCodesList();
+  }catch(e){ alert('⚠️ پیکج نہیں بدلا: ' + e.message); }
 }
 // ---------- پرانے/موجودہ کوڈ کے ساتھ موبائل نمبر لگائیں یا بدلیں ----------
 async function editLicensePhone(code){
@@ -9769,7 +9835,7 @@ function renderIssuedCodesList(){
     const isUsed = !!it.activatedAt;
     const statusLabel = isRevoked ? '🚫 معطل شدہ' : (isUsed ? '✅ استعمال شدہ' : '🟢 فعال — استعمال کا منتظر');
     const statusColor = isRevoked ? '#b91c1c' : (isUsed ? '#15803d' : '#c2410c');
-    const durationLabel = it.lifetime ? '🌟 Lifetime' : `${it.days || '?'} دن`;
+    const durationLabel = (it.lifetime ? '🌟 Lifetime' : `${it.days || '?'} دن`) + ' • 📦 ' + planName(planDevicesFromLicense(it));
     return `
     <div style="background:#fff; border:1.5px solid #e5e9f0; border-radius:10px; padding:10px 12px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
@@ -9782,6 +9848,7 @@ function renderIssuedCodesList(){
       <div style="display:flex; gap:6px; margin-bottom:6px;">
         <button onclick="copyCodeFromList('${it.code}', this)" style="flex:1; padding:6px; background:#eef2ff; color:#3730a3; border:none; border-radius:7px; font-size:11.5px; font-weight:800; cursor:pointer;">📋 کاپی</button>
         <button onclick="shareCodeWhatsapp('${it.code}', '${it.customerPhone || ''}')" style="flex:1; padding:6px; background:#dcfce7; color:#15803d; border:none; border-radius:7px; font-size:11.5px; font-weight:800; cursor:pointer;">📤 WhatsApp</button>
+        <button onclick="editLicensePlan('${it.code}')" style="flex:1; padding:6px; background:#f3e8ff; color:#7e22ce; border:none; border-radius:7px; font-size:11.5px; font-weight:800; cursor:pointer;">📦 پیکج</button>
         <button onclick="editLicensePhone('${it.code}')" style="flex:1; padding:6px; background:#e0f2fe; color:#0369a1; border:none; border-radius:7px; font-size:11.5px; font-weight:800; cursor:pointer;">📱 نمبر</button>
       </div>
       <div style="display:flex; gap:6px;">
@@ -9853,13 +9920,14 @@ function openRequestCodeModal(){
   const ph = document.getElementById('reqCodePhoneInput');
   if(ph && !ph.value) ph.value = s.contactPhone || '';
   document.getElementById('reqCodeMsg').textContent = '';
+  document.getElementById('reqCodePlanInput').value = String(s.isOnFreeTrial ? 1 : Math.min(PLAN_MAX_PACK, Math.max(1, parseInt(s.planDevices) || 1)));
   initPhoneCountryFields();
   document.getElementById('requestCodeModal').classList.add('show');
 }
 function closeRequestCodeModal(){
   document.getElementById('requestCodeModal').classList.remove('show');
 }
-function buildCodeRequestMessage(name, phoneKey, city){
+function buildCodeRequestMessage(name, phoneKey, city, plan){
   const uid = getOrCreateDeviceUID();
   let status = '';
   try{
@@ -9873,6 +9941,7 @@ function buildCodeRequestMessage(name, phoneKey, city){
   if(phoneKey) lines.push(`Mobile: +${phoneKey}`);
   if(city) lines.push(`City: ${city}`);
   lines.push(`UID: ${uid}`);
+  if(plan) lines.push(`Package: ${planName(plan)}`);
   if(status) lines.push(`Status: ${status}`);
   return `محترم ڈیویلپر السلام علیکم ورحمۃ اللہ وبرکاتہ\n\nمیں AIO POS DIRECT استعمال کرنا چاہتا ہوں، برائے مہربانی مجھے ایکٹیویشن کوڈ بھیجیں۔\n\n\`\`\`\n${lines.join('\n')}\n\`\`\``;
 }
@@ -9890,7 +9959,7 @@ function sendCodeRequest(channel){
   AppState.settings.contactCity = city;
   AppState.settings.contactPhone = phoneRaw;
   persistAllData();
-  const msg = buildCodeRequestMessage(name, phoneKey, city);
+  const msg = buildCodeRequestMessage(name, phoneKey, city, parseInt(document.getElementById('reqCodePlanInput').value) || 1);
   const contact = getDeveloperContact();
   if(channel === 'sms') window.open(`sms:${contact.sms}?body=${encodeURIComponent(msg)}`, '_blank');
   else window.open(`https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
@@ -9903,10 +9972,11 @@ function _extractCodeRequest(text){
   const pick = re => { const m = t.match(re); return m ? m[1].trim() : ''; };
   const name = pick(/^\s*Name\s*:\s*(.+)$/im);
   const mobile = pick(/^\s*Mobile\s*:\s*(.+)$/im);
+  const pm = t.match(/^\s*Package\s*:\s*P1\+(\d)/im), plan = pm ? Math.min(PLAN_MAX_PACK, parseInt(pm[1]) + 1) : 0;
   let uid = pick(/^\s*UID\s*:\s*([A-Za-z0-9-]+)/im);
   if(!uid){ const m = t.match(/\b([A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4})\b/); if(m) uid = m[1]; }
   if(!uid){ const m = t.match(/^\s*(\d{5,10})\s*$/m); if(m) uid = m[1]; }
-  return { name, mobile, uid: uid.toUpperCase() };
+  return { name, mobile, uid: uid.toUpperCase(), plan };
 }
 function parseCodeRequestPaste(quiet){
   const msgEl = document.getElementById('giftCodePasteMsg');
@@ -9918,13 +9988,14 @@ function parseCodeRequestPaste(quiet){
   }
   if(r.name) document.getElementById('giftCodeNameInput').value = r.name;
   if(r.uid) document.getElementById('giftCodeUidInput').value = r.uid;
+  if(r.plan) document.getElementById('giftCodeDevicesInput').value = String(r.plan);
   if(r.mobile){
     const ph = document.getElementById('giftCodePhoneInput');
     ph.value = r.mobile;
     ph.dispatchEvent(new Event('input')); // ---------- + والے نمبر سے ملک خود چن لیا جائے ----------
   }
   msgEl.style.color = 'var(--success)';
-  msgEl.textContent = `✅ ${r.name ? '👤 ' + r.name : '⚠️ نام نہیں ملا'} • ${r.uid ? '🔒 ' + r.uid : '⚠️ UID نہیں ملی'}${r.mobile ? ' • 📞 ' + r.mobile : ''} — اب دن چن کر "Generate Code" دبائیں`;
+  msgEl.textContent = `✅ ${r.name ? '👤 ' + r.name : '⚠️ نام نہیں ملا'} • ${r.uid ? '🔒 ' + r.uid : '⚠️ UID نہیں ملی'}${r.mobile ? ' • 📞 ' + r.mobile : ''}${r.plan ? ' • 📦 ' + planName(r.plan) : ''} — اب دن چن کر "Generate Code" دبائیں`;
 }
 async function pasteCodeRequestFromClipboard(){
   try{
@@ -28585,6 +28656,7 @@ function renderStaffDevicesCard(){
   const s = AppState.settings;
   if(!aioMultiOn()){
     el.innerHTML = `<h3>👥 Staff &amp; Devices</h3>
+      ${planMaxDevices() < 99 ? `<div class="mdPlan${planMaxDevices() < 2 ? ' full' : ''}"><span>📦 Your package <b>${planName(planMaxDevices())}</b></span><span>${planMaxDevices()} device${planMaxDevices() > 1 ? 's' : ''}${AppState.settings.isOnFreeTrial ? ' (trial)' : ''}</span>${planMaxDevices() < PLAN_MAX_PACK || AppState.settings.isOnFreeTrial ? `<button type="button" onclick="openSubscribeModal()">⬆️ Upgrade</button>` : ''}</div>` : ''}
       <div class="settingsHint">Run your shop on <b>more phones and PCs with the same data</b> — you and your staff each log in with your own PIN. Bills, stock, customers and payments update on every device.</div>
       <div class="mdSteps">1️⃣ Turn on here (this device becomes the owner's device)<br>2️⃣ Add your staff and their PINs (👤 Users)<br>3️⃣ On the other phone/PC: login screen → <b>🔗 Join a shop</b> → Shop Code + PIN</div>
       <button type="button" class="mdBigBtn" onclick="enableMultiDevice()">📲 Turn on Multi-Device</button>`;
@@ -28611,6 +28683,10 @@ function renderStaffDevicesCard(){
     ${(() => { const bx = syncBiggestBox(), ls = syncLocalStorageBytes(), lsPct = Math.round(ls / (5 * 1024 * 1024) * 100);
       const col = p => p >= 80 ? '#dc2626' : p >= 60 ? '#d97706' : '#15803d';
       return `<div class="mdSteps" style="font-size:12px;">📦 Biggest cloud box: <b style="color:${col(bx.pct)}">${bx.pct}%</b>${bx.bytes ? ' (' + Math.round(bx.bytes / 1024) + ' KB)' : ''} &nbsp;•&nbsp; 📱 This device storage: <b style="color:${col(lsPct)}">${lsPct}%</b>${window.__syncBoxFull ? `<br><span style="color:#b91c1c; font-weight:800;">⚠️ ${mdEsc(window.__syncBoxFull.msg)}</span>` : (window.__cloudSyncError && cloudSyncStatus === 'error' ? `<br><span style="color:#b91c1c; font-weight:800;">⚠️ ${mdEsc(window.__cloudSyncError)}</span>` : '')}</div>`; })()}
+    ${(() => { const max = owner ? planMaxDevices() : (sh.maxDevices || 0); if(!max || max >= 99) return '';
+      const full = devs.length >= max;
+      return `<div class="mdPlan${full ? ' full' : ''}"><span>📦 Package <b>${planName(max)}</b></span><span>${devs.length} / ${max} devices${full ? ' — full' : ''}</span>${owner && max < PLAN_MAX_PACK ? `<button type="button" onclick="openSubscribeModal()">⬆️ Upgrade</button>` : ''}</div>`; })()}
+    ${!owner && syncOverPlanLimit() ? `<div class="mdPlan full"><span>⚠️ The shop's package (${planName(sh.maxDevices)}) does not include this device — ask the owner to upgrade or remove another device.</span></div>` : ''}
     <div class="settingsSubLabel">Devices (${devs.length})</div>
     ${devHtml}
     <div class="mdRow2" style="margin-top:6px;"><button type="button" class="mdBigBtn ghost" onclick="syncNow(); showNavToast('🔄 Syncing…')">🔄 Sync now</button>
@@ -28618,6 +28694,11 @@ function renderStaffDevicesCard(){
 }
 async function enableMultiDevice(){
   if(AppState.currentRole && AppState.currentRole !== 'admin'){ alert('Only the owner can turn this on.'); return; }
+  if(planMaxDevices() < 2){
+    alert(`Your package is ${planName(1)} — owner only (1 device).\n\nTo add staff or more phones/PCs, upgrade to P1+1, P1+2 or P1+3.`);
+    try{ openSubscribeModal(); }catch(e){}
+    return;
+  }
   const admin = usersData.find(u => u.role === 'admin' && u.is_active);
   if(!admin || (admin.pin === DEFAULT_ADMIN_PIN_HASH && AppState.settings.pinLockUserSet !== true)){
     alert('First set your own Admin PIN — on every device each person logs in with a PIN.');
@@ -32829,9 +32910,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR2710TU078';
+  const APP_VERSION = 'AIODR2710TU079';
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Multi-Device: cloud boxes split from the start (bills 8 boxes a day) so they never fill up; box meter in Staff & Devices; billing never stops';
+  const UPDATE_NOTE = 'Packages P1+0 to P1+3: device limit follows your activation code; choose package when requesting a code; Upgrade button in Staff & Devices';
   const UPD_KEY = 'aioDrUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }

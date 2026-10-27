@@ -1829,6 +1829,15 @@
   .ilQty b{font-size:13.5px; color:#0f172a;}
   .ilEmpty{text-align:center; color:#94a3b8; font-size:13px; padding:22px 8px;}
   .vcBottomBtns{display:flex; flex-direction:column; gap:8px; margin-top:12px;}
+  /* AIODR2710TU082: پیکج کی قیمتیں — ہر فون 500 روپے مہینہ */
+  .drPriceLine{margin-top:8px; padding:9px 11px; border-radius:10px; background:#f0fdf4; border:1.5px solid #86efac; color:#166534; font-size:13px; font-weight:800; line-height:1.4;}
+  .drPriceLine small{display:block; font-size:11px; font-weight:600; color:#4d7c0f;}
+  .drPriceTbl{width:100%; border-collapse:collapse; margin:8px 0 2px; font-size:12.5px;}
+  .drPriceTbl th, .drPriceTbl td{padding:6px 4px; border-bottom:1px solid #eef1f6; text-align:right; white-space:nowrap;}
+  .drPriceTbl th:first-child, .drPriceTbl td:first-child{text-align:left; white-space:normal;}
+  .drPriceTbl th{font-size:11px; color:var(--muted); font-weight:800;}
+  .drPriceTbl td{font-weight:700;}
+  .drPriceNote{font-size:11.5px; color:var(--muted); margin-top:4px;}
   /* ---------- AIO2510SU098: مختصر ویرینٹ لسٹ — ہر سائز ایک لائن، باقی تفصیل ⋯ میں ---------- */
   .productCard.capCard .variantCardWrap{padding:0 0 12px;}
   .vlBox{background:var(--card); border:1px solid #e5e9f0; border-radius:14px; padding:8px 6px; box-shadow:0 4px 14px rgba(41,29,10,.05);}
@@ -3055,7 +3064,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR2710TU081</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR2710TU082</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -3251,7 +3260,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR2710TU081</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR2710TU082</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div class="subOnly" style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3322,7 +3331,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       </div>
       <input type="text" id="giftCodeNameInput" placeholder="👤 کسٹمر کا نام * (مثلاً: احمد سٹور)" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
       <input type="tel" id="giftCodePhoneInput" inputmode="tel" placeholder="📱 کسٹمر کا موبائل نمبر * (03001234567 یا +971501234567)" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
-      <select id="giftCodeDaysInput" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
+      <select id="giftCodeDaysInput" onchange="drGenAutoPrice()" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
         <option value="1">1 دن (ٹیسٹ)</option>
         <option value="2">2 دن (ٹیسٹ)</option>
         <option value="3">3 دن</option>
@@ -3333,7 +3342,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
         <option value="365">365 دن (1 سال)</option>
         <option value="lifetime">🌟 Lifetime (ہمیشہ کے لیے)</option>
       </select>
-      <select id="giftCodeDevicesInput" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px; font-weight:800;">
+      <select id="giftCodeDevicesInput" onchange="drGenAutoPrice()" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px; font-weight:800;">
         <option value="1" selected>📦 P1+0 — صرف مالک (1 فون/PC)</option>
         <option value="2">📦 P1+1 — مالک + 1 ملازم (2 فون/PC)</option>
         <option value="3">📦 P1+2 — مالک + 2 ملازم (3 فون/PC)</option>
@@ -3409,7 +3418,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR2710TU081</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR2710TU082</span>
     </div>
   </div>
 
@@ -6639,6 +6648,10 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       <button class="backupConfirmCloseBtn" style="margin-top:8px; background:#e0f2fe; color:#0369a1;" onclick="restoreByPhoneUI('subscribePhoneInput','subscribeMsg')">📱 Restore with mobile number</button>
     </div>
     <div id="subscribeMsg" style="margin-top:10px; font-size:13px; font-weight:700;"></div>
+    <div class="subOnly" style="margin-top:12px; padding-top:10px; border-top:1px dashed #dbe1ea;">
+      <div style="font-size:12.5px; font-weight:800; color:var(--primary-dark);">💰 Packages — Rs 500 per phone / month</div>
+      <div id="subscribePriceTable"></div>
+    </div>
     <button class="backupConfirmCloseBtn" style="margin-top:10px; background:#dcfce7; color:#15803d;" onclick="closeSubscribeModal(); openRequestCodeModal();">📩 Request Activation Code</button>
     <button class="backupConfirmCloseBtn" style="margin-top:8px; background:#f1f5f9; color:var(--text);" onclick="closeSubscribeModal()">Close</button>
   </div>
@@ -6660,12 +6673,15 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <input type="text" id="reqCodeCityInput" placeholder="e.g. Lahore" style="width:100%; padding:10px; border:1px solid #dbe1ea; border-radius:8px; font-size:14px; margin-bottom:8px;">
     <!-- AIODR2710TU081: کتنے فون/PC — پیغام میں "Package: P1+N" جاتا ہے، ڈویلپر پینل خود چن لیتا ہے (آخری فیصلہ ڈویلپر کا) -->
     <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:4px;">📦 How many phones / PCs?</label>
-    <select id="reqCodePlanInput" style="width:100%; padding:10px; border:1px solid #dbe1ea; border-radius:8px; font-size:14px; font-weight:700; background:#fff;">
+    <select id="reqCodePlanInput" onchange="drReqPlanChanged()" style="width:100%; padding:10px; border:1px solid #dbe1ea; border-radius:8px; font-size:14px; font-weight:700; background:#fff;">
       <option value="1" selected>Only me — 1 phone</option>
       <option value="2">Me + 1 staff — 2 phones</option>
       <option value="3">Me + 2 staff — 3 phones</option>
       <option value="4">Me + 3 staff — 4 phones</option>
     </select>
+    <label style="display:block; font-size:12px; color:var(--muted); margin:8px 0 4px;">⏱️ For how long?</label>
+    <select id="reqCodeTermInput" onchange="drReqPlanChanged()" style="width:100%; padding:10px; border:1px solid #dbe1ea; border-radius:8px; font-size:14px; font-weight:700; background:#fff;"></select>
+    <div class="drPriceLine" id="reqCodePriceLine"></div>
 
     <div id="reqCodeMsg" style="margin-top:8px; font-size:12.5px; font-weight:700; color:var(--danger);"></div>
     <button class="backupConfirmCloseBtn" style="margin-top:8px; background:#16a34a;" onclick="sendCodeRequest('whatsapp')">💬 Send on WhatsApp</button>
@@ -6717,7 +6733,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 </div>
 
 <script>
-// ---------- AIODR2710TU081: 💾 فون کی جگہ کبھی نہ بھرے — localStorage (~5MB، اسی ویب سائٹ کی سب ایپس میں بٹا ہوا) ----------
+// ---------- AIODR2710TU080: 💾 فون کی جگہ کبھی نہ بھرے — localStorage (~5MB، اسی ویب سائٹ کی سب ایپس میں بٹا ہوا) ----------
 // 1) بڑی فہرستیں (بل، گاہک، پراڈکٹ…) دبا کر (LZ) رکھی جاتی ہیں — 6 سے 10 گنا کم جگہ
 // 2) جو نہ بدلا ہو وہ دوبارہ نہیں لکھا جاتا (ہر 1.5 سیکنڈ والا خودکار محفوظ ہلکا)
 // 3) پھر بھی جگہ ختم ہو تو وہ فہرست فون کی بڑی جگہ (IndexedDB <prefix>store_v1) میں، localStorage میں صرف نشان؛
@@ -7032,7 +7048,7 @@ function syncDeviceUid(){
   return s.syncDevId;
 }
 function shopInfo(){ return shopInfoData.find(x => x.id === 'shop') || {}; }
-// ---------- AIODR2710TU081: دکان سے جڑا فون — سبسکرپشن/پیکج/کوڈ کچھ نظر نہیں آتا، سب مالک کے فون سے ----------
+// ---------- AIODR2710TU080: دکان سے جڑا فون — سبسکرپشن/پیکج/کوڈ کچھ نظر نہیں آتا، سب مالک کے فون سے ----------
 function isLinkedDevice(){ return aioMultiOn() && AppState.settings.syncJoined === true; }
 function refreshMultiFlag(){
   AIO_MULTIUSER_ENABLED = aioMultiOn();
@@ -9147,7 +9163,7 @@ async function resyncLicenseOnline(){
 
 function isSubscriptionActive(){
   if(AppState.settings.developerUnlock) return true; // AIO Developer Unlock
-  if(isLinkedDevice()) return linkedShopActive(); // AIODR2710TU081: جڑا فون صرف مالک کی سبسکرپشن پر — اپنا ٹرائل/کوڈ نہیں
+  if(isLinkedDevice()) return linkedShopActive(); // AIODR2710TU080: جڑا فون صرف مالک کی سبسکرپشن پر — اپنا ٹرائل/کوڈ نہیں
   const exp = AppState.settings.subscriptionExpiry;
   if(!exp) return false;
   const today = getEffectiveToday();
@@ -9329,6 +9345,7 @@ function openSubscribeModal(){
   } else note.style.display = 'none';
   document.getElementById('subscribeCodeInput').value = '';
   document.getElementById('subscribeMsg').textContent = '';
+  renderSubscribePriceTable();
   document.getElementById('subscribeNowModal').classList.add('show');
 }
 function closeSubscribeModal(){
@@ -10050,6 +10067,41 @@ function buildAdInquiryMessage(){
 
 // ---------- AIODR1910MO023: 📩 ایکٹیویشن کوڈ کی درخواست — نام لازمی، UID خود۔ ``` والا حصہ واٹس ایپ میں الگ بلاک بنتا ہے
 // اور ڈویلپر پینل کا "پیسٹ کریں" اسی کے Name/Mobile/UID لیبل پڑھ کر خانے خود بھرتا ہے ----------
+// ---------- AIODR2710TU082: پیکج کی قیمتیں (مالک کی منظوری) — ہر فون 500 روپے مہینہ؛ 6 مہینے = 6 مہینے، سال = 10 مہینے؛
+// لائف ٹائم صرف «صرف میں» (1 فون) کے لیے 25,000۔ گاہک صرف درخواست کرتا ہے — کوڈ اور آخری پیکج ادائیگی کے بعد ڈویلپر بناتا ہے ----------
+const DR_PHONE_MONTHLY = 500, DR_LIFETIME_PRICE = 25000;
+const DR_TERMS = [{key:'180', label:'6 Months', months:6}, {key:'365', label:'1 Year', months:10}, {key:'lifetime', label:'Lifetime (one time)', lifetime:true}];
+function drPlanPrice(devices, termKey){
+  const d = Math.min(PLAN_MAX_PACK, Math.max(1, parseInt(devices) || 1));
+  const t = DR_TERMS.find(x => x.key === String(termKey));
+  if(!t) return 0;
+  if(t.lifetime) return d === 1 ? DR_LIFETIME_PRICE : 0;
+  return d * DR_PHONE_MONTHLY * t.months;
+}
+function drTermLabel(termKey){ const t = DR_TERMS.find(x => x.key === String(termKey)); return t ? t.label : ''; }
+function drReqPlanChanged(){
+  const plan = parseInt(document.getElementById('reqCodePlanInput').value) || 1;
+  const sel = document.getElementById('reqCodeTermInput');
+  const cur = sel.value || '365';
+  sel.innerHTML = DR_TERMS.filter(t => !t.lifetime || plan === 1)
+    .map(t => `<option value="${t.key}">${t.label} — Rs ${drPlanPrice(plan, t.key).toLocaleString()}</option>`).join('');
+  sel.value = [...sel.options].some(o => o.value === cur) ? cur : '365';
+  const price = drPlanPrice(plan, sel.value);
+  document.getElementById('reqCodePriceLine').innerHTML = `💰 ${planName(plan)} · ${drTermLabel(sel.value)}: Rs ${price.toLocaleString()}<small>Pay the developer — your code and final package are set after payment.</small>`;
+}
+function renderSubscribePriceTable(){
+  const el = document.getElementById('subscribePriceTable');
+  if(!el) return;
+  const rows = [[1, 'Only me'], [2, 'Me + 1 staff'], [3, 'Me + 2 staff'], [4, 'Me + 3 staff']];
+  el.innerHTML = `<table class="drPriceTbl"><tr><th>Phones</th><th>6 Months</th><th>1 Year</th></tr>` +
+    rows.map(([d, l]) => `<tr><td>${l} (${d})</td><td>Rs ${drPlanPrice(d, '180').toLocaleString()}</td><td>Rs ${drPlanPrice(d, '365').toLocaleString()}</td></tr>`).join('') +
+    `</table><div class="drPriceNote">♾️ Lifetime (only me, 1 phone): Rs ${DR_LIFETIME_PRICE.toLocaleString()} one time · 1 Year = 2 months free</div>`;
+}
+// ---------- ڈویلپر پینل: فون/دن بدلیں تو قیمت کا خانہ پیکج کی فہرست سے خود بھرے (ہاتھ سے بدلی جا سکتی ہے) ----------
+function drGenAutoPrice(){
+  const pr = drPlanPrice(document.getElementById('giftCodeDevicesInput').value, document.getElementById('giftCodeDaysInput').value);
+  document.getElementById('giftCodePriceInput').value = pr ? String(pr) : '';
+}
 function openRequestCodeModal(){
   const s = AppState.settings;
   document.getElementById('reqCodeUid').textContent = getOrCreateDeviceUID();
@@ -10058,13 +10110,14 @@ function openRequestCodeModal(){
   const ph = document.getElementById('reqCodePhoneInput');
   if(ph && !ph.value) ph.value = s.contactPhone || '';
   document.getElementById('reqCodeMsg').textContent = '';
+  drReqPlanChanged();
   initPhoneCountryFields();
   document.getElementById('requestCodeModal').classList.add('show');
 }
 function closeRequestCodeModal(){
   document.getElementById('requestCodeModal').classList.remove('show');
 }
-function buildCodeRequestMessage(name, phoneKey, city, plan){
+function buildCodeRequestMessage(name, phoneKey, city, plan, term){
   const uid = getOrCreateDeviceUID();
   let status = '';
   try{
@@ -10078,6 +10131,11 @@ function buildCodeRequestMessage(name, phoneKey, city, plan){
   if(phoneKey) lines.push(`Mobile: +${phoneKey}`);
   if(city) lines.push(`City: ${city}`);
   if(plan) lines.push(`Package: ${planName(plan)} (${plan} phone${plan > 1 ? 's' : ''})`);
+  if(plan && term){
+    lines.push(`Duration: ${drTermLabel(term)}`);
+    const pr = drPlanPrice(plan, term);
+    if(pr) lines.push(`Price: Rs ${pr}`);
+  }
   lines.push(`UID: ${uid}`);
   if(status) lines.push(`Status: ${status}`);
   return `محترم ڈیویلپر السلام علیکم ورحمۃ اللہ وبرکاتہ\n\nمیں AIO POS DIRECT استعمال کرنا چاہتا ہوں، برائے مہربانی مجھے ایکٹیویشن کوڈ بھیجیں۔\n\n\`\`\`\n${lines.join('\n')}\n\`\`\``;
@@ -10097,7 +10155,8 @@ function sendCodeRequest(channel){
   AppState.settings.contactPhone = phoneRaw;
   persistAllData();
   const plan = Math.min(PLAN_MAX_PACK, Math.max(1, parseInt(document.getElementById('reqCodePlanInput')?.value) || 1));
-  const msg = buildCodeRequestMessage(name, phoneKey, city, plan);
+  const term = document.getElementById('reqCodeTermInput')?.value || '';
+  const msg = buildCodeRequestMessage(name, phoneKey, city, plan, term);
   const contact = getDeveloperContact();
   if(channel === 'sms') window.open(`sms:${contact.sms}?body=${encodeURIComponent(msg)}`, '_blank');
   else window.open(`https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
@@ -10111,10 +10170,13 @@ function _extractCodeRequest(text){
   const name = pick(/^\s*Name\s*:\s*(.+)$/im);
   const mobile = pick(/^\s*Mobile\s*:\s*(.+)$/im);
   const pm = t.match(/^\s*Package\s*:\s*P1\+(\d)/im), plan = pm ? Math.min(PLAN_MAX_PACK, parseInt(pm[1]) + 1) : 0;
+  const dur = pick(/^\s*Duration\s*:\s*(.+)$/im);
+  const term = /life/i.test(dur) ? 'lifetime' : /6\s*month/i.test(dur) ? '180' : /year/i.test(dur) ? '365' : '';
+  const price = parseInt((pick(/^\s*Price\s*:\s*(.+)$/im) || '').replace(/[^\d]/g, '')) || 0;
   let uid = pick(/^\s*UID\s*:\s*([A-Za-z0-9-]+)/im);
   if(!uid){ const m = t.match(/\b([A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4})\b/); if(m) uid = m[1]; }
   if(!uid){ const m = t.match(/^\s*(\d{5,10})\s*$/m); if(m) uid = m[1]; }
-  return { name, mobile, uid: uid.toUpperCase(), plan };
+  return { name, mobile, uid: uid.toUpperCase(), plan, term, price };
 }
 function parseCodeRequestPaste(quiet){
   const msgEl = document.getElementById('giftCodePasteMsg');
@@ -10127,13 +10189,16 @@ function parseCodeRequestPaste(quiet){
   if(r.name) document.getElementById('giftCodeNameInput').value = r.name;
   if(r.uid) document.getElementById('giftCodeUidInput').value = r.uid;
   if(r.plan) document.getElementById('giftCodeDevicesInput').value = String(r.plan);
+  if(r.term) document.getElementById('giftCodeDaysInput').value = r.term;
+  if(r.plan || r.term) drGenAutoPrice();
+  if(r.price) document.getElementById('giftCodePriceInput').value = String(r.price);
   if(r.mobile){
     const ph = document.getElementById('giftCodePhoneInput');
     ph.value = r.mobile;
     ph.dispatchEvent(new Event('input')); // ---------- + والے نمبر سے ملک خود چن لیا جائے ----------
   }
   msgEl.style.color = 'var(--success)';
-  msgEl.textContent = `✅ ${r.name ? '👤 ' + r.name : '⚠️ نام نہیں ملا'} • ${r.uid ? '🔒 ' + r.uid : '⚠️ UID نہیں ملی'}${r.mobile ? ' • 📞 ' + r.mobile : ''}${r.plan ? ' • 📦 ' + planName(r.plan) : ''} — اب دن چن کر "Generate Code" دبائیں`;
+  msgEl.textContent = `✅ ${r.name ? '👤 ' + r.name : '⚠️ نام نہیں ملا'} • ${r.uid ? '🔒 ' + r.uid : '⚠️ UID نہیں ملی'}${r.mobile ? ' • 📞 ' + r.mobile : ''}${r.plan ? ' • 📦 ' + planName(r.plan) : ''}${r.term ? ' • ⏱️ ' + drTermLabel(r.term) : ''}${r.price ? ' • 💰 Rs ' + r.price.toLocaleString() : ''} — ادائیگی ملنے پر "Generate Code" دبائیں`;
 }
 async function pasteCodeRequestFromClipboard(){
   try{
@@ -33058,9 +33123,9 @@ try{ storeHydrate(); }catch(e){ _storeHydrating = false; }
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR2710TU081';
+  const APP_VERSION = 'AIODR2710TU082';
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Code request: choose how many phones (package); developer can save the price; code is sent in an easy copy box';
+  const UPDATE_NOTE = 'Packages with prices: Rs 500 per phone a month — 6 months or 1 year (2 months free), Lifetime for one phone';
   const UPD_KEY = 'aioDrUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }

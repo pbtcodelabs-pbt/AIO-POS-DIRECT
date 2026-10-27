@@ -3055,7 +3055,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR2710TU080</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR2710TU081</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -3251,7 +3251,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR2710TU080</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR2710TU081</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div class="subOnly" style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3339,6 +3339,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
         <option value="3">📦 P1+2 — مالک + 2 ملازم (3 فون/PC)</option>
         <option value="4">📦 P1+3 — مالک + 3 ملازم (4 فون/PC)</option>
       </select>
+      <input type="number" id="giftCodePriceInput" inputmode="numeric" min="0" placeholder="💰 قیمت / ریٹ (روپے) — اختیاری، مثلاً 3000" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
       <input type="text" id="giftCodeUidInput" placeholder="🔒 Device UID * (مثلاً AIO-URP0-TYS2)" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px;">
       <button class="testPrintBtn" style="background:#dcfce7; color:#15803d;" onclick="generateGiftCode()">🎁 Generate Code</button>
       <div id="giftCodeResultWrap" style="display:none; margin-top:10px; background:#f0fdf4; border:1.5px solid #86efac; border-radius:10px; padding:12px; text-align:center;">
@@ -3408,7 +3409,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR2710TU080</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR2710TU081</span>
     </div>
   </div>
 
@@ -6656,7 +6657,15 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:4px;">📱 Mobile number <b style="color:var(--danger);">*</b> (to restore on a new phone)</label>
     <input type="tel" id="reqCodePhoneInput" inputmode="tel" placeholder="03001234567" style="width:100%; padding:10px; border:1px solid #dbe1ea; border-radius:8px; font-size:14px; margin-bottom:8px;">
     <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:4px;">🏙️ City (optional)</label>
-    <input type="text" id="reqCodeCityInput" placeholder="e.g. Lahore" style="width:100%; padding:10px; border:1px solid #dbe1ea; border-radius:8px; font-size:14px;">
+    <input type="text" id="reqCodeCityInput" placeholder="e.g. Lahore" style="width:100%; padding:10px; border:1px solid #dbe1ea; border-radius:8px; font-size:14px; margin-bottom:8px;">
+    <!-- AIODR2710TU081: کتنے فون/PC — پیغام میں "Package: P1+N" جاتا ہے، ڈویلپر پینل خود چن لیتا ہے (آخری فیصلہ ڈویلپر کا) -->
+    <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:4px;">📦 How many phones / PCs?</label>
+    <select id="reqCodePlanInput" style="width:100%; padding:10px; border:1px solid #dbe1ea; border-radius:8px; font-size:14px; font-weight:700; background:#fff;">
+      <option value="1" selected>Only me — 1 phone</option>
+      <option value="2">Me + 1 staff — 2 phones</option>
+      <option value="3">Me + 2 staff — 3 phones</option>
+      <option value="4">Me + 3 staff — 4 phones</option>
+    </select>
 
     <div id="reqCodeMsg" style="margin-top:8px; font-size:12.5px; font-weight:700; color:var(--danger);"></div>
     <button class="backupConfirmCloseBtn" style="margin-top:8px; background:#16a34a;" onclick="sendCodeRequest('whatsapp')">💬 Send on WhatsApp</button>
@@ -6708,7 +6717,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 </div>
 
 <script>
-// ---------- AIODR2710TU080: 💾 فون کی جگہ کبھی نہ بھرے — localStorage (~5MB، اسی ویب سائٹ کی سب ایپس میں بٹا ہوا) ----------
+// ---------- AIODR2710TU081: 💾 فون کی جگہ کبھی نہ بھرے — localStorage (~5MB، اسی ویب سائٹ کی سب ایپس میں بٹا ہوا) ----------
 // 1) بڑی فہرستیں (بل، گاہک، پراڈکٹ…) دبا کر (LZ) رکھی جاتی ہیں — 6 سے 10 گنا کم جگہ
 // 2) جو نہ بدلا ہو وہ دوبارہ نہیں لکھا جاتا (ہر 1.5 سیکنڈ والا خودکار محفوظ ہلکا)
 // 3) پھر بھی جگہ ختم ہو تو وہ فہرست فون کی بڑی جگہ (IndexedDB <prefix>store_v1) میں، localStorage میں صرف نشان؛
@@ -7023,7 +7032,7 @@ function syncDeviceUid(){
   return s.syncDevId;
 }
 function shopInfo(){ return shopInfoData.find(x => x.id === 'shop') || {}; }
-// ---------- AIODR2710TU080: دکان سے جڑا فون — سبسکرپشن/پیکج/کوڈ کچھ نظر نہیں آتا، سب مالک کے فون سے ----------
+// ---------- AIODR2710TU081: دکان سے جڑا فون — سبسکرپشن/پیکج/کوڈ کچھ نظر نہیں آتا، سب مالک کے فون سے ----------
 function isLinkedDevice(){ return aioMultiOn() && AppState.settings.syncJoined === true; }
 function refreshMultiFlag(){
   AIO_MULTIUSER_ENABLED = aioMultiOn();
@@ -9138,7 +9147,7 @@ async function resyncLicenseOnline(){
 
 function isSubscriptionActive(){
   if(AppState.settings.developerUnlock) return true; // AIO Developer Unlock
-  if(isLinkedDevice()) return linkedShopActive(); // AIODR2710TU080: جڑا فون صرف مالک کی سبسکرپشن پر — اپنا ٹرائل/کوڈ نہیں
+  if(isLinkedDevice()) return linkedShopActive(); // AIODR2710TU081: جڑا فون صرف مالک کی سبسکرپشن پر — اپنا ٹرائل/کوڈ نہیں
   const exp = AppState.settings.subscriptionExpiry;
   if(!exp) return false;
   const today = getEffectiveToday();
@@ -9780,6 +9789,8 @@ async function generateGiftCode(){
   if(uidVal) fields.boundUid = { stringValue: uidVal };
   if(nameVal) fields.customerName = { stringValue: nameVal };
   if(phoneKey) fields.customerPhone = { stringValue: phoneKey };
+  const priceVal = Math.max(0, Math.round(Number(document.getElementById('giftCodePriceInput').value) || 0));
+  if(priceVal) fields.price = { integerValue: String(priceVal) }; // AIODR2710TU081: کتنے روپے میں دیا
 
   try{
     const res = await devFirestoreFetch(`licenses/${encodeURIComponent(code)}?currentDocument.exists=false&key=${FIREBASE_API_KEY}`, {
@@ -9805,6 +9816,7 @@ async function generateGiftCode(){
     document.getElementById('giftCodeNameInput').value = '';
     document.getElementById('giftCodePhoneInput').value = '';
     document.getElementById('giftCodeUidInput').value = '';
+    document.getElementById('giftCodePriceInput').value = '';
     document.getElementById('giftCodePasteInput').value = '';
     document.getElementById('giftCodePasteMsg').textContent = '';
     lastGeneratedGiftPhone = phoneKey;
@@ -9818,7 +9830,7 @@ function copyGiftCode(){
   navigator.clipboard?.writeText(lastGeneratedGiftCode).catch(()=>{});
 }
 function _codeShareMessage(code){
-  return `🧾 AIO POS — آپ کا ایکٹیویشن کوڈ:\n\n${code}\n\nایپ میں "Have an activation code?" یا ہوم پیج پر "Subscribe" میں جا کر یہ کوڈ درج کریں۔\nنیا موبائل یا ایپ دوبارہ انسٹال؟ وہی کوڈ یا اپنا موبائل نمبر لکھیں — آپ کے باقی دن واپس مل جائیں گے۔`;
+  return `🧾 AIO POS — آپ کا ایکٹیویشن کوڈ (دبا کر کاپی کریں):\n\n\`\`\`${code}\`\`\`\n\nایپ میں "Have an activation code?" یا ہوم پیج پر "Subscribe" میں جا کر یہ کوڈ درج کریں۔\nنیا موبائل یا ایپ دوبارہ انسٹال؟ وہی کوڈ یا اپنا موبائل نمبر لکھیں — آپ کے باقی دن واپس مل جائیں گے۔`;
 }
 function shareCodeWhatsapp(code, phoneKey){
   window.open(`https://wa.me/${phoneForWhatsapp(phoneKey)}?text=${encodeURIComponent(_codeShareMessage(code))}`, '_blank');
@@ -9961,7 +9973,7 @@ function renderIssuedCodesList(){
     const isUsed = !!it.activatedAt;
     const statusLabel = isRevoked ? '🚫 معطل شدہ' : (isUsed ? '✅ استعمال شدہ' : '🟢 فعال — استعمال کا منتظر');
     const statusColor = isRevoked ? '#b91c1c' : (isUsed ? '#15803d' : '#c2410c');
-    const durationLabel = (it.lifetime ? '🌟 Lifetime' : `${it.days || '?'} دن`) + ' • 📦 ' + planName(planDevicesFromLicense(it));
+    const durationLabel = (it.lifetime ? '🌟 Lifetime' : `${it.days || '?'} دن`) + ' • 📦 ' + planName(planDevicesFromLicense(it)) + (Number(it.price) > 0 ? ' • 💰 Rs. ' + Number(it.price).toLocaleString() : '');
     return `
     <div style="background:#fff; border:1.5px solid #e5e9f0; border-radius:10px; padding:10px 12px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
@@ -10052,7 +10064,7 @@ function openRequestCodeModal(){
 function closeRequestCodeModal(){
   document.getElementById('requestCodeModal').classList.remove('show');
 }
-function buildCodeRequestMessage(name, phoneKey, city){
+function buildCodeRequestMessage(name, phoneKey, city, plan){
   const uid = getOrCreateDeviceUID();
   let status = '';
   try{
@@ -10065,6 +10077,7 @@ function buildCodeRequestMessage(name, phoneKey, city){
   const lines = ['AIO POS DIRECT — CODE REQUEST', `Name: ${name}`];
   if(phoneKey) lines.push(`Mobile: +${phoneKey}`);
   if(city) lines.push(`City: ${city}`);
+  if(plan) lines.push(`Package: ${planName(plan)} (${plan} phone${plan > 1 ? 's' : ''})`);
   lines.push(`UID: ${uid}`);
   if(status) lines.push(`Status: ${status}`);
   return `محترم ڈیویلپر السلام علیکم ورحمۃ اللہ وبرکاتہ\n\nمیں AIO POS DIRECT استعمال کرنا چاہتا ہوں، برائے مہربانی مجھے ایکٹیویشن کوڈ بھیجیں۔\n\n\`\`\`\n${lines.join('\n')}\n\`\`\``;
@@ -10083,7 +10096,8 @@ function sendCodeRequest(channel){
   AppState.settings.contactCity = city;
   AppState.settings.contactPhone = phoneRaw;
   persistAllData();
-  const msg = buildCodeRequestMessage(name, phoneKey, city);
+  const plan = Math.min(PLAN_MAX_PACK, Math.max(1, parseInt(document.getElementById('reqCodePlanInput')?.value) || 1));
+  const msg = buildCodeRequestMessage(name, phoneKey, city, plan);
   const contact = getDeveloperContact();
   if(channel === 'sms') window.open(`sms:${contact.sms}?body=${encodeURIComponent(msg)}`, '_blank');
   else window.open(`https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
@@ -33044,9 +33058,9 @@ try{ storeHydrate(); }catch(e){ _storeHydrating = false; }
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR2710TU080';
+  const APP_VERSION = 'AIODR2710TU081';
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Storage never fills: big lists packed 10x smaller and moved to device storage if needed; staff devices show no subscription — only the owner\'s; code request needs only name and mobile';
+  const UPDATE_NOTE = 'Code request: choose how many phones (package); developer can save the price; code is sent in an easy copy box';
   const UPD_KEY = 'aioDrUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }

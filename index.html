@@ -3321,7 +3321,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR0111SU110</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR0111SU111</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -3517,7 +3517,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR0111SU110</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR0111SU111</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div class="subOnly" style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3675,7 +3675,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR0111SU110</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR0111SU111</span>
     </div>
   </div>
 
@@ -16150,6 +16150,12 @@ function getDayAbbrev(dateStr){
 // دونوں نمبر Bill History کی سادہ سرچ سے مل جاتے ہیں کیونکہ دونوں ایک ہی invoice_no سٹرنگ کا حصہ ہیں
 // ---------- AIODR0111SU109: 🔢 بل نمبر صرف سادہ سیریل — 1، 2، 3… ہمیشہ آگے (بل حذف ہو تب بھی نمبر دوبارہ نہیں آتا) ----------
 // ---------- AIODR0111SU110: 💲 ریٹ کی مرمت — Quick Add والی چیزوں کا خود سے 8% کم ہول سیل واپس اصل ریٹ؛ 36.800000000004 جیسے لمبے اعشاریے صاف ----------
+// ---------- AIODR0111SU111: 📱 بل پر گاہک کا موبائل نمبر (نام کے نیچے) — بل کا اپنا نمبر، نہ ہو تو کسٹمر لسٹ والا ----------
+function invoicePhone(inv){
+  let p = String((inv && inv.customer_phone) || '').trim();
+  if(!p && inv && inv.customer_id != null){ const c = (customersData || []).find(x => x.customer_id == inv.customer_id); if(c) p = String(c.phone || '').trim(); }
+  return p;
+}
 function cleanMoney(x){ const n = Number(x); if(typeof x !== 'number' || !isFinite(n)) return x; const r = Math.round(n * 100) / 100; return Math.abs(n - r) < 1e-6 ? r : n; }
 function repairPriceFloats(){
   if(typeof storeIsHydrating === 'function' && storeIsHydrating()){ setTimeout(repairPriceFloats, 500); return; }
@@ -27946,6 +27952,7 @@ async function renderInvoiceToCanvas(invoice, paperWidthMM = 80, highlightMatchK
   const pmRowsT = paymentModeRows(invoice);
   if(pmRowsT.length) estimatedHeight += Math.round(22 * fscale) * (pmRowsT.length + 1) + 22; // ---------- 💳 Payment Mode ڈبہ ----------
   if(AppState.settings.printShowSalesman && invoice.sold_by) estimatedHeight += 16;
+  if(invoicePhone(invoice)) estimatedHeight += 22; // AIODR0111SU111: فون والی لائن
   if(AppState.settings.printShowBranding) estimatedHeight += 20;
   estimatedHeight += 40; // فوٹر + مارجن
 
@@ -28001,6 +28008,7 @@ async function renderInvoiceToCanvas(invoice, paperWidthMM = 80, highlightMatchK
 
   ctx.font = F('16px');
   ctx.fillText('Customer: ' + invoice.customer_name, pxWidth/2, y); y += 28;
+  if(invoicePhone(invoice)){ ctx.fillText('📱 ' + invoicePhone(invoice), pxWidth/2, y - 6); y += 22; }
 
   if(AppState.settings.printShowSalesman && invoice.sold_by){
     ctx.font = F('13px');
@@ -28417,7 +28425,7 @@ async function renderInvoiceToA4Canvas(invoice, highlightMatchKey = null){
   const tableH = headerRowH + (invoice.items.length * rowH) + (returnedItemsCountA4 * returnedNoteExtraA4);
 
   const headerBandH = Math.round(120 * fscale); // ---------- ہیڈر بینڈ کی اونچائی — بڑے فونٹ کو جگہ دینے کے لیے ----------
-  const detailsBoxH = Math.round(70 * Math.max(fscale, rowScale));
+  const detailsBoxH = Math.round((invoicePhone(invoice) ? 92 : 70) * Math.max(fscale, rowScale)); // AIODR0111SU111: فون ہو تو ڈبہ اونچا
   const grandTotalBoxH = Math.round(46 * fscale);
 
   // ---------- کل اونچائی کا اندازہ ----------
@@ -28485,15 +28493,17 @@ async function renderInvoiceToA4Canvas(invoice, highlightMatchKey = null){
   ctx.fillStyle = '#1a1a1a';
   ctx.textAlign = 'left';
   ctx.font = F('bold 16px');
-  ctx.fillText(`Invoice #${billNoText(invoice) || '—'}`, tableLeft + 16, y + Math.round(detailsBoxH*0.4));
+  ctx.fillText(`Invoice #${billNoText(invoice) || '—'}`, tableLeft + 16, y + Math.round(detailsBoxH*(invoicePhone(invoice) ? 0.32 : 0.4)));
   ctx.font = F('13px');
-  ctx.fillText(`${dd}/${mm}/${yy} ${getDayAbbrev(invoice.created_at)}`, tableLeft + 16, y + Math.round(detailsBoxH*0.71));
+  ctx.fillText(`${dd}/${mm}/${yy} ${getDayAbbrev(invoice.created_at)}`, tableLeft + 16, y + Math.round(detailsBoxH*(invoicePhone(invoice) ? 0.57 : 0.71)));
 
   ctx.textAlign = 'right';
   ctx.font = F('bold 16px');
-  ctx.fillText('Bill To', tableRight - 16, y + Math.round(detailsBoxH*0.4));
+  const a4Ph = invoicePhone(invoice);
+  ctx.fillText('Bill To', tableRight - 16, y + Math.round(detailsBoxH*(a4Ph ? 0.32 : 0.4)));
   ctx.font = F('13px');
-  ctx.fillText(invoice.customer_name, tableRight - 16, y + Math.round(detailsBoxH*0.71));
+  ctx.fillText(invoice.customer_name, tableRight - 16, y + Math.round(detailsBoxH*(a4Ph ? 0.57 : 0.71)));
+  if(a4Ph){ ctx.fillText(a4Ph, tableRight - 16, y + Math.round(detailsBoxH*0.82)); }
 
   y += detailsBoxH + 26;
 
@@ -29480,6 +29490,7 @@ function buildInvoicePlainText(invoice){
   const dd = String(d.getDate()).padStart(2,'0'), mm = String(d.getMonth()+1).padStart(2,'0'), yy = String(d.getFullYear()).slice(-2);
   lines.push(centerMono(`Bill#${billNoText(invoice) || '—'} ${dd}/${mm}/${yy}`, cols));
   lines.push(centerMono('Customer: ' + (invoice.customer_name || 'Walk-in'), cols));
+  if(invoicePhone(invoice)) lines.push(centerMono('Ph: ' + invoicePhone(invoice), cols)); // AIODR0111SU111
   lines.push('-'.repeat(cols));
   const qtyW = 4, totalW = 9, nameW = cols - qtyW - totalW;
   lines.push(padRightMono('Item', nameW) + padLeftMono('Qty', qtyW) + padLeftMono('Total', totalW));
@@ -34871,9 +34882,9 @@ try{ storeHydrate(); }catch(e){ _storeHydrating = false; }
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR0111SU110';
+  const APP_VERSION = 'AIODR0111SU111';
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Rates fixed: Quick Add no longer sets wholesale 8% lower, long decimals (36.8000000004) cleaned; one bill search box: name, phone, bill#, amount or date';
+  const UPDATE_NOTE = 'Customer mobile number now printed under the name on every bill (thermal, A4 and Bluetooth)';
   const UPD_KEY = 'aioDrUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }

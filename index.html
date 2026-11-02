@@ -3321,7 +3321,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR0211MO113</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR0211MO114</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -3517,7 +3517,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR0211MO113</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR0211MO114</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div class="subOnly" style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3675,7 +3675,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR0211MO113</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR0211MO114</span>
     </div>
   </div>
 
@@ -7373,9 +7373,9 @@ const cloudPollTimers = {};
 //   • ہر فون کی اپنی "سلاٹ" — نئی آئی ڈیاں الگ رینج میں (دو فون آف لائن بھی ایک ہی نمبر نہ بنائیں)
 //   • تصویریں (data:) کلاؤڈ پر نہیں جاتیں — اسی فون پر رہتی ہیں
 // سب کچھ businesses/{shopCode}/store/{doc} میں (موجودہ Firestore رول کے اندر)۔
-const SYNC_TYPES = ['shopinfo','devices','users','products','customers','suppliers','invoices','pendingbills','approvalrequests','advanceorders','payments','expenses']; // AIODR3010FR099: shopinfo پہلے (آرکائیو کی تاریخ)
+const SYNC_TYPES = ['shopinfo','cashbox','devices','users','products','customers','suppliers','invoices','pendingbills','approvalrequests','advanceorders','payments','expenses']; // AIODR3010FR099: shopinfo پہلے (آرکائیو کی تاریخ)
 const SYNC_LOCAL_ONLY_KEYS = ['image','photo','slip_image','billPhoto','qr','qrImage','logo'];
-const SYNC_DELTA_KEYS = ['stock','qty','salesCount','total_receivable','wallet_balance','total_payable'];
+const SYNC_DELTA_KEYS = ['stock','qty','salesCount','total_receivable','wallet_balance','total_payable','cashInHand']; // AIODR0211MO114: cashInHand — پوری دکان کا ایک گلہ
 const SYNC_POLL_MS = 30000;
 let devicesData = loadFromStorage('syncDevices', []);
 let shopInfoData = loadFromStorage('syncShopInfo', []);
@@ -7409,7 +7409,7 @@ function refreshMultiFlag(){
 // AIODR3010FR097: گاہک (والٹ ہسٹری) اور سپلائر (پرچیز آرڈر + آئٹم) وقت کے ساتھ بھاری — 800 گاہک/30 سپلائر 2 سال میں سپلائر ڈبہ 105% تھا۔
 // اب زیادہ ڈبے: پراڈکٹ 16، گاہک 32، سپلائر 64 (وہی حساب اب 13% / 17%)۔ ڈبوں کے نام __v4_b — پرانے __v3_b والے نظرانداز (مٹائے نہیں جاتے)
 const SYNC_BUCKETS = {products: 16, customers: 32, suppliers: 64};
-const SYNC_SINGLE = ['users','devices','shopinfo'];
+const SYNC_SINGLE = ['users','devices','shopinfo','cashbox'];
 function syncBucket(v, n){ let h = 0; for(const ch of String(v == null ? '' : v)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h % n; }
 // v4 ڈبوں کے لیے بہتر بانٹ (FNV-1a) — پرانا syncBucket لگاتار آئی ڈیوں کو چند ڈبوں میں ہی ڈالتا تھا؛ بل/ادائیگی پرانے پر ہی رہیں
 function syncBucket4(v, n){ let h = 2166136261; for(const ch of String(v == null ? '' : v)){ h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; } return h % n; }
@@ -7510,6 +7510,7 @@ function syncMergeOne(b, l, r){
   return syncMergeObj(b, l, r);
 }
 function syncMerge3(docType, base, local, remote){
+  if(docType === 'cashbox' && !base.length && remote.length) return remote; // AIODR0211MO114: نیا جڑا فون — دکان کا گلہ کلاؤڈ والا، اپنا نہیں
   const key = aioGetDocTypeMeta(docType).matchKey;
   const id = x => String(x[key]);
   const B = new Map(base.map(x => [id(x), x])), L = new Map(local.map(x => [id(x), x])), R = new Map(remote.map(x => [id(x), x]));
@@ -7821,6 +7822,7 @@ function syncAfterApply(touched){
   touched.forEach(t => { try{ applyCloudDocTypeUI(t); }catch(e){} });
   if(touched.has('devices')) syncCheckStillMember();
   if(touched.has('products')){ try{ syncRepriceCart(); }catch(e){} }
+  if(touched.has('cashbox')){ try{ renderKpiCards(); }catch(e){} try{ const h = document.getElementById('hlCash'); if(h) h.textContent = 'Rs. ' + financeDummy.cashInHand.toLocaleString(); }catch(e){} }
   if(touched.has('products') || touched.has('invoices')){ try{ renderCart(); }catch(e){} }
 }
 // ---------- AIODR0211MO113: مالک نے ریٹ بدلا اور سنک ہو کر آیا — کھلے کارٹ کی چیزیں نئے ریٹ پر (جن کا ریٹ کیشیئر نے خود نہیں بدلا) ----------
@@ -7931,6 +7933,7 @@ function staffBillsNeedApproval(){ return aioMultiOn() && shopInfo().staffApprov
 function syncWipeLocalBusinessData(){
   ['products','customers','suppliers','users','invoices','pendingbills','approvalrequests','advanceorders','payments','expenses'].forEach(t => { const m = aioGetDocTypeMeta(t); if(m) m.data = []; });
   devicesData = []; shopInfoData = [];
+  try{ financeDummy.cashInHand = 0; }catch(e){} // AIODR0211MO114: جڑنے پر اس فون کا پرانا کیش نہیں — دکان کا گلہ آئے گا
   saveToStorage('syncKnown', {});
   Object.keys(syncDocStamp).forEach(k => delete syncDocStamp[k]);
 }
@@ -8006,6 +8009,8 @@ function aioGetDocTypeMeta(docType){
     // ---------- AIOTEST27: Slip کی تصویر (base64) Firestore کی 1MB فی دستاویز حد سے ٹکرا سکتی ہے — کلاؤڈ پر کبھی نہ بھیجیں، صرف اسی فون تک محدود رہے ----------
     stripForCloud: (p) => ({...p, slip_image: null}) };
   if(docType === 'devices') return { get data(){ return devicesData; }, set data(v){ devicesData = v; }, seed: [], matchKey: 'uid', nameKey: 'name', nextIdVar: () => 0 };
+  // AIODR0211MO114: 💵 پوری دکان کا ایک نقد گلہ — ہر فون کی نقد فروخت/وصولی/خرچ اسی میں (کمی بیشی جمع، دو فون ایک ساتھ بھی درست)
+  if(docType === 'cashbox') return { get data(){ return [{id: 'cash', cashInHand: Math.round((Number(financeDummy.cashInHand) || 0) * 100) / 100}]; }, set data(v){ const r = (v || []).find(x => x.id === 'cash'); if(r) financeDummy.cashInHand = Math.round((Number(r.cashInHand) || 0) * 100) / 100; }, seed: [], matchKey: 'id', nameKey: 'id', nextIdVar: () => 0 };
   if(docType === 'shopinfo') return { get data(){ return shopInfoData; }, set data(v){ shopInfoData = v; }, seed: [], matchKey: 'id', nameKey: 'id', nextIdVar: () => 0 };
   if(docType === 'expenses') return { get data(){ return expenseData; }, set data(v){ expenseData.length=0; expenseData.push(...v); }, seed: [], idKey: 'nextExpenseId', nextIdVar: () => nextExpenseId, setNextId: (v) => { nextExpenseId = v; }, matchKey: 'id', nameKey: 'name' };
   return null;
@@ -8472,7 +8477,7 @@ function persistAllData(){
   if(typeof nextDiaryId !== 'undefined') saveToStorage('nextDiaryId', nextDiaryId);
   if(typeof expenseData !== 'undefined'){ saveToStorage('expenses', expenseData); try{ pushDocTypeToCloud('expenses', expenseData); }catch(e){} }
   if(typeof nextExpenseId !== 'undefined') saveToStorage('nextExpenseId', nextExpenseId);
-  if(typeof financeDummy !== 'undefined') saveToStorage('cashInHand', Math.round(financeDummy.cashInHand * 100) / 100);
+  if(typeof financeDummy !== 'undefined'){ saveToStorage('cashInHand', Math.round(financeDummy.cashInHand * 100) / 100); try{ pushDocTypeToCloud('cashbox', [Math.round(financeDummy.cashInHand * 100) / 100]); }catch(e){} }
 }
 setInterval(persistAllData, 1500); // ---------- ہر 1.5 سیکنڈ بعد خودکار محفوظ (fail-safe) ----------
 
@@ -32982,6 +32987,7 @@ function eodEnsureOpening(){
 function eodMorningPrompt(){
   try{
     if(AppState.currentRole !== 'admin') return;
+    if(typeof isLinkedDevice === 'function' && isLinkedDevice()) return; // AIODR0211MO114: گلہ ایک — صبح کا کیش صرف مالک کے فون پر
     const today = localDateStr(new Date());
     if(eodGetOpening(today) !== null || AppState.settings.eodAsked === today) return;
     if(document.querySelector('.modalOverlay.show')){ setTimeout(eodMorningPrompt, 4000); return; }
@@ -34950,9 +34956,9 @@ try{ storeHydrate(); }catch(e){ _storeHydrating = false; }
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR0211MO113';
+  const APP_VERSION = 'AIODR0211MO114';
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Multi-device fixes: a bill, sale or payment made while syncing is never lost; unique bill IDs on every phone; same-amount ledger lines both kept; owner rate changes reach open carts';
+  const UPDATE_NOTE = 'One shared cash drawer for the whole shop on every phone; bill edit, returns and void tested on 3 phones';
   const UPD_KEY = 'aioDrUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }

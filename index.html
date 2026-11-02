@@ -3321,7 +3321,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR0211MO114</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR0211MO115</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -3517,7 +3517,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR0211MO114</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR0211MO115</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div class="subOnly" style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3675,7 +3675,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR0211MO114</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR0211MO115</span>
     </div>
   </div>
 
@@ -7462,7 +7462,7 @@ const syncEq = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const syncR2 = n => Math.round(n * 1000) / 1000;
 function syncIdOf(o){
   if(!o || typeof o !== 'object') return null;
-  for(const k of ['variant_id','batchId','payment_id','invoice_id','customer_id','supplier_id','product_id','user_id','pending_id','request_id','uid','id']){ if(o[k] != null) return k + ':' + o[k]; }
+  for(const k of ['variant_id','batchId','po_id','payment_id','invoice_id','customer_id','supplier_id','product_id','user_id','pending_id','request_id','uid','id']){ if(o[k] != null) return k + ':' + o[k]; }
   return null;
 }
 function syncMergeArray(b, l, r){
@@ -16731,6 +16731,7 @@ async function previewPendingBillBeforeApproval(){
 function approvePendingBill(){
   const p = pendingBillsData.find(x => x.pending_id === activeReviewPendingId);
   if(!p) return;
+  if(p.status && p.status !== 'pending'){ alert(`This bill was already ${p.status} (maybe on another device).`); try{ document.getElementById('pendingReviewModal').classList.remove('show'); renderPendingBillsBanner(); }catch(e){} return; } // AIODR0211MO115: دوبارہ منظوری = دوگنا سٹاک/بقایا
 
   const customer = p.customer_id ? customersData.find(c => c.customer_id === p.customer_id) : null;
   const subtotal = p.items.reduce((s,i) => s + i.qty*i.unitPrice, 0);
@@ -16810,6 +16811,7 @@ function approvePendingBill(){
 function rejectPendingBill(){
   const p = pendingBillsData.find(x => x.pending_id === activeReviewPendingId);
   if(!p) return;
+  if(p.status && p.status !== 'pending'){ alert(`This bill was already ${p.status} (maybe on another device).`); try{ document.getElementById('pendingReviewModal').classList.remove('show'); renderPendingBillsBanner(); }catch(e){} return; } // AIODR0211MO115
 
   const reason = prompt('Reason for rejecting this bill (visible to the salesman):');
   if(reason === null) return; // منسوخ کیا
@@ -25071,6 +25073,12 @@ function printAdvanceOrdersList(){
    ===================================================================== */
 let activeReceiveSupplierId = null;
 let activeReceivePoIdx = null;
+let activeReceivePoId = null; // AIODR0211MO115: آرڈر کی پہچان آئی ڈی سے — دوسرے فون سے نیا آرڈر آ کر ترتیب بدلے تو غلط آرڈر وصول نہ ہو
+function recvPoLookup(s){
+  const ph = (s && s.purchaseHistory) || [];
+  if(activeReceivePoId != null){ const i = ph.findIndex(p => p && p.po_id === activeReceivePoId); if(i >= 0){ activeReceivePoIdx = i; return ph[i]; } return null; }
+  return ph[activeReceivePoIdx] || null;
+}
 let receiveShipmentCart = [];
 let receiveShipmentBillPhoto = null;
 
@@ -25078,7 +25086,7 @@ let receiveShipmentBillPhoto = null;
 function getShipDrafts(){ const d = loadFromStorage('shipDrafts', {}); return (d && typeof d === 'object' && !Array.isArray(d)) ? d : {}; }
 function shipDraftFor(po){ const d = po && po.po_id ? getShipDrafts()[po.po_id] : null; return d && Array.isArray(d.items) ? d : null; }
 function clearShipDraft(po){ if(!po || !po.po_id) return; const all = getShipDrafts(); delete all[po.po_id]; saveToStorage('shipDrafts', all); }
-function activeReceivePo(){ const s = suppliersData.find(x => x.supplier_id === activeReceiveSupplierId); return (s?.purchaseHistory || [])[activeReceivePoIdx] || null; }
+function activeReceivePo(){ const s = suppliersData.find(x => x.supplier_id === activeReceiveSupplierId); return recvPoLookup(s); }
 function saveShipDraft(){
   const el = document.getElementById('rsDraftBanner');
   const po = receiveEditMode ? null : activeReceivePo();
@@ -25162,6 +25170,7 @@ function openReceiveShipmentModal(supplierId, poIdx){
   if(!po.po_id){ po.po_id = Date.now() + poIdx; persistAllData(); } // ---------- ڈرافٹ کے لیے مستقل شناخت (پرانے PO) ----------
   activeReceiveSupplierId = supplierId;
   activeReceivePoIdx = poIdx;
+  activeReceivePoId = po.po_id;
   receiveEditMode = false;
   const _t = document.getElementById('receiveShipmentTitle'); if(_t) _t.textContent = 'Receive Shipment';
   const _b = document.getElementById('receiveShipmentConfirmBtn'); if(_b) _b.textContent = '✅ Confirm Receipt (Add to Stock)';
@@ -25316,7 +25325,7 @@ function openEditReceivedShipment(supplierId, poIdx){
 }
 function saveEditedShipment(){
   const s = suppliersData.find(x => x.supplier_id === activeReceiveSupplierId);
-  const po = (s?.purchaseHistory || [])[activeReceivePoIdx];
+  const po = recvPoLookup(s);
   if(!s || !po) return;
   if(receiveShipmentCart.length === 0){ alert('This shipment has no items. Remove it with Return, or add at least one item.'); return; }
   const oldItems = po.items || [];
@@ -25370,8 +25379,9 @@ function saveEditedShipment(){
 function confirmShipmentReceipt(){
   if(receiveEditMode){ saveEditedShipment(); return; }
   const s = suppliersData.find(x => x.supplier_id === activeReceiveSupplierId);
-  const po = (s?.purchaseHistory || [])[activeReceivePoIdx];
-  if(!s || !po) return;
+  const po = recvPoLookup(s);
+  if(!s || !po){ alert('This order was changed on another device — please open it again.'); return; }
+  if(po.status === 'received'){ alert('This shipment was already received (maybe on another device). Stock was not added again.'); try{ closeReceiveShipmentModal(); }catch(e){} return; } // AIODR0211MO115
 
   if(receiveShipmentCart.length === 0){
     alert('This shipment has no items. Please add at least one item or cancel.');
@@ -34956,9 +34966,9 @@ try{ storeHydrate(); }catch(e){ _storeHydrating = false; }
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR0211MO114';
+  const APP_VERSION = 'AIODR0211MO115';
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'One shared cash drawer for the whole shop on every phone; bill edit, returns and void tested on 3 phones';
+  const UPDATE_NOTE = 'Multi-device: supplier shipments received by order ID (never the wrong order or twice); a staff bill can't be approved twice; expenses tested on 3 phones';
   const UPD_KEY = 'aioDrUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }

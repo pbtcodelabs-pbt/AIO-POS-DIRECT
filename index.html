@@ -3328,7 +3328,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR0311TU124</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR0311TU125</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -3524,7 +3524,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR0311TU124</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR0311TU125</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div class="subOnly" style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3682,7 +3682,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR0311TU124</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR0311TU125</span>
     </div>
   </div>
 
@@ -16415,22 +16415,9 @@ function finalizeInvoice(){
 
   const custId = document.getElementById('customerSelect').value;
   let customer = custId ? customersData.find(c => c.customer_id == custId) : null;
-  if(!customer){
-    // ہیلپ ڈیسک #38: Walk-in خانے میں لکھا نام / فون کسٹمر لسٹ کے کسی گاہک کا ہو تو پوچھیں — ورنہ پرنٹ پر نام آتا مگر گاہک کے ریکارڈ میں بل نہیں
-    const w = walkinInfo(), wd = (w.phone || '').replace(/\D/g, '').slice(-10), wnm = (w.name || '').toLowerCase().replace(/\s+/g, ' ');
-    const match = !w.save && (wd.length >= 7 || wnm) ? customersData.find(c => !String(c.name || '').includes('Walk-in') && ((wd.length >= 7 && String(c.phone || '').replace(/\D/g, '').slice(-10) === wd) || (wnm && String(c.name || '').toLowerCase().replace(/\s+/g, ' ').trim() === wnm))) : null;
-    if(match && confirm(`"${match.name}" is already in your customer list.\n\nSave this bill in ${match.name}'s customer record?\n\nOK = Yes, add to customer record\nCancel = No, keep as Walk-in`)){
-      const recEl = document.getElementById('amountReceivedInput');
-      const fullCash = Billing.counterSale && recEl && !(parseFloat(recEl.value) > 0);
-      try{ const si = document.getElementById('custSearchInput'); if(si) si.value = ''; const af = document.getElementById('custAreaFilter'); if(af) af.value = ''; }catch(e){}
-      populateCustomerDropdown();
-      const sel = document.getElementById('customerSelect'); if(sel) sel.value = match.customer_id;
-      try{ onCustomerChange(); }catch(e){}
-      if(fullCash && recEl) recEl.value = Math.round(Billing.thisBillTotal || 0);
-      clearWalkinFields();
-      customer = match;
-    } else { const wc = walkinSavedCustomer(); if(wc === false) return; if(wc) customer = wc; }
-  }
+  // ہیلپ ڈیسک #50 (Ali And Company): Walk-in نام پر «پہلے سے گاہک ہے؟» والا سوال ختم — ہر Walk-in بل الگ، کسی کھاتے سے نہیں جڑتا
+  //   (صرف «Save to customer list» خود چیک کریں تو گاہک بنتا ہے، پہلے جیسا)
+  if(!customer){ const wc = walkinSavedCustomer(); if(wc === false) return; if(wc) customer = wc; }
 
   const subtotal = Math.round(Billing.cart.reduce((sum,i) => sum + (i.qty*i.unitPrice), 0) * 100) / 100; // AIODR2710TU078: 2939.919999 نہیں، 2939.92
   const discount = Math.min(parseFloat(document.getElementById('discountInput')?.value) || 0, subtotal);
@@ -35228,9 +35215,9 @@ try{ storeHydrate(); }catch(e){ _storeHydrating = false; }
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR0311TU124';
+  const APP_VERSION = 'AIODR0311TU125';
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Held bill keeps its customer; a Walk-in name that matches a saved customer can go to their record';
+  const UPDATE_NOTE = 'Walk-in bills stay separate — no prompt to attach them to a saved customer';
   const UPD_KEY = 'aioDrUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }

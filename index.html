@@ -105,6 +105,11 @@
   .loginBox button{width:100%; padding:13px; margin-top:10px; background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:#fff; border:none; border-radius:12px; font-size:16px; font-weight:700; cursor:pointer; box-shadow:0 6px 16px rgba(15,118,110,.3); transition:transform .1s ease, box-shadow .1s ease;}
   .loginBox button:active{transform:translateY(1px) scale(.99); box-shadow:0 3px 8px rgba(15,118,110,.25);}
   .loginHint{margin-top:14px; font-size:12px; color:var(--muted);}
+  .loginAcctSend{display:block;margin:10px auto 0;padding:7px 14px;border-radius:999px;border:1.5px dashed #0f766e !important;background:#f0fdfa !important;color:#0f766e !important;font-weight:800;font-size:12.5px;cursor:pointer;width:auto !important}
+  #acctSendBox input{display:block;width:100%;box-sizing:border-box;margin:0 0 6px;padding:10px;border:1.5px solid #dbe1ea;border-radius:10px;font-size:15px}
+  .acctSendUid{font-size:12.5px;margin-bottom:6px;color:#334155;direction:ltr;text-align:left}
+  .acctSendGo{display:block;width:100%;padding:11px;border:none;border-radius:10px;background:var(--primary,#0f766e);color:#fff;font-weight:800;font-size:14px;cursor:pointer}
+  .acctSendHint{font-size:11.5px;color:var(--muted,#64748b);margin-top:6px;line-height:1.5}
   /* =====================================================================
      👆 Touch ID / Fingerprint Unlock — پروفیشنل sensor-style آئیکن (fingerprint-in-circle),
      ٹیپ کرنے پر رِنگ + fingerprint ridges "ڈرا" ہوتی ہیں، پھر اسکین لائن، پھر ✅ کنفرمیشن
@@ -3328,7 +3333,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR0311TU125</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR0411WE126</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -3415,6 +3420,8 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       <div id="loginActivationMsg" style="margin-top:8px; font-size:13px; font-weight:700;"></div>
     </div>
 
+    <!-- AIODR0411WE126: اکاؤنٹ کی تفصیل ہیلپ ڈیسک سے ڈویلپر کو -->
+    <button type="button" class="loginAcctSend" onclick="acctSendOpen()">📨 Send account details to developer</button>
     <div class="loginHint loginForgotHint"><a href="javascript:void(0)" onclick="openPinRecoveryModal()" style="color:var(--primary); font-weight:700; text-decoration:none;">Forgot your PIN? Recover it here.</a></div>
     <div id="turnOffTouchIdHint" class="loginHint" style="display:none;"><a href="javascript:void(0)" onclick="turnOffTouchId()" style="color:var(--muted); font-weight:700; text-decoration:none;">👆 Turn off Touch ID on this device</a></div>
   </div>
@@ -3524,7 +3531,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR0311TU125</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR0411WE126</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div class="subOnly" style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3682,7 +3689,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR0311TU125</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR0411WE126</span>
     </div>
   </div>
 
@@ -11052,13 +11059,47 @@ function renderHomeUnfinishedCartCard(){
 const NAV_PALETTE = ['#6366f1','#10b981','#f43f5e','#f97316','#14b8a6','#8b5cf6','#0ea5e9','#d946ef','#06b6d4','#eab308','#ec4899','#84cc16','#3b82f6','#22c55e','#f59e0b','#a855f7'];
 // ---------- AIO1210MO024: نمبر A سے Z کی ترتیب میں — Advance Orders = 1، Bill & Print Settings = 2 ... ----------
 // ---------- AIODR0111SU112: 🆘 PBT Help Desk — مسئلہ / مشورہ ایپ کے اندر پاپ اپ میں (pbtcodelabs-pbt.github.io/help) ----------
-function openHelpDesk(){
+function openHelpDesk(extra){
   const s = (typeof AppState !== 'undefined' && AppState.settings) || {};
   const ver = (document.getElementById('topVersionBadge')?.textContent || '').trim();
-  const o = { app: 'AIO-POS-DIRECT', ver, phone: s.businessPhone || '', name: s.businessName || '' };
+  const o = Object.assign({ app: 'AIO-POS-DIRECT', ver, phone: s.businessPhone || '', name: s.businessName || '' }, (extra && typeof extra === 'object' && !extra.target) ? extra : {});
   if(window.PBTHelp){ window.PBTHelp.open(o); return; }
-  const q = 'app=' + o.app + '&v=' + encodeURIComponent(ver) + '&phone=' + encodeURIComponent(o.phone) + '&name=' + encodeURIComponent(o.name);
-  window.open('https://pbtcodelabs-pbt.github.io/help/?' + q + '#/app/' + o.app, '_blank');
+  const q = 'app=' + o.app + '&v=' + encodeURIComponent(ver) + '&phone=' + encodeURIComponent(o.phone) + '&name=' + encodeURIComponent(o.name) + (o.text ? '&type=' + (o.type || 'ask') + '&text=' + encodeURIComponent(o.text) : '');
+  window.open('https://pbtcodelabs-pbt.github.io/help/?' + q + (o.text ? '#/new/' : '#/app/') + o.app, '_blank');
+}
+// ---------- AIODR0411WE126 (مالک کا حکم، AIO0411WE158 کے برابر): «Send account details to developer» — UID، Name، Mobile no.، Gmail ہیلپ ڈیسک میں خود بھرے ----------
+function acctSendOpen(){
+  let m = document.getElementById('acctSendModal');
+  if(!m){
+    m = document.createElement('div'); m.id = 'acctSendModal'; m.className = 'modalOverlay'; m.style.zIndex = '9400';
+    m.onclick = e => { if(e.target === m) m.classList.remove('show'); };
+    m.innerHTML = `<div class="modalBox" style="max-width:400px;"><div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;"><h3 style="margin:0;">📨 Send account details to developer</h3><span class="closeBtn" style="cursor:pointer;" onclick="document.getElementById('acctSendModal').classList.remove('show')">✖</span></div>
+      <div id="acctSendBox"><div class="acctSendUid">UID: <b id="acctSendUid"></b></div>
+      <input type="text" id="acctSendName" placeholder="Name (shop / your name)" autocomplete="name">
+      <input type="tel" id="acctSendPhone" inputmode="tel" placeholder="Mobile no. — 03001234567" autocomplete="tel">
+      <input type="email" id="acctSendMail" placeholder="Gmail — name@gmail.com" autocomplete="email">
+      <button type="button" class="acctSendGo" onclick="acctSendGo()">📨 Send to developer</button>
+      <div id="acctSendMsg" style="margin-top:6px; font-size:13px; font-weight:700; color:#dc2626;"></div>
+      <div class="acctSendHint">Your details open in PBT Help Desk — just press Send there. The developer will set up your account and reply.</div></div></div>`;
+    document.body.appendChild(m);
+  }
+  const s = AppState.settings || {};
+  document.getElementById('acctSendUid').textContent = getOrCreateDeviceUID();
+  const n = document.getElementById('acctSendName'), p = document.getElementById('acctSendPhone');
+  if(!n.value) n.value = s.businessName || '';
+  if(!p.value) p.value = s.businessPhone || '';
+  document.getElementById('acctSendMsg').textContent = '';
+  m.classList.add('show');
+}
+function acctSendGo(){
+  const msg = t => { document.getElementById('acctSendMsg').textContent = t; };
+  const n = document.getElementById('acctSendName').value.trim(), p = document.getElementById('acctSendPhone').value.trim(), m = document.getElementById('acctSendMail').value.trim().toLowerCase();
+  if(n.length < 2){ msg('⚠️ Please write your name'); return; }
+  if(p.replace(/\D/g, '').length < 10){ msg('⚠️ Please write your mobile number, e.g. 03001234567'); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m)){ msg('⚠️ Please write your Gmail, e.g. name@gmail.com'); return; }
+  const text = '🔑 Account sign-in request — AIO POS Direct\nUID: ' + getOrCreateDeviceUID() + '\nName: ' + n + '\nMobile no.: ' + p + '\nGmail: ' + m;
+  document.getElementById('acctSendModal').classList.remove('show');
+  openHelpDesk({ text, type: 'ask', phone: p, name: n });
 }
 window.openHelpDesk = openHelpDesk;
 
@@ -35215,9 +35256,9 @@ try{ storeHydrate(); }catch(e){ _storeHydrating = false; }
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR0311TU125';
+  const APP_VERSION = 'AIODR0411WE126';
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Walk-in bills stay separate — no prompt to attach them to a saved customer';
+  const UPDATE_NOTE = 'Login screen: “Send account details to developer” — UID, name, mobile and Gmail go ready-filled to Help Desk';
   const UPD_KEY = 'aioDrUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }

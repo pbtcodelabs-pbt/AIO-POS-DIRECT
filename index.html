@@ -111,7 +111,9 @@
   .drPayAcc:active{transform:translateY(1px)}
   .drPayKind{font-weight:800;font-size:13px;color:#15803d}.drPayNo{font-size:24px;font-weight:900;letter-spacing:1px;color:#0f172a}
   .drPayTitle{font-size:12px;color:#334155}.drPayTap{margin-top:4px;font-size:11.5px;font-weight:800;color:#fff;background:#16a34a;border-radius:999px;padding:3px 8px;display:inline-block}
-  .drPayQrImg{display:block;max-width:200px;width:100%;margin:0 auto 8px;border-radius:10px;border:1px solid #dbe1ea}
+  .drPayQrImg{display:block;max-width:170px;width:70%;margin:8px auto 2px;border-radius:10px;border:1px solid #dbe1ea;background:#fff}
+  .drPayQrNote{font-size:11px;color:var(--muted)}
+  .drPayIban{margin-top:4px;font-size:12px;color:#0f172a;background:#f1f5f9;border-radius:8px;padding:4px 6px;word-break:break-all;cursor:pointer}
   .drPayL{display:block;font-size:12px;color:var(--muted);margin:4px 0}
   .drPayShotBtn{display:block;text-align:center;padding:9px;border:1.5px dashed #16a34a;border-radius:10px;color:#15803d;font-weight:800;font-size:13px;cursor:pointer;background:#fff}
   .drPayShotBox{position:relative;margin-top:8px;text-align:center}.drPayShotBox img{max-height:160px;max-width:100%;border-radius:8px;border:1px solid #dbe1ea}
@@ -3344,7 +3346,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR0411WE127</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR0411WE128</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -3542,7 +3544,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR0411WE127</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR0411WE128</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div class="subOnly" style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3700,7 +3702,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR0411WE127</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR0411WE128</span>
     </div>
   </div>
 
@@ -7094,7 +7096,6 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="drPay">
       <div class="drPayH">💳 Pay here <small>(tap the number — it copies and opens the app)</small></div>
       <div id="drPayAccts"></div>
-      <div id="drPayQr"></div>
       <label class="drPayL">🧾 Transaction ID (optional)</label>
       <input type="text" id="reqCodeTidInput" placeholder="e.g. 12345678901" style="width:100%; padding:10px; border:1px solid #dbe1ea; border-radius:8px; font-size:14px; margin-bottom:8px;">
       <label class="drPayL">📸 Payment screenshot (optional — it goes with your message)</label>
@@ -10651,18 +10652,23 @@ function drPlanPrice(devices, termKey){
 function drTermLabel(termKey){ const t = DR_TERMS.find(x => x.key === String(termKey)); return t ? t.label : ''; }
 // ---------- AIODR0411WE127 (مالک کا حکم): ادائیگی کے اکاؤنٹ — نیا اکاؤنٹ / بینک ہو تو یہاں ایک لائن جوڑیں؛ qr: 'icons/pay-qr.png' جیسی تصویر ----------
 const DR_PAY_ACCOUNTS = [
-  { kind: 'Easypaisa', no: '03206793793', title: 'Abdul Hafeez', pkg: 'pk.com.telenor.phoenix', icon: '📲' }
+  { kind: 'Easypaisa', no: '03206793793', title: 'Abdul Hafeez', pkg: 'pk.com.telenor.phoenix', icon: '📲', qr: '' },
+  // AIODR0411WE128: میزان بینک (مالک کی دی ہوئی تفصیل + QR)
+  { kind: 'Meezan Bank', no: '98270103048186', iban: 'PK63MEZN0098270103048186', title: 'ABDUL HAFEEZ', branch: 'Fateh Pur Br — DGK', pkg: 'invo8.meezan.mb', icon: '🏦', qr: 'pay/meezan-qr.jpg' }
 ];
-const DR_PAY_QR = '';
-let drPayShot = null;
+let drPayShot = null, drPayUsed = null;
 function drPayRender(){
   const box = document.getElementById('drPayAccts'); if(!box) return;
-  box.innerHTML = DR_PAY_ACCOUNTS.map((a, i) => `<div class="drPayAcc" onclick="drPayOpen(${i})"><div class="drPayKind">${a.icon || '🏦'} ${a.kind}</div><div class="drPayNo" dir="ltr">${a.no}</div><div class="drPayTitle">Account name: <b>${a.title}</b></div><div class="drPayTap">📋 Tap to copy &amp; open ${a.kind}</div></div>`).join('');
-  const q = document.getElementById('drPayQr'); if(q) q.innerHTML = DR_PAY_QR ? `<img src="${DR_PAY_QR}" alt="QR" class="drPayQrImg">` : '';
+  box.innerHTML = DR_PAY_ACCOUNTS.map((a, i) => `<div class="drPayAcc" onclick="drPayOpen(${i})"><div class="drPayKind">${a.icon || '🏦'} ${a.kind}</div><div class="drPayNo" dir="ltr">${a.no}</div><div class="drPayTitle">Account name: <b>${a.title}</b>${a.branch ? '<br>' + a.branch : ''}</div>${a.iban ? `<div class="drPayIban" dir="ltr" onclick="event.stopPropagation(); drPayCopy('${a.iban}')">IBAN: <b>${a.iban}</b> 📋</div>` : ''}<div class="drPayTap">📋 Tap to copy &amp; open ${a.kind}</div>${a.qr ? `<img src="${a.qr}" alt="${a.kind} QR" class="drPayQrImg" onclick="event.stopPropagation(); window.open('${a.qr}','_blank')"><div class="drPayQrNote">Scan this QR from your banking app</div>` : ''}</div>`).join('');
+}
+async function drPayCopy(v){
+  try{ await navigator.clipboard.writeText(v); }catch(e){ try{ const t = document.createElement('textarea'); t.value = v; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); }catch(_){} }
+  showNavToast('📋 ' + v + ' copied');
 }
 async function drPayOpen(i){
   const a = DR_PAY_ACCOUNTS[i]; if(!a) return;
-  try{ await navigator.clipboard.writeText(a.no); }catch(e){ try{ const t = document.createElement('textarea'); t.value = a.no; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); }catch(_){} }
+  drPayUsed = a;
+  await drPayCopy(a.no);
   showNavToast('📋 ' + a.no + ' copied — paste it in ' + a.kind);
   if(a.pkg && /Android/i.test(navigator.userAgent)) setTimeout(() => { location.href = 'intent://#Intent;package=' + a.pkg + ';S.browser_fallback_url=' + encodeURIComponent('https://play.google.com/store/apps/details?id=' + a.pkg) + ';end'; }, 600);
 }
@@ -10732,7 +10738,7 @@ function buildCodeRequestMessage(name, phoneKey, city, plan, term){
   lines.push(`UID: ${uid}`);
   if(status) lines.push(`Status: ${status}`);
   const tid = (document.getElementById('reqCodeTidInput')?.value || '').trim();
-  if(tid || drPayShot) lines.push(`Paid: ✅ ${DR_PAY_ACCOUNTS.map(a => a.kind + ' ' + a.no).join(' / ')}${tid ? ' — TID: ' + tid : ''}${drPayShot ? ' — screenshot attached' : ''}`);
+  if(tid || drPayShot) lines.push(`Paid: ✅ ${drPayUsed ? drPayUsed.kind + ' ' + drPayUsed.no : DR_PAY_ACCOUNTS.map(a => a.kind).join(' / ')}${tid ? ' — TID: ' + tid : ''}${drPayShot ? ' — screenshot attached' : ''}`);
   return `محترم ڈیویلپر السلام علیکم ورحمۃ اللہ وبرکاتہ\n\nمیں AIO POS DIRECT استعمال کرنا چاہتا ہوں، برائے مہربانی مجھے ایکٹیویشن کوڈ بھیجیں۔\n\n\`\`\`\n${lines.join('\n')}\n\`\`\``;
 }
 function sendCodeRequest(channel){
@@ -35310,9 +35316,9 @@ try{ storeHydrate(); }catch(e){ _storeHydrating = false; }
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR0411WE127';
+  const APP_VERSION = 'AIODR0411WE128';
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Request code: Easypaisa number (tap to copy & open), transaction ID and payment screenshot go with your message';
+  const UPDATE_NOTE = 'Pay here: Meezan Bank account, IBAN and QR added next to Easypaisa';
   const UPD_KEY = 'aioDrUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }

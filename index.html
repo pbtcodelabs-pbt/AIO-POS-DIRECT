@@ -3517,7 +3517,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 
 <div class="modalOverlay" id="pinRecoveryModal" style="z-index:3700;" onclick="if(event.target===this) this.classList.remove('show')">
   <div class="modalBox" style="max-width:380px;">
-    <h3>🆘 Recover Admin PIN</h3>
+    <h3>🔑 Recover Admin PIN</h3>
     <div id="recoveryStep1">
       <label style="display:block; font-size:12px; color:var(--muted); margin:10px 0 4px;">Your Year of Birth</label>
       <div class="dobPicker">
@@ -6395,7 +6395,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
             <textarea id="appShareMessageInput" placeholder="e.g. Try our AIO POS App — it's fast, reliable and free to try!" rows="2" style="width:100%; padding:9px; margin-bottom:8px; border:1px solid #dbe1ea; border-radius:8px; font-size:13px; font-family:inherit; resize:vertical;" oninput="saveAdminControl()"></textarea>
             <div class="settingsHint" style="margin-top:0;">PIN unlocks here too — change it via Home → Users → ✏️ Set Custom PIN.</div>
 
-            <div class="settingsSubLabel" style="margin-top:14px; padding-top:10px; border-top:1px solid #eef2f7;">🆘 PIN Recovery Setup</div>
+            <div class="settingsSubLabel" style="margin-top:14px; padding-top:10px; border-top:1px solid #eef2f7;">🔑 PIN Recovery Setup</div>
             <div class="settingsHint" style="margin-top:0;">Set your Year of Birth now — lets you reset a forgotten PIN later.</div>
             <div class="dobPicker" style="margin-bottom:8px;">
               <span class="dpYearWrap" id="securityDobInput_yearWrap" style="flex:1;">
@@ -7135,7 +7135,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       <p style="font-size:11.5px; color:var(--muted); line-height:1.6; margin-bottom:8px;">
         💳 Card not working? Try a different card, or buy a <b>Google Play Gift Card</b> from a local shop and redeem it in the Play Store.
       </p>
-      <button class="backupConfirmCloseBtn" style="background:#fff7ed; color:#c2410c; font-size:12.5px; padding:10px;" onclick="sendTroubleSubscribingMessage()">🆘 Still Stuck? Contact Us</button>
+      <button class="backupConfirmCloseBtn" style="background:#fff7ed; color:#c2410c; font-size:12.5px; padding:10px;" onclick="sendTroubleSubscribingMessage()">💬 Still Stuck? Contact Us</button>
     </div>
   </div>
 </div>
@@ -35317,9 +35317,9 @@ try{ storeHydrate(); }catch(e){ _storeHydrating = false; }
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR0411WE130';
+  const APP_VERSION = 'AIODR0511TH131';
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Developer panel: account details from Help Desk paste straight into Generate Code';
+  const UPDATE_NOTE = 'The SOS label is gone everywhere: Help Desk for help, a key icon for PIN recovery';
   const UPD_KEY = 'aioDrUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }

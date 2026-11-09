@@ -1,4 +1,4 @@
-const CACHE_NAME = 'AIODR0911MO159';
+const CACHE_NAME = 'AIODR0911MO160';
 const CORE_ASSETS = [
   './',
   './index.html',

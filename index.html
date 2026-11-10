@@ -3372,7 +3372,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1011TU166</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1011TU167</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -3572,7 +3572,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1011TU166</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1011TU167</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div class="subOnly" style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3730,7 +3730,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1011TU166</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1011TU167</span>
     </div>
   </div>
 
@@ -8692,20 +8692,34 @@ function hideThinProgress(){
 // (نوٹ: یہ حقیقی پس منظر ٹائمر نہیں — ویب ایپ فون بند ہونے پر خود سے نہیں چل سکتی؛
 // اصل عمل درآمد یہی ہے کہ جب بھی صارف ایپ کھولے، اس وقت چیک ہو جاتا ہے) ---------- -->
 function checkAndRunScheduledAutoBackups(){
+  /* AIODR1011TU167 (ہیلپ ڈیسک #210، مالک کا فیصلہ): خودکار ڈرائیو بیک اپ دن میں دو بار — دوپہر 12 بجے اور رات 8 بجے؛
+     ایپ اس وقت بند ہو تو اگلی بار کھلنے پر (ایک ہی وقت میں دو باریاں رہ گئی ہوں تو ایک ہی بیک اپ)؛ ایپ کھلی رہے تو ہر منٹ دیکھتا ہے */
+  window._aioAutoBkArmed = true;
   if(!AppState.settings.gdriveAccountEmail) return; // ---------- Google Drive ابھی جڑا نہیں، خاموش بیک اپ ممکن نہیں ----------
   const now = new Date();
   const todayStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
   const hour = now.getHours();
-
-  if(AppState.settings.lastAutoBackupMorningDate !== todayStr){
-    AppState.settings.lastAutoBackupMorningDate = todayStr;
-    persistAllData();
-    setTimeout(() => silentAutoBackupToGoogleDrive(), 1200);
-  } else if(hour >= 20 && AppState.settings.lastAutoBackupEveningDate !== todayStr){
-    AppState.settings.lastAutoBackupEveningDate = todayStr;
-    persistAllData();
-    setTimeout(() => silentAutoBackupToGoogleDrive(), 1200);
-  }
+  let due = false;
+  if(hour >= 12 && AppState.settings.lastAutoBackupNoonDate !== todayStr){ AppState.settings.lastAutoBackupNoonDate = todayStr; due = true; }
+  if(hour >= 20 && AppState.settings.lastAutoBackupEveningDate !== todayStr){ AppState.settings.lastAutoBackupEveningDate = todayStr; due = true; }
+  if(!due) return;
+  persistAllData();
+  setTimeout(() => silentAutoBackupToGoogleDrive(), 1200);
+}
+setInterval(() => { try{ if(window._aioAutoBkArmed && !document.hidden) checkAndRunScheduledAutoBackups(); }catch(e){} }, 60000);
+// ---------- AIODR1011TU167: ڈرائیو کے «AIO Backup» فولڈر میں صرف آخری 10 بیک اپ — پرانے Trash میں (30 دن تک گوگل سے واپس لائے جا سکتے ہیں) ----------
+const GDRIVE_KEEP_BACKUPS = 10;
+async function aioDrivePrune(){
+  try{
+    const fid = AppState.settings.gdriveFolderId; if(!fid || !gDriveAccessToken) return;
+    const q = `'${fid}' in parents and trashed=false and name contains 'BK.' and mimeType='application/json'`;
+    const r = await fetch('https://www.googleapis.com/drive/v3/files?q=' + encodeURIComponent(q) + '&orderBy=createdTime%20desc&pageSize=200&fields=' + encodeURIComponent('files(id,name,createdTime)'), { headers: { 'Authorization': 'Bearer ' + gDriveAccessToken } });
+    if(!r.ok) return;
+    const files = ((await r.json()).files || []).filter(f => /^BK\./.test(f.name || ''));
+    for(const f of files.slice(GDRIVE_KEEP_BACKUPS)){
+      await fetch('https://www.googleapis.com/drive/v3/files/' + f.id, { method: 'PATCH', headers: { 'Authorization': 'Bearer ' + gDriveAccessToken, 'Content-Type': 'application/json' }, body: JSON.stringify({ trashed: true }) });
+    }
+  }catch(e){}
 }
 // ---------- خاموش بیک اپ — کوئی بٹن، کوئی رکاوٹ نہیں، بس پتلی Progress Bar اوپر نظر آئے گی ---------- -->
 async function silentAutoBackupToGoogleDrive(){
@@ -8743,7 +8757,7 @@ async function silentAutoBackupToGoogleDrive(){
       AppState.settings.lastGDriveBackupAt = new Date().toISOString();
       persistAllData();
       renderHomeLastBackupLine();
-      finishThinProgressSuccess('Auto Backup Successful!');
+      finishThinProgressSuccess('Auto Backup Successful!'); setTimeout(aioDrivePrune, 2500);
     }catch(err){
       hideThinProgress(); // ---------- خودکار بیک اپ ناکام ہو تو خاموشی سے چھپا دیں، صارف کو الارم نہ کریں ----------
     }
@@ -8977,7 +8991,7 @@ async function backupToGoogleDrive(){
         }
       }catch(e){ /* اگر ای میل نہ ملے تو بھی بیک اپ کامیاب ہی شمار ہوگا، صرف پیغام میں ای میل نہیں دکھے گا */ }
 
-      finishThinProgressSuccess('Backup Successful!');
+      finishThinProgressSuccess('Backup Successful!'); setTimeout(aioDrivePrune, 2500);
       showBackupConfirmModal('export', fileName + ' (Google Drive)', {
         products: productsData.length, customers: customersData.length, invoices: invoicesData.length,
         accountEmail
@@ -35647,9 +35661,9 @@ try{ storeHydrate(); }catch(e){ _storeHydrating = false; }
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR1011TU166'; window.APP_UPD_OLD = APP_VERSION;
+  const APP_VERSION = 'AIODR1011TU167'; window.APP_UPD_OLD = APP_VERSION;
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Staff / linked phone no longer shows its own Free Trial on the login screen';
+  const UPDATE_NOTE = 'Auto Drive backup at 12 noon and 8 PM; only the last 10 backups are kept in the Drive folder';
   const UPD_KEY = 'aioDrUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }

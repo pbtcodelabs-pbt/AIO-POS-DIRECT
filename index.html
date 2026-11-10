@@ -3372,7 +3372,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1011TU164</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1011TU165</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -3572,7 +3572,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1011TU164</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1011TU165</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div class="subOnly" style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3730,7 +3730,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1011TU164</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1011TU165</span>
     </div>
   </div>
 
@@ -8713,7 +8713,7 @@ async function silentAutoBackupToGoogleDrive(){
   if(!client) return;
   client.callback = async (resp) => {
     if(resp.error) return; // ---------- خاموشی سے ناکام ہو تو بھی صارف کو تنگ نہ کریں، اگلی بار خودکار دوبارہ کوشش ہوگی ----------
-    gDriveAccessToken = resp.access_token;
+    gDriveAccessToken = resp.access_token; setTimeout(aioDriveEmailFill, 1500);
     try{
       const folderId = await ensureGDriveBackupFolder();
       const fileName = generateBackupFileName();
@@ -8825,6 +8825,22 @@ const GOOGLE_DRIVE_CLIENT_ID = '751661674362-49d5habgkr9h6t1sb8a9err7e6r1b975.ap
 const GOOGLE_DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
 let gDriveTokenClient = null;
 let gDriveAccessToken = null;
+/* AIO1011TU200 (ہیلپ ڈیسک #206، Ali And Company): Drive کی اجازت صرف drive.file ہے — userinfo سے Gmail نہیں ملتا تھا («Gmail not known yet»)؛
+   اب Drive کا اپنا about (اسی اجازت میں) سے Gmail؛ userinfo بھی آزمایا جاتا ہے */
+async function aioWhoFetch(opts){
+  const h = (opts && opts.headers) || {};
+  let email = '';
+  try{ const r = await fetch('https://www.googleapis.com/drive/v3/about?fields=user(emailAddress,displayName)', {headers: h}); if(r.ok){ const j = await r.json(); email = (j.user && j.user.emailAddress) || ''; } }catch(e){}
+  if(!email){ try{ const r = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {headers: h}); if(r.ok){ const j = await r.json(); email = j.email || ''; } }catch(e){} }
+  return {ok: !!email, json: async () => ({email})};
+}
+async function aioDriveEmailFill(){
+  try{
+    if(AppState.settings.gdriveAccountEmail || !gDriveAccessToken) return;
+    const r = await aioWhoFetch({headers: {'Authorization': 'Bearer ' + gDriveAccessToken}});
+    if(r.ok){ const j = await r.json(); if(j.email){ AppState.settings.gdriveAccountEmail = j.email; persistAllData(); try{ renderLastBackupStatus(); }catch(e){} } }
+  }catch(e){}
+}
 const GDRIVE_BACKUP_FOLDER_NAME = 'AIO Backup';
 
 // ---------- Google Drive میں "AIO Backup" فولڈر تلاش کریں، نہ ملے تو نئی بنا دیں — تاکہ ہر بار وہی ایک فولڈر
@@ -8903,7 +8919,7 @@ async function backupToGoogleDrive(){
       alert('Google Drive permission was not granted: ' + resp.error);
       return;
     }
-    gDriveAccessToken = resp.access_token;
+    gDriveAccessToken = resp.access_token; setTimeout(aioDriveEmailFill, 1500);
     try{
       if(btn) btn.textContent = '⏳ Uploading...';
       const folderId = await ensureGDriveBackupFolder(); // ---------- ہمیشہ "AIO Backup" فولڈر کے اندر ہی جائے ----------
@@ -8946,7 +8962,7 @@ async function backupToGoogleDrive(){
       // ---------- کس Google اکاؤنٹ میں محفوظ ہوا — یہ بتانا صارف کے لیے سب سے زیادہ اطمینان بخش ہوتا ہے ----------
       let accountEmail = '';
       try{
-        const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        const userInfoRes = await aioWhoFetch({
           headers: { 'Authorization': 'Bearer ' + gDriveAccessToken }
         });
         if(userInfoRes.ok){
@@ -9001,12 +9017,12 @@ async function restoreFromGoogleDrive(){
       alert('Google Drive permission was not granted: ' + resp.error);
       return;
     }
-    gDriveAccessToken = resp.access_token;
+    gDriveAccessToken = resp.access_token; setTimeout(aioDriveEmailFill, 1500);
     try{
       if(btn) btn.textContent = '⏳ Loading files...';
       // ---------- یہاں سے بھی اکاؤنٹ یاد رکھ لیں — اگر صارف پہلے کبھی Backup سے پہلے سیدھا Restore کرے تو بھی آئندہ اکاؤنٹ فہرست دوبارہ نہ کھلے ----------
       try{
-        const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        const userInfoRes = await aioWhoFetch({
           headers: { 'Authorization': 'Bearer ' + gDriveAccessToken }
         });
         if(userInfoRes.ok){
@@ -35630,9 +35646,9 @@ try{ storeHydrate(); }catch(e){ _storeHydrating = false; }
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR1011TU164'; window.APP_UPD_OLD = APP_VERSION;
+  const APP_VERSION = 'AIODR1011TU165'; window.APP_UPD_OLD = APP_VERSION;
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Simple bill numbers 1, 2, 3 on every phone (no -1) — the cloud keeps them unique';
+  const UPDATE_NOTE = 'Backup card now shows the Gmail used for Google Drive backup';
   const UPD_KEY = 'aioDrUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }

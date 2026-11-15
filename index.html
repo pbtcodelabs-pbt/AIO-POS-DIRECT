@@ -1919,6 +1919,14 @@
   /* AIODR2910TH094: 📝 نوٹ — بل، PO اور شپمنٹ کی یادداشت */
   .recNotes{margin:6px 0 0; padding:6px 9px; border-radius:10px; background:#fefce8; border:1.5px dashed #eab308; color:#713f12; font-size:12px; font-weight:700; line-height:1.4; text-align:left; white-space:normal; word-break:break-word;}
   .recNotes > b{font-size:11.5px; color:#a16207;}
+  .rnWrap{margin:6px 0 0;}
+  .rnTog{border:1.5px solid #eab308; background:#fefce8; color:#a16207; border-radius:999px; padding:3px 10px; font-size:12px; font-weight:800; cursor:pointer; font-family:inherit;}
+  .rnArr{display:inline-block; transition:transform .25s ease;}
+  .rnWrap.open .rnArr{transform:rotate(180deg);}
+  .rnBody{display:grid; grid-template-rows:0fr; transition:grid-template-rows .3s ease;}
+  .rnWrap.open .rnBody{grid-template-rows:1fr;}
+  .rnIn{overflow:hidden; min-height:0;}
+  .rnWrap .recNotes{margin-top:5px;}
   .recNotes > div + div{margin-top:3px; padding-top:3px; border-top:1px dotted #fde68a;}
   .recNotes small{color:#a16207; font-weight:900; margin-right:5px;}
   .recNoteInp{width:100%; box-sizing:border-box; margin:8px 0 2px; padding:9px 12px; border:1.5px dashed #eab308; border-radius:12px; background:#fefce8; color:#713f12; font-size:13px; font-weight:700; font-family:inherit; resize:vertical;}
@@ -2704,6 +2712,9 @@
   .profileSidebar button .sideIcon{font-size:15px; line-height:1;}
   body.role-admin .profileSidebar button.admin-only{display:flex;} /* AIO1310TU043: Delete بٹن بھی باقی آئیکنز جیسا */
   .profileSidebar button .sideLabel{font-size:6.8px; font-weight:800; line-height:1.05; text-align:center; padding:0 1px;}
+  .profileSidebar .qaMv{display:flex; gap:3px; margin:-4px 0 2px;}
+  .profileSidebar .qaMv button{width:22px; height:20px; border-radius:6px; background:#fff; color:#0f172a; font-size:10px; box-shadow:0 1px 3px rgba(0,0,0,.25); padding:0;}
+  .profileSidebar.qaArranging .qaArrBtn{outline:2px solid #facc15; outline-offset:1px;}
   .profileMain{flex:1 1 auto; min-width:0; padding:12px 14px 20px; overflow-y:auto;}
 
   /* --- بالکل اوپر: مالی خلاصہ، ایک نظر میں — اب کمپیکٹ (پرانی رابطہ پٹی کی جگہ یہیں آ گئی) --- */
@@ -3372,7 +3383,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1111WE171</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1511SU172</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -3572,7 +3583,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1111WE171</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1511SU172</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div class="subOnly" style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3730,7 +3741,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1111WE171</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1511SU172</span>
     </div>
   </div>
 
@@ -16004,8 +16015,12 @@ function recNotesHtml(rec, max){
   const L = recNotesList(rec);
   if(!L.length) return '';
   const show = max ? L.slice(-max) : L;
-  return `<div class="recNotes"><b>📝 Note${L.length > show.length ? ` (+${L.length - show.length} more)` : ''}</b>${show.map(n => `<div>${recNoteLine(n)}</div>`).join('')}</div>`;
+  const inner = show.map(n => `<div>${recNoteLine(n)}</div>`).join('');
+  // AIO1511SU210 / AIODR1511SU172 (ہیلپ ڈیسک #239): فہرست کے کارڈ پر نوٹ پہلے سے بند — «📝 Notes (N) ▾» دبانے پر آرام سے کھلیں، دوبارہ دبانے پر بند
+  if(max) return `<div class="rnWrap"><button type="button" class="rnTog" onclick="event.stopPropagation(); recNotesToggle(this);">📝 Notes (${L.length}) <span class="rnArr">▾</span></button><div class="rnBody"><div class="rnIn"><div class="recNotes">${L.length > show.length ? `<b>+${L.length - show.length} more</b>` : ''}${inner}</div></div></div></div>`;
+  return `<div class="recNotes"><b>📝 Note</b>${inner}</div>`;
 }
+function recNotesToggle(btn){ const w = btn && btn.closest('.rnWrap'); if(w) w.classList.toggle('open'); }
 function openRecNotes(kind, a, b){
   recNoteTarget = kind === 'inv' ? {kind, id: a} : {kind, sid: a, idx: b};
   const rec = recNoteRec(recNoteTarget);
@@ -20224,9 +20239,9 @@ async function secureDeleteConfirm(name, what, extraHtml){
     html: `You are about to delete<span class="dcName">${esc(name)}</span>${extraHtml || ''}<span class="dcNote">⚠️ This cannot be undone.</span>`
   });
   if(!ok1) return false;
-  if(isPinGateNeeded()){
+  if(true){ // AIO1511SU210 / AIODR1511SU172 (ہیلپ ڈیسک #243): ہر حذف پر ہمیشہ ایڈمن PIN
     return await dangerConfirm({
-      step: 'STEP 2 OF 2', title: 'Enter your PIN to delete', pin: true, final: true, okText: '🗑️ Delete',
+      step: 'STEP 2 OF 2', title: 'Enter Admin PIN to delete', pin: true, final: true, okText: '🗑️ Delete',
       html: `Your app is protected with a PIN.<br>Enter it to permanently delete <b>${esc(name)}</b>.`
     });
   }
@@ -22160,20 +22175,64 @@ function openCustomerProfile(customerId){
   // --- بائیں طرف چھوٹے 3D آئیکن بٹنوں کا کالم (New Bill سب سے اوپر — سب سے زیادہ استعمال ہونے والا عمل)؛ Transactions سب سے نیچے ---
   const sideEl = document.getElementById('profileQuickActions');
   sideEl.innerHTML = `
-    <button style="background:linear-gradient(155deg,#0f766e,#0b4a45);" onclick="startNewBillForCustomer(${c.customer_id})"><span class="sideIcon">🧾</span><span class="sideLabel">New Bill</span></button>
-    <button style="background:linear-gradient(155deg,#ef4444,#b91c1c);" onclick="closeProfileModal(); openCollectModal(${c.customer_id});"><span class="sideIcon">📥</span><span class="sideLabel">Collect</span></button>
-    <button style="background:linear-gradient(155deg,#22c55e,#15803d);" onclick="closeProfileModal(); openWalletModal(${c.customer_id});"><span class="sideIcon">➕</span><span class="sideLabel">Wallet</span></button>
-    <button style="background:linear-gradient(155deg,#f59e0b,#c2410c);" onclick="closeProfileModal(); openOpeningBalanceModal(${c.customer_id});"><span class="sideIcon">⚖️</span><span class="sideLabel">Opening Bal.</span></button>
-    ${c.total_receivable > 0 ? `<button style="background:linear-gradient(155deg,#fb923c,#c2410c);" onclick="openCustomerReminderModal(${c.customer_id})"><span class="sideIcon">📢</span><span class="sideLabel">Remind</span></button>` : ''}
-    <button style="background:linear-gradient(155deg,#8b5cf6,#5b21b6);" onclick="shareCustomerProfile(${c.customer_id})"><span class="sideIcon">🪪</span><span class="sideLabel">Profile</span></button>
-    <button id="profileModeBtn" style="background:linear-gradient(155deg,#475569,#1e293b);" onclick="toggleProfileMainMode()"><span class="sideIcon">📜</span><span class="sideLabel">Transactions</span></button>
+    <button data-qa="bill" style="background:linear-gradient(155deg,#0f766e,#0b4a45);" onclick="startNewBillForCustomer(${c.customer_id})"><span class="sideIcon">🧾</span><span class="sideLabel">New Bill</span></button>
+    <button data-qa="collect" style="background:linear-gradient(155deg,#ef4444,#b91c1c);" onclick="closeProfileModal(); openCollectModal(${c.customer_id});"><span class="sideIcon">📥</span><span class="sideLabel">Collect</span></button>
+    <button data-qa="wallet" style="background:linear-gradient(155deg,#22c55e,#15803d);" onclick="closeProfileModal(); openWalletModal(${c.customer_id});"><span class="sideIcon">➕</span><span class="sideLabel">Wallet</span></button>
+    <button data-qa="opening" style="background:linear-gradient(155deg,#f59e0b,#c2410c);" onclick="closeProfileModal(); openOpeningBalanceModal(${c.customer_id});"><span class="sideIcon">⚖️</span><span class="sideLabel">Opening Bal.</span></button>
+    ${c.total_receivable > 0 ? `<button data-qa="remind" style="background:linear-gradient(155deg,#fb923c,#c2410c);" onclick="openCustomerReminderModal(${c.customer_id})"><span class="sideIcon">📢</span><span class="sideLabel">Remind</span></button>` : ''}
+    <button data-qa="profile" style="background:linear-gradient(155deg,#8b5cf6,#5b21b6);" onclick="shareCustomerProfile(${c.customer_id})"><span class="sideIcon">🪪</span><span class="sideLabel">Profile</span></button>
+    <button data-qa="tx" id="profileModeBtn" style="background:linear-gradient(155deg,#475569,#1e293b);" onclick="toggleProfileMainMode()"><span class="sideIcon">📜</span><span class="sideLabel">Transactions</span></button>
+    <button type="button" class="qaArrBtn" style="background:linear-gradient(155deg,#64748b,#334155);" onclick="qaArrangeToggle()" title="Move buttons up / down"><span class="sideIcon">↕️</span><span class="sideLabel">Arrange</span></button>
     <button class="admin-only" style="background:linear-gradient(155deg,#7f1d1d,#450a0a); margin-top:10px;" onclick="secureDeleteParty('customers', ${c.customer_id})"><span class="sideIcon">🗑️</span><span class="sideLabel">Delete</span></button>
   `;
 
+  qaApplyOrder('customers');
   renderCustomerMainContent(c.customer_id);
   document.getElementById('profileModal').classList.add('show');
 }
 
+// ---------- AIO1511SU210 / AIODR1511SU172 (ہیلپ ڈیسک #240): پروفائل کے بائیں بٹنوں کی ترتیب — گاہک میں Transactions تیسرے نمبر پر (ڈیفالٹ)،
+// «↕️ Arrange» دبا کر ہر بٹن ▲ / ▼ سے اوپر نیچے؛ ترتیب `settings.qaOrder.customers / suppliers` میں (Delete ہمیشہ آخر میں) ----------
+const QA_DEFAULT = { customers: ['bill', 'collect', 'tx', 'wallet', 'opening', 'remind', 'profile'], suppliers: ['po', 'pay', 'opening', 'profile', 'tx'] };
+let qaKind = 'customers', qaArranging = false;
+function qaOrderOf(kind){
+  const saved = ((AppState.settings || {}).qaOrder || {})[kind];
+  const def = QA_DEFAULT[kind] || [];
+  const out = Array.isArray(saved) ? saved.filter(k => def.includes(k)) : [];
+  def.forEach(k => { if(!out.includes(k)) out.push(k); });
+  return out;
+}
+function qaApplyOrder(kind){
+  qaKind = kind || qaKind; qaArranging = false;
+  const el = document.getElementById('profileQuickActions'); if(!el) return;
+  el.classList.remove('qaArranging');
+  const order = qaOrderOf(qaKind);
+  const anchor = el.querySelector('.qaArrBtn');
+  order.forEach(k => { const b = el.querySelector(`[data-qa="${k}"]`); if(b) el.insertBefore(b, anchor); });
+  el.querySelectorAll('.qaMv').forEach(x => x.remove());
+}
+function qaArrangeToggle(){
+  const el = document.getElementById('profileQuickActions'); if(!el) return;
+  qaArranging = !qaArranging;
+  el.classList.toggle('qaArranging', qaArranging);
+  el.querySelectorAll('.qaMv').forEach(x => x.remove());
+  if(!qaArranging){ try{ showNavToast('✅ Button order saved'); }catch(e){} return; }
+  el.querySelectorAll('[data-qa]').forEach(b => {
+    const k = b.getAttribute('data-qa');
+    const mv = document.createElement('div'); mv.className = 'qaMv';
+    mv.innerHTML = `<button type="button" onclick="event.stopPropagation(); qaMove('${k}', -1)" aria-label="Move up">▲</button><button type="button" onclick="event.stopPropagation(); qaMove('${k}', 1)" aria-label="Move down">▼</button>`;
+    b.insertAdjacentElement('afterend', mv);
+  });
+}
+function qaMove(k, dir){
+  const order = qaOrderOf(qaKind);
+  const i = order.indexOf(k), j = i + dir;
+  if(i < 0 || j < 0 || j >= order.length) return;
+  [order[i], order[j]] = [order[j], order[i]];
+  AppState.settings.qaOrder = Object.assign({}, AppState.settings.qaOrder || {}, { [qaKind]: order });
+  persistAllData();
+  qaApplyOrder(qaKind); qaArrangeToggle();
+}
 // ---------- سائیڈبار کے "Transactions" بٹن سے مین ایریا Bills ↔ Transactions کے درمیان بدلیں ----------
 function toggleProfileMainMode(){
   profileMainMode = profileMainMode === 'bills' ? 'transactions' : 'bills';
@@ -22832,14 +22891,16 @@ function openSupplierProfile(supplierId){
 
   // --- بائیں طرف چھوٹے 3D آئیکن بٹنوں کا کالم؛ Transactions سب سے نیچے ---
   document.getElementById('profileQuickActions').innerHTML = `
-    <button style="background:linear-gradient(155deg,#3b82f6,#1e3a8a);" onclick="closeProfileModal(); openPoModal(${s.supplier_id});"><span class="sideIcon">📦</span><span class="sideLabel">New PO</span></button>
-    <button style="background:linear-gradient(155deg,#ef4444,#b91c1c);" onclick="openPaySupplierModal(${s.supplier_id});"><span class="sideIcon">💵</span><span class="sideLabel">Pay Supplier</span></button>
-    <button style="background:linear-gradient(155deg,#f59e0b,#c2410c);" onclick="closeProfileModal(); openOpeningBalanceModal(${s.supplier_id}, 'suppliers');"><span class="sideIcon">⚖️</span><span class="sideLabel">Opening Bal.</span></button>
-    <button style="background:linear-gradient(155deg,#8b5cf6,#5b21b6);" onclick="shareSupplierProfile(${s.supplier_id})"><span class="sideIcon">🪪</span><span class="sideLabel">Profile</span></button>
-    <button id="profileModeBtn" style="background:linear-gradient(155deg,#475569,#1e293b);" onclick="toggleProfileMainMode()"><span class="sideIcon">📜</span><span class="sideLabel">Transactions</span></button>
+    <button data-qa="po" style="background:linear-gradient(155deg,#3b82f6,#1e3a8a);" onclick="closeProfileModal(); openPoModal(${s.supplier_id});"><span class="sideIcon">📦</span><span class="sideLabel">New PO</span></button>
+    <button data-qa="pay" style="background:linear-gradient(155deg,#ef4444,#b91c1c);" onclick="openPaySupplierModal(${s.supplier_id});"><span class="sideIcon">💵</span><span class="sideLabel">Pay Supplier</span></button>
+    <button data-qa="opening" style="background:linear-gradient(155deg,#f59e0b,#c2410c);" onclick="closeProfileModal(); openOpeningBalanceModal(${s.supplier_id}, 'suppliers');"><span class="sideIcon">⚖️</span><span class="sideLabel">Opening Bal.</span></button>
+    <button data-qa="profile" style="background:linear-gradient(155deg,#8b5cf6,#5b21b6);" onclick="shareSupplierProfile(${s.supplier_id})"><span class="sideIcon">🪪</span><span class="sideLabel">Profile</span></button>
+    <button data-qa="tx" id="profileModeBtn" style="background:linear-gradient(155deg,#475569,#1e293b);" onclick="toggleProfileMainMode()"><span class="sideIcon">📜</span><span class="sideLabel">Transactions</span></button>
+    <button type="button" class="qaArrBtn" style="background:linear-gradient(155deg,#64748b,#334155);" onclick="qaArrangeToggle()" title="Move buttons up / down"><span class="sideIcon">↕️</span><span class="sideLabel">Arrange</span></button>
     <button class="admin-only" style="background:linear-gradient(155deg,#7f1d1d,#450a0a); margin-top:10px;" onclick="secureDeleteParty('suppliers', ${s.supplier_id})"><span class="sideIcon">🗑️</span><span class="sideLabel">Delete</span></button>
   `;
 
+  qaApplyOrder('suppliers');
   renderSupplierMainContent(s.supplier_id);
   document.getElementById('profileModal').classList.add('show');
 }
@@ -30976,7 +31037,7 @@ function renderStaffDevicesCard(){
   const devs = devicesData.slice().sort((a, b) => (a.slot || 0) - (b.slot || 0));
   const devHtml = devs.length ? devs.map(d => `<div class="mdDev">
       <span class="mdIco">${d.role === 'owner' || d.role === 'owner2' ? '👑' : '🧑‍💼'}</span>
-      <span class="mdTxt">${mdEsc(d.name || 'Device')} ${d.uid === me ? '<span class="mdTag">This device</span>' : ''}<small>${d.role === 'owner' ? 'Owner (main)' : d.role === 'owner2' ? 'Owner — 2nd device' : 'Staff'}${d.user ? ' • ' + mdEsc(d.user) : ''} • ${mdAgo(d.last_seen)}${d.slot ? ' • bills end with -' + d.slot : ''}</small></span>
+      <span class="mdTxt">${mdEsc(d.name || 'Device')} ${d.uid === me ? '<span class="mdTag">This device</span>' : ''}<small>${d.role === 'owner' ? 'Owner (main)' : d.role === 'owner2' ? 'Owner — 2nd device' : 'Staff'}${d.user ? ' • ' + mdEsc(d.user) : ''} • ${mdAgo(d.last_seen)}</small></span>
       ${owner && d.uid !== me ? `<button type="button" onclick="removeShopDevice('${mdEsc(d.uid)}')">✖ Remove</button>` : ''}
     </div>`).join('') : '<div class="settingsHint">No devices yet.</div>';
   el.innerHTML = `<h3>👥 Staff &amp; Devices</h3>
@@ -35661,9 +35722,9 @@ try{ storeHydrate(); }catch(e){ _storeHydrating = false; }
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR1111WE171'; window.APP_UPD_OLD = APP_VERSION;
+  const APP_VERSION = 'AIODR1511SU172'; window.APP_UPD_OLD = APP_VERSION;
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Settings: removed the extra «Open Users» box — staff & phones are only in 👤 Users';
+  const UPDATE_NOTE = 'Notes on bills open with a tap; Transactions 3rd + arrange buttons; Admin PIN before any delete and before restoring a backup';
   const UPD_KEY = 'aioDrUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
@@ -36680,6 +36741,57 @@ try{ storeHydrate(); }catch(e){ _storeHydrating = false; }
     if(b._h !== html){ b._h = html; b.innerHTML = html; } b.classList.toggle('on', v); b.setAttribute('aria-checked', String(v));
   }catch(e){} }
   setInterval(paint, 1500); setTimeout(paint, 800);
+})();
+</script>
+<script>
+/* AIO1511SU210 / AIODR1511SU172 (ہیلپ ڈیسک #243 / #247، Ali And Company):
+   #243 — کچھ بھی حذف کرنے سے پہلے ہمیشہ ایڈمن PIN (`aioDelGate` → `dangerConfirm({pin:true})`، کسی فعال ایڈمن کا PIN)؛
+          بل void / مستقل حذف، نوٹ، خرچ، پرچیز آرڈر، ایڈوانس آرڈر، ڈائری، اکاؤنٹ، جواب کا سانچہ، یوزر، ویریئنٹ بیچ؛
+          پراڈکٹ / لین دین / ویریئنٹ `secureDeleteConfirm` میں (اب ہمیشہ PIN)، گاہک / سپلائر `secureDeleteParty` پہلے سے۔
+   #247 — بیک اپ واپسی (`proceedWithImport` — فائل اور گوگل ڈرائیو دونوں) سے پہلے اسی بیک اپ کے ایڈمن کا PIN (بیک اپ کی `users` میں hash)؛
+          بیک اپ میں ایڈمن PIN نہ ہو تو اس فون کا ایڈمن PIN۔ نئے فون پر بھی فائل چرانے والا ڈیٹا نہیں دیکھ سکتا۔ */
+(function(){
+  const norm = v => String(v || '').replace(/[۰-۹]/g, c => '۰۱۲۳۴۵۶۷۸۹'.indexOf(c)).replace(/[٠-٩]/g, c => '٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace(/\D/g, '');
+  function askPin(title, text, hashes){ return new Promise(res => {
+    const o = document.createElement('div'); o.id = 'apprPinOv';
+    o.innerHTML = '<div><h3></h3><p></p><input type="password" inputmode="numeric" maxlength="8" autocomplete="off"><div class="e"></div><div class="r"><button type="button" class="c" style="background:#e2e8f0;color:#0f172a">Cancel</button><button type="button" class="g" style="background:#dc2626;color:#fff">🔐 Confirm</button></div></div>';
+    o.querySelector('h3').textContent = title; o.querySelector('p').textContent = text;
+    document.body.appendChild(o); const i = o.querySelector('input'), e = o.querySelector('.e'); setTimeout(() => i.focus(), 60);
+    const done = v => { o.remove(); res(v); };
+    o.querySelector('.c').onclick = () => done(false);
+    const go = async () => { const p = norm(i.value); if(p.length < 4){ e.textContent = 'Enter the Admin PIN'; return; }
+      const h = await hashPin(p); if(hashes.includes(h)) done(true); else { e.textContent = '❌ Wrong Admin PIN'; i.value = ''; i.focus(); } };
+    o.querySelector('.g').onclick = go; i.onkeydown = ev => { if(ev.key === 'Enter') go(); };
+  }); }
+  const adminHashes = list => (list || []).filter(u => u && u.role === 'admin' && u.is_active !== false && u.pin).map(u => u.pin);
+  window.aioDelGate = function(){
+    const h = adminHashes(typeof usersData !== 'undefined' ? usersData : []);
+    if(!h.length) return Promise.resolve(true);
+    return askPin('🔐 Admin PIN required', 'Deleting needs the Admin PIN, so nothing is removed by mistake or without permission.', h);
+  };
+  const DEL = [['deleteRecNote'], ['deleteExpenseEntry'], ['deletePendingPurchaseOrder', 'renderPurchaseOrdersScreen'], ['permanentlyDeleteBill'], ['adminVoidBill'],
+    ['deleteVariantBatch'], ['deleteAdvanceOrder'], ['deleteDiaryEntry'], ['deleteDiaryHistoryLine'], ['deletePaymentAccount'], ['deleteSupplierBankAccount'], ['deleteReplyTemplate'], ['deleteUser']];
+  DEL.forEach(([n, after]) => {
+    const orig = window[n]; if(typeof orig !== 'function' || orig._delGate) return;
+    const w = async function(...a){ if(!(await window.aioDelGate())) return; const r = orig.apply(this, a); try{ await r; }catch(e){} if(after && typeof window[after] === 'function'){ try{ window[after](); }catch(e){} } return r; };
+    w._delGate = true; window[n] = w;
+  });
+  const _imp = window.proceedWithImport;
+  if(typeof _imp === 'function'){
+    window.proceedWithImport = async function(){
+      const b = (typeof pendingImportBackup !== 'undefined') ? pendingImportBackup : null;
+      if(b){
+        let h = adminHashes(b.users);
+        if(!h.length) h = adminHashes(typeof usersData !== 'undefined' ? usersData : []);
+        if(h.length){
+          document.getElementById('importConfirmModal')?.classList.remove('show');
+          const ok = await askPin('🔐 Admin PIN of this backup', 'This backup is protected. Enter the Admin PIN that was used in the shop where this backup was made. Nothing is restored without it.', h);
+          if(!ok){ try{ cancelImportConfirm(); }catch(e){} return; }
+        }
+      }
+      return _imp.apply(this, arguments);
+    };
+  }
 })();
 </script>
 </body>

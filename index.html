@@ -3383,7 +3383,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1511SU172</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1611MO173</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -3583,7 +3583,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1511SU172</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1611MO173</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div class="subOnly" style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3741,7 +3741,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1511SU172</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1611MO173</span>
     </div>
   </div>
 
@@ -10615,7 +10615,7 @@ async function loadIssuedCodesList(){
     const res = await devFirestoreFetch(`licenses?key=${FIREBASE_API_KEY}&pageSize=300`);
     if(!res.ok) throw new Error('فہرست نہیں مل سکی');
     const data = await res.json();
-    const docs = data.documents || [];
+    const docs = (data.documents || []).filter(d => !/\/__[^/]*$/.test(d.name)); // AIODR1611MO173: __drrates (ریٹ) کوڈ نہیں
     _issuedCodesCache = docs.map(d => {
       const code = d.name.split('/').pop();
       const f = _parseFirestoreFields(d.fields || {});
@@ -10778,6 +10778,7 @@ function drTermLabel(termKey){ const t = DR_TERMS.find(x => x.key === String(ter
 // ---------- AIODR0411WE127 (مالک کا حکم): ادائیگی کے اکاؤنٹ — نیا اکاؤنٹ / بینک ہو تو یہاں ایک لائن جوڑیں؛ qr: 'icons/pay-qr.png' جیسی تصویر ----------
 const DR_PAY_ACCOUNTS = [
   { kind: 'Easypaisa', no: '03206793793', title: 'Abdul Hafeez', pkg: 'pk.com.telenor.phoenix', icon: '📲', qr: 'pay/easypaisa-qr.jpg' },
+  { kind: 'JazzCash', no: '03206793793', title: 'Abdul Hafeez', pkg: 'com.techlogix.mobilinkcustomer', icon: '📲' },   // AIODR1611MO173: سبزی منڈی جیسا تیسرا اکاؤنٹ
   // AIODR0411WE128: میزان بینک (مالک کی دی ہوئی تفصیل + QR)
   { kind: 'Meezan Bank', no: '98270103048186', iban: 'PK63MEZN0098270103048186', title: 'ABDUL HAFEEZ', branch: 'Fateh Pur Br — DGK', pkg: 'invo8.meezan.mb', icon: '🏦', qr: 'pay/meezan-qr.jpg' }
 ];
@@ -35722,9 +35723,9 @@ try{ storeHydrate(); }catch(e){ _storeHydrating = false; }
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR1511SU172'; window.APP_UPD_OLD = APP_VERSION;
+  const APP_VERSION = 'AIODR1611MO173'; window.APP_UPD_OLD = APP_VERSION;
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Notes on bills open with a tap; Transactions 3rd + arrange buttons; Admin PIN before any delete and before restoring a backup';
+  const UPDATE_NOTE = 'Get or renew a package in the app — pay, and it turns on by itself; Package Plans card on login';
   const UPD_KEY = 'aioDrUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
@@ -36792,6 +36793,357 @@ try{ storeHydrate(); }catch(e){ _storeHydrating = false; }
       return _imp.apply(this, arguments);
     };
   }
+})();
+</script>
+<script>
+/* 📦 AIODR1611MO173 (مالک کا حکم — «سبزی منڈی والا سبسکرپشن نظام مکمل طور پر AIO Direct میں»):
+   NB-xxxxxx نیا پیکج / SB-xxxxxx تجدید — گاہک پیکج (P1+0…P1+3) + مدت (1 / 3 / 6 مہینے / 1 سال = 10 مہینوں کی رقم) چنے، رقم ریٹ سے خود
+   ← سرور (AIO worker /smcode، app:'DR'، الگ DNB / DSB) پر 6 ہندسوں کا کوڈ ← ڈویلپر کو واٹس ایپ پیغام ← فوراً ادائیگی کے اکاؤنٹ (DR_PAY_ACCOUNTS) + TID / اسکرین شاٹ
+   ← ہر منٹ `me`؛ ڈویلپر پینل «🔑 Customer code (NB / SB)» ← «✅ پیسے وصول» ← گفٹ کوڈ فارم خود بھر کر `generateGiftCode` (UID پر) ← سرور `done` + `res.lic`
+   ← گاہک کا فون خود `activateSubscription` (نئے دن پرانے کے اوپر جمع)۔ ریٹ: licenses/__drrates (ڈویلپر «💰 Package rates»)۔ پیکج پلانز کا کارڈ (تصویر شیئر) لاگ اِن پر۔ */
+(function(){
+  const API = 'https://aio-pos-verify.pbtcodelabs.workers.dev/smcode';
+  const PLANS = ['P1', 'P1+1', 'P1+2', 'P1+3'];
+  const DEVN = { 'P1': 1, 'P1+1': 2, 'P1+2': 3, 'P1+3': 4 };
+  const MONTHS = [1, 3, 6, 12];
+  const RATES0 = { 'P1': 500, 'P1+1': 1000, 'P1+2': 1500, 'P1+3': 2000 };
+  const fmt = n => Number(n || 0).toLocaleString('en-US');
+  const mLabel = m => m === 12 ? '1 Year' : (m === 1 ? '1 Month' : m + ' Months');
+  const payM = m => m === 12 ? 10 : m;
+  const dDays = m => m === 12 ? 365 : m * 30;
+  const pLabel = p => p === 'P1' ? 'Owner only' : 'Owner + ' + (DEVN[p] - 1) + ' staff';
+  const pShort = p => p === 'P1' ? '1+0' : p.replace('P', '');
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const st = () => AppState.settings;
+  const save = () => { try{ persistAllData(); }catch(e){} };
+  const tok = () => { let t = ''; try{ t = localStorage.getItem('aioDr_reqTok') || ''; if(t.length < 32){ const a = new Uint8Array(16); crypto.getRandomValues(a); t = Array.from(a, x => x.toString(16).padStart(2, '0')).join(''); localStorage.setItem('aioDr_reqTok', t); } }catch(e){} return t; };
+  async function smc(body, dev){
+    const h = { 'Content-Type': 'application/json' };
+    if(dev){ let t = null; try{ t = await ensureDevAuth(); }catch(e){} if(!t) return { ok: false, reason: 'dev_only' }; h.Authorization = 'Bearer ' + t; }
+    const r = await fetch(API, { method: 'POST', headers: h, body: JSON.stringify(Object.assign({ app: 'DR' }, body)) });
+    return r.json();
+  }
+  function toast(t, bg){
+    const d = document.createElement('div'); d.textContent = t;
+    d.style.cssText = 'position:fixed;left:50%;top:16px;transform:translateX(-50%);z-index:2147483647;background:' + (bg || '#15803d') + ';color:#fff;padding:10px 18px;border-radius:14px;font-weight:800;max-width:92vw;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.3);font-family:Arial,sans-serif';
+    document.body.appendChild(d); setTimeout(() => d.remove(), 5000);
+  }
+  function ov(id, html, rtl){
+    let o = document.getElementById(id); if(o) o.remove();
+    o = document.createElement('div'); o.id = id; if(rtl) o.setAttribute('dir', 'rtl');
+    o.style.cssText = 'position:fixed;inset:0;z-index:2147483300;background:rgba(15,23,42,.62);display:flex;align-items:center;justify-content:center;padding:12px;font-family:Arial,sans-serif';
+    o.innerHTML = '<div style="background:#fff;border-radius:20px;max-width:430px;width:100%;max-height:94vh;overflow:auto;box-shadow:0 18px 50px rgba(0,0,0,.4)">' + html + '</div>';
+    o.addEventListener('click', e => { if(e.target === o && id !== 'drPayOv') o.remove(); });
+    document.body.appendChild(o); return o;
+  }
+  const head = (t, bg) => '<div style="background:' + (bg || 'linear-gradient(135deg,#0f766e,#134e4a)') + ';color:#fff;padding:12px 14px;font-size:19px;font-weight:900;text-align:center">' + t + '</div>';
+  const btnS = (bg, c) => 'border:none;border-radius:12px;padding:10px;font-weight:800;font-size:15px;cursor:pointer;background:' + bg + ';color:' + c + ';font-family:inherit;';
+
+  // ---------- 💰 ریٹ ----------
+  function rates(){ try{ const r = JSON.parse(localStorage.getItem('aioDr_rates') || 'null'); if(r && r.P1) return r; }catch(e){} return Object.assign({}, RATES0); }
+  async function loadRates(){
+    try{
+      const r = await fetch(FIRESTORE_BASE + '/licenses/__drrates?key=' + FIREBASE_API_KEY, { cache: 'no-store' });
+      if(!r.ok) return rates();
+      const d = await r.json(); const j = JSON.parse(((d.fields || {}).rates || {}).stringValue || '{}');
+      if(j && j.P1){ localStorage.setItem('aioDr_rates', JSON.stringify(j)); return j; }
+    }catch(e){}
+    return rates();
+  }
+  window.drRates = rates;
+
+  // ---------- 📦 گاہک: پیکج / تجدید ----------
+  const curPlan = () => { const n = Math.max(1, Math.min(4, parseInt(st().planDevices) || 1)); return n === 1 ? 'P1' : 'P1+' + (n - 1); };
+  const isRenew = () => !!(st().lastActivationCode || (!st().isOnFreeTrial && st().subscriptionExpiry));
+  let P = null;
+  window.drPkgOpen = async function(){
+    try{ if(isLinkedDevice()){ alert('This phone is connected to a shop — the shop owner renews the package from their own phone.'); return; } }catch(e){}
+    const s = st(), kind = isRenew() ? 'SB' : 'NB';
+    P = { kind, plan: (kind === 'SB' && PLANS.indexOf(curPlan()) >= 0) ? curPlan() : 'P1', m: 6, R: rates(),
+      name: s.businessName || s.contactName || s.ownerName || '', mob: s.businessPhone || s.contactPhone || '' };
+    draw();
+    const R = await loadRates(); if(P){ P.R = R; draw(); }
+  };
+  function draw(){
+    const s = st(), R = P.R, amt = (R[P.plan] || 0) * payM(P.m);
+    const chip = (on, t, js) => '<button type="button" onclick="' + js + '" style="flex:1 1 45%;min-width:0;padding:8px 4px;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;font-family:inherit;line-height:1.35;' + (on ? 'background:#0f766e;color:#fff;border:2px solid #115e59' : 'background:#f8fafc;color:#134e4a;border:2px solid #99f6e4') + '">' + t + '</button>';
+    const inp = 'width:100%;box-sizing:border-box;padding:9px;border:2px solid #99f6e4;border-radius:10px;font-size:15px;font-family:inherit';
+    const html = head(P.kind === 'SB' ? '🔄 Renew your package' : '📦 Get a package')
+      + '<div style="padding:12px 14px;display:flex;flex-direction:column;gap:9px">'
+      + '<input id="drPkgName" placeholder="Shop / your name" value="' + esc(P.name) + '" style="' + inp + '" oninput="drPkgVal(\'name\',this.value)">'
+      + '<input id="drPkgMob" type="tel" inputmode="tel" placeholder="Mobile no. — 03001234567" value="' + esc(P.mob) + '" style="' + inp + '" oninput="drPkgVal(\'mob\',this.value)">'
+      + (P.kind === 'SB' && s.subscriptionExpiry ? '<div style="background:#ecfdf5;border:1.5px solid #86efac;border-radius:12px;padding:6px 10px;font-size:13px;color:#166534;font-weight:700">📅 Current package till <b>' + esc(formatDateDMY(s.subscriptionExpiry)) + '</b> — your remaining days are kept, the new days are added after them.</div>' : '')
+      + '<div style="font-weight:900;font-size:15px">👥 How many phones?</div>'
+      + '<div style="display:flex;flex-wrap:wrap;gap:6px">' + PLANS.map(p => chip(P.plan === p, pLabel(p) + '<br><small style="font-size:11.5px">' + pShort(p) + ' • Rs ' + fmt(R[p]) + '/month</small>', "drPkgSet('plan','" + p + "')")).join('') + '</div>'
+      + '<div style="font-weight:900;font-size:15px">⏱️ How long?</div>'
+      + '<div style="display:flex;flex-wrap:wrap;gap:6px">' + MONTHS.map(m => chip(P.m === m, mLabel(m) + (m === 12 ? '<br><small style="font-size:11.5px">🎁 2 months free</small>' : ''), "drPkgSet('m'," + m + ")")).join('') + '</div>'
+      + '<div style="background:#ecfdf5;border:2px solid #0f766e;border-radius:14px;padding:8px;text-align:center"><div style="font-size:13px;font-weight:800;color:#065f46">💰 Total</div><div style="font-family:Arial Black,Arial;font-size:28px;color:#065f46">Rs ' + fmt(amt) + '</div><div style="font-size:12px;color:#475569">' + fmt(R[P.plan]) + ' × ' + payM(P.m) + (P.m === 12 ? ' — 12 months, 2 free' : '') + '</div></div>'
+      + '<div id="drPkgErr" style="color:#b91c1c;font-weight:800;font-size:13px;text-align:center"></div>'
+      + '<button type="button" id="drPkgSend" onclick="drPkgSend()" style="' + btnS('#25d366', '#fff') + 'font-size:17px">📨 Send to developer</button>'
+      + '<button type="button" onclick="document.getElementById(\'drPkgOv\').remove()" style="' + btnS('#e2e8f0', '#334155') + '">✖ Close</button></div>';
+    ov('drPkgOv', html);
+  }
+  window.drPkgVal = (k, v) => { if(P) P[k] = v; };
+  window.drPkgSet = function(k, v){ P[k] = v; draw(); };
+  window.drPkgSend = async function(){
+    const s = st(), R = P.R, amt = (R[P.plan] || 0) * payM(P.m), b = document.getElementById('drPkgSend'), er = document.getElementById('drPkgErr');
+    const name = String(P.name || '').trim(), mob = String(P.mob || '').trim();
+    if(name.length < 2){ er.textContent = '⚠️ Please write your shop / name'; return; }
+    if(mob.replace(/\D/g, '').length < 10){ er.textContent = '⚠️ Please write your mobile number'; return; }
+    if(!s.businessPhone && !s.contactPhone){ s.contactPhone = mob; } if(!s.contactName && !s.businessName){ s.contactName = name; } save();
+    if(b){ b.disabled = true; b.textContent = '⏳ Sending…'; }
+    const data = { uid: String(getOrCreateDeviceUID()), shop: name, owner: s.ownerName || '', mobile: mob, plan: P.plan, m: P.m, days: dDays(P.m), amt, rate: R[P.plan] || 0,
+      cur: s.lastActivationCode || '', exp: s.subscriptionExpiry || '', curPlan: curPlan(), trial: !!s.isOnFreeTrial, ver: typeof APP_VERSION !== 'undefined' ? APP_VERSION : '' };
+    let j = null; try{ j = await smc({ op: 'put', kind: P.kind, uid: tok(), data }); }catch(e){}
+    if(!j || !j.ok){ if(b){ b.disabled = false; b.textContent = '📨 Send to developer'; } er.textContent = '⚠️ Check the internet and try again' + (j && j.reason === 'wait' ? ' (after a while)' : ''); return; }
+    s.drPendReq = { code: j.code, kind: P.kind, plan: P.plan, m: P.m, amt, at: Date.now() }; save();
+    const msg = (P.kind === 'SB' ? '🔄 AIO POS Direct — package renewal' : '🧾 AIO POS Direct — new package')
+      + '\nShop: ' + name + '\nMobile: ' + mob
+      + '\nPackage: ' + pShort(P.plan) + ' (' + pLabel(P.plan) + ') — ' + mLabel(P.m)
+      + '\nAmount: Rs ' + fmt(amt) + (P.m === 12 ? ' (1 year — 10 months price, 2 months free)' : '')
+      + (P.kind === 'SB' && data.exp ? '\nCurrent till: ' + formatDateDMY(data.exp) : '')
+      + '\nCode: ' + P.kind + '-' + j.code;
+    const o = document.getElementById('drPkgOv'); if(o) o.remove();
+    try{ window.open('https://wa.me/' + getDeveloperContact().whatsapp + '?text=' + encodeURIComponent(msg), '_blank'); }catch(e){}
+    drPayShow(true);
+  };
+
+  // ---------- 💳 ادائیگی ----------
+  let _shot = '';
+  const trialOn = () => { try{ return !!(st().isOnFreeTrial && isSubscriptionActive()); }catch(e){ return false; } };
+  window.drPayShow = function(fresh){
+    const r = st().drPendReq; if(!r) return;
+    const cards = DR_PAY_ACCOUNTS.map((a, i) => '<div style="background:#f8fafc;border:2px solid #0f766e;border-radius:14px;padding:8px 10px">'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><b style="font-size:16px;color:#0f766e">' + (a.icon || '🏦') + ' ' + esc(a.kind) + '</b><span style="font-size:12.5px;color:#334155">' + esc(a.title) + '</span></div>'
+      + '<div style="font-family:Arial Black,Arial;font-size:20px;text-align:center;color:#0f172a;letter-spacing:1px">' + esc(a.no) + '</div>'
+      + (a.iban ? '<div style="font-size:11.5px;text-align:center;color:#475569">IBAN: ' + esc(a.iban) + '</div>' : '')
+      + '<div style="display:flex;gap:6px;margin-top:5px"><button type="button" onclick="drPkgCopy(' + i + ')" style="flex:1;' + btnS('#fff', '#0f766e') + 'border:1.5px solid #0f766e;font-size:13px;padding:6px">📋 Copy number</button>'
+      + '<button type="button" onclick="drPkgApp(' + i + ')" style="flex:1;' + btnS('#0f766e', '#fff') + 'font-size:13px;padding:6px">📲 Open app</button></div></div>').join('');
+    const html = head(fresh ? '✅ Your request reached the developer' : '⏳ Payment pending')
+      + '<div style="padding:12px 14px;display:flex;flex-direction:column;gap:8px">'
+      + '<div style="text-align:center;font-size:14px;line-height:1.7">📦 ' + pShort(r.plan) + ' (' + pLabel(r.plan) + ') — ' + mLabel(r.m) + '<br>💰 <b style="font-family:Arial Black,Arial;font-size:24px;color:#065f46">Rs ' + fmt(r.amt) + '</b><br>Send this amount to any one account below:</div>'
+      + cards
+      + '<div style="background:#fffbeb;border:1.5px dashed #d97706;border-radius:12px;padding:8px 10px"><div style="font-weight:800;font-size:14px;color:#92400e">📸 Payment proof (optional)</div>'
+      + '<input id="drPayTid" placeholder="Transaction ID" style="width:100%;box-sizing:border-box;padding:8px;border:1.5px solid #d97706;border-radius:10px;font-size:15px;margin-top:5px;text-align:center">'
+      + '<div style="display:flex;gap:6px;margin-top:6px"><label style="flex:1;text-align:center;' + btnS('#fef3c7', '#92400e') + 'font-size:13px;padding:7px">🖼️ Screenshot<input type="file" accept="image/*" style="display:none" onchange="drPkgShot(this)"></label>'
+      + '<button type="button" onclick="drPkgProof()" style="flex:1;' + btnS('#d97706', '#fff') + 'font-size:13px;padding:7px">📨 Send proof</button></div><div id="drPayMsg" style="font-size:13px;font-weight:800;text-align:center;margin-top:4px"></div></div>'
+      + '<div style="font-size:12.5px;color:#475569;text-align:center;line-height:1.7">As soon as the payment is received, the developer issues your package — this app turns on <b>by itself</b>, nothing to type.<br>Request no.: <b>' + r.kind + '-' + r.code + '</b></div>'
+      + (trialOn() ? '<div style="background:#ecfdf5;border:2px solid #16a34a;border-radius:12px;padding:6px;text-align:center;font-weight:800;color:#065f46">🎁 Your free trial is running till then — ' + daysLeftInSubscription() + ' days left</div>' : '')
+      + '<button type="button" onclick="document.getElementById(\'drPayOv\').remove()" style="' + btnS(trialOn() ? '#16a34a' : '#e2e8f0', trialOn() ? '#fff' : '#334155') + '">' + (trialOn() ? '✅ OK — open the app' : 'OK') + '</button></div>';
+    ov('drPayOv', html);
+  };
+  window.drPkgCopy = async function(i){ const a = DR_PAY_ACCOUNTS[i]; try{ await navigator.clipboard.writeText(a.no); toast('📋 ' + a.kind + ' number copied'); }catch(e){ prompt('Copy the number:', a.no); } };
+  window.drPkgApp = function(i){
+    const a = DR_PAY_ACCOUNTS[i]; try{ navigator.clipboard.writeText(a.no); }catch(e){}
+    if(!a.pkg) return;
+    if(/Android/i.test(navigator.userAgent)) location.href = 'intent://#Intent;package=' + a.pkg + ';S.browser_fallback_url=' + encodeURIComponent('https://play.google.com/store/apps/details?id=' + a.pkg) + ';end';
+    else window.open('https://play.google.com/store/apps/details?id=' + a.pkg, '_blank');
+  };
+  window.drPkgShot = function(inp){
+    const f = inp.files && inp.files[0]; if(!f) return;
+    const im = new Image(), u = URL.createObjectURL(f);
+    im.onload = () => { const k = Math.min(1, 1100 / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = Math.round(im.width * k); c.height = Math.round(im.height * k); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); _shot = c.toDataURL('image/jpeg', .6); URL.revokeObjectURL(u);
+      const m = document.getElementById('drPayMsg'); if(m){ m.style.color = '#15803d'; m.textContent = '✅ Screenshot added — press «Send proof»'; } };
+    im.src = u;
+  };
+  window.drPkgProof = async function(){
+    const r = st().drPendReq, m = document.getElementById('drPayMsg'), tid = (document.getElementById('drPayTid').value || '').trim();
+    if(!tid && !_shot){ m.style.color = '#b91c1c'; m.textContent = 'Write the Transaction ID or add a screenshot'; return; }
+    m.style.color = '#334155'; m.textContent = '⏳ …';
+    let j = null; try{ j = await smc({ op: 'proof', code: r.code, uid: tok(), tid, shot: _shot }); }catch(e){}
+    if(j && j.ok){ m.style.color = '#15803d'; m.textContent = '✅ Proof sent to the developer'; _shot = ''; } else { m.style.color = '#b91c1c'; m.textContent = '⚠️ Not sent — check the internet'; }
+  };
+  function pendPill(){
+    const r = st() && st().drPendReq;
+    let p = document.getElementById('drPendPill');
+    if(!r || Date.now() - r.at > 30 * 864e5){ if(p) p.remove(); return; }
+    if(!p){ p = document.createElement('button'); p.id = 'drPendPill'; p.type = 'button'; p.onclick = () => drPayShow(false);
+      p.style.cssText = 'position:fixed;bottom:74px;left:10px;z-index:2147482000;border:none;border-radius:999px;background:#d97706;color:#fff;padding:6px 14px;font-weight:800;font-size:13px;box-shadow:0 4px 12px rgba(0,0,0,.3);cursor:pointer;font-family:Arial,sans-serif';
+      document.body.appendChild(p); }
+    p.textContent = '⏳ Payment pending — Rs ' + fmt(r.amt);
+  }
+  let _busy = false;
+  async function poll(){
+    const s = st(), r = s && s.drPendReq; pendPill();
+    if(!r || _busy || navigator.onLine === false) return; _busy = true;
+    try{
+      const j = await smc({ op: 'me', code: r.code, uid: tok() });
+      if(j && (j.st === 'done' || j.st === 'no' || j.reason === 'expired' || j.reason === 'none')){
+        delete s.drPendReq; save(); pendPill();
+        if(j.st === 'done'){
+          let R = {}; try{ R = JSON.parse(j.res || '{}') || {}; }catch(e){}
+          if(R.lic){ try{ const a = await activateSubscription(R.lic); if(a && a.success){ try{ _refreshScreensAfterSubscription(); }catch(e){} try{ showActivationCelebration(a, true); }catch(e){} } }catch(e){} }
+          try{ await autoApplyBoundCodesFromServer(); }catch(e){}
+          toast('✅ Your package is active' + (s.subscriptionExpiry ? ' — till ' + formatDateDMY(s.subscriptionExpiry) : ''));
+        }
+      }
+    }catch(e){}
+    _busy = false;
+  }
+  setTimeout(poll, 5000); setInterval(poll, 60000);
+  document.addEventListener('visibilitychange', () => { if(!document.hidden) poll(); });
+
+  // ---------- پرانے «کوڈ منگوائیں» کی جگہ یہی ----------
+  window._drOldReqCode = window.openRequestCodeModal;
+  window.openRequestCodeModal = openRequestCodeModal = function(){ return drPkgOpen(); };
+  // Subscribe پاپ اپ کے اوپر بڑا بٹن
+  setInterval(() => { try{
+    const m = document.getElementById('subscribeNowModal'); if(!m || document.getElementById('drSubPkgBtn')) return;
+    const box = m.querySelector('.modalBox') || m.firstElementChild; if(!box) return;
+    const b = document.createElement('button'); b.id = 'drSubPkgBtn'; b.type = 'button';
+    b.innerHTML = '📦 Get / renew a package<br><small style="font-weight:700;font-size:12px">Choose phones & period — the app turns on by itself after payment</small>';
+    b.onclick = () => { try{ closeSubscribeModal(); }catch(e){} drPkgOpen(); };
+    b.style.cssText = 'display:block;width:100%;margin:6px 0 10px;padding:10px;border:none;border-radius:14px;background:linear-gradient(135deg,#16a34a,#0f766e);color:#fff;font-weight:900;font-size:16px;cursor:pointer;line-height:1.4';
+    const h = box.querySelector('h3'); if(h) h.after(b); else box.prepend(b);
+  }catch(e){} }, 1500);
+
+  // ---------- 💳 پیکج پلانز کا کارڈ ----------
+  async function plansCanvas(R, noLogo){
+    const W = 1080, H = 1500, c = document.createElement('canvas'); c.width = W; c.height = H;
+    const x = c.getContext('2d');
+    const rr = (X, Y, w, h, r) => { x.beginPath(); x.moveTo(X + r, Y); x.arcTo(X + w, Y, X + w, Y + h, r); x.arcTo(X + w, Y + h, X, Y + h, r); x.arcTo(X, Y + h, X, Y, r); x.arcTo(X, Y, X + w, Y, r); x.closePath(); };
+    const T = (t, X, Y, f, col, al) => { x.font = f; x.fillStyle = col; x.textAlign = al || 'center'; x.fillText(t, X, Y); };
+    let g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#0f766e'); g.addColorStop(1, '#042f2e'); x.fillStyle = g; x.fillRect(0, 0, W, H);
+    if(!noLogo) try{ const im = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = 'icon-192.png'; });
+      x.save(); rr(W / 2 - 75, 46, 150, 150, 32); x.clip(); x.drawImage(im, W / 2 - 75, 46, 150, 150); x.restore(); }catch(e){}
+    T('AIO POS', W / 2, 272, '900 78px Arial', '#fde68a');
+    T('Billing, stock & accounts for every shop', W / 2, 328, '700 36px Arial', '#ccfbf1');
+    T('Fast, modern & easy — on phone and PC', W / 2, 376, '700 36px Arial', '#fde68a');
+    rr(150, 404, W - 300, 88, 44); x.fillStyle = '#f59e0b'; x.fill();
+    T('📦 Package Plans — per month', W / 2, 463, '900 44px Arial', '#fff');
+    PLANS.forEach((p, n) => {
+      const Y = 530 + n * 180;
+      rr(70, Y, W - 140, 156, 30); x.fillStyle = n % 2 ? '#ecfdf5' : '#ffffff'; x.fill();
+      x.lineWidth = 4; x.strokeStyle = '#2dd4bf'; x.stroke();
+      rr(100, Y + 28, 130, 100, 22); x.fillStyle = '#0f766e'; x.fill();
+      T(pShort(p), 165, Y + 96, 'bold 50px Arial', '#fde68a');
+      T(pLabel(p), 260, Y + 72, '900 46px Arial', '#134e4a', 'left');
+      T(DEVN[p] + (DEVN[p] === 1 ? ' phone / PC' : ' phones / PCs'), 260, Y + 124, '700 32px Arial', '#475569', 'left');
+      T('Rs ' + fmt(R[p] || 0), W - 110, Y + 86, 'bold 56px Arial', '#047857', 'right');
+      T('per month', W - 110, Y + 128, '700 28px Arial', '#64748b', 'right');
+    });
+    rr(70, 1260, W - 140, 80, 24); x.fillStyle = 'rgba(253,230,138,.15)'; x.fill();
+    T('🎁 1 year package: pay only 10 months — 2 months free', W / 2, 1312, '700 34px Arial', '#fde68a');
+    T('To get it, contact: 📞 0320-6793793', W / 2, 1400, 'bold 42px Arial', '#ffffff');
+    T('PBT Code Labs', W / 2, 1458, '700 30px Arial', '#99f6e4');
+    return c;
+  }
+  window.drPlansOpen = async function(){
+    const o = ov('drPlansOv', head('💳 Package Plans', 'linear-gradient(135deg,#f59e0b,#b45309)') + '<div style="padding:10px 12px;display:flex;flex-direction:column;gap:8px"><div id="drPlansImg" style="text-align:center;padding:30px">⏳ …</div>'
+      + '<button type="button" id="drPlShare" style="' + btnS('#16a34a', '#fff') + '">📤 Share (WhatsApp / Status)</button>'
+      + '<button type="button" id="drPlSave" style="' + btnS('#e0f2fe', '#075985') + '">⬇️ Save picture</button>'
+      + '<button type="button" id="drPlGet" style="' + btnS('#0f766e', '#fff') + '">📦 Get a package now</button>'
+      + '<button type="button" id="drPlClose" style="' + btnS('#e2e8f0', '#334155') + '">✖ Close</button></div>');
+    o.querySelector('#drPlClose').onclick = () => o.remove();
+    o.querySelector('#drPlGet').onclick = () => { o.remove(); drPkgOpen(); };
+    try{ if(isLinkedDevice()) o.querySelector('#drPlGet').style.display = 'none'; }catch(e){}
+    let R = rates(); try{ R = await loadRates(); }catch(e){}
+    let c = await plansCanvas(R), url; try{ url = c.toDataURL('image/png'); }catch(e){ c = await plansCanvas(R, true); url = c.toDataURL('image/png'); }
+    const box = o.querySelector('#drPlansImg'); box.style.padding = '0';
+    box.innerHTML = '<img src="' + url + '" alt="Package Plans" style="width:100%;border-radius:14px;box-shadow:0 4px 14px rgba(0,0,0,.25)">';
+    const blob = await new Promise(r => c.toBlob(r, 'image/png')), file = new File([blob], 'AIO-POS-Package-Plans.png', { type: 'image/png' });
+    const txt = 'AIO POS — Package Plans\nTo get it, contact: 0320-6793793\nPBT Code Labs';
+    const sv = () => { const a = document.createElement('a'); a.href = url; a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); };
+    o.querySelector('#drPlSave').onclick = sv;
+    o.querySelector('#drPlShare').onclick = async () => {
+      try{ if(navigator.canShare && navigator.canShare({ files: [file] })){ await navigator.share({ files: [file], text: txt }); return; } }catch(e){ if(e && e.name === 'AbortError') return; }
+      sv(); toast('⬇️ Picture saved — send it from the gallery in WhatsApp');
+    };
+  };
+  // لاگ اِن پر بٹن (ٹائلوں کے نیچے) — ہر فون پر
+  setInterval(() => { try{
+    const g = document.getElementById('loginTiles'); if(!g) return;
+    let b = document.getElementById('drPlansBtn');
+    if(!b){ b = document.createElement('button'); b.id = 'drPlansBtn'; b.type = 'button'; b.onclick = () => drPlansOpen();
+      b.innerHTML = '<b>💳 Package Plans</b><small>See prices & share — get a package</small>';
+      b.style.cssText = 'display:flex;flex-direction:column;align-items:center;width:100%;margin:8px 0 2px;padding:9px 12px;border:none;border-radius:14px;background:linear-gradient(135deg,#f59e0b,#b45309);color:#fff;cursor:pointer;box-shadow:0 3px 0 #92400e;line-height:1.3;font-family:inherit'; }
+    if(g.nextElementSibling !== b) g.insertAdjacentElement('afterend', b);
+  }catch(e){} }, 1500);
+
+  // ================= 👨‍💻 ڈویلپر پینل: «🔑 دکاندار کا کوڈ لکھیں» + ریٹ =================
+  function devBox(){
+    const paste = document.getElementById('giftCodePasteInput'); if(!paste || document.getElementById('drcDevBox')) return;
+    const anchor = paste.parentNode;
+    const b = document.createElement('div'); b.id = 'drcDevBox'; b.setAttribute('dir', 'rtl');
+    b.style.cssText = 'background:#ecfdf5;border:2px solid #16a34a;border-radius:12px;padding:8px;margin-bottom:8px;';
+    b.innerHTML = '<div style="font-weight:900;font-size:14px;color:#065f46;margin-bottom:5px">🔑 دکاندار کا کوڈ لکھیں (NB / SB)</div>'
+      + '<div style="display:flex;gap:6px"><input id="drcDevIn" type="tel" inputmode="numeric" dir="ltr" maxlength="9" placeholder="NB-______" style="flex:1;min-width:0;padding:7px;border:2px solid #16a34a;border-radius:8px;font-size:20px;text-align:center;font-family:Arial Black,Arial;letter-spacing:2px">'
+      + '<button type="button" onclick="drcDevGo()" style="padding:6px 14px;border:none;border-radius:8px;background:#16a34a;color:#fff;font-weight:900;cursor:pointer">🔍 کھولیں</button></div>'
+      + '<div id="drcDevCard"></div>'
+      + '<button type="button" onclick="drcRatesEdit()" style="margin-top:6px;width:100%;padding:6px;border:1.5px solid #0d9488;border-radius:8px;background:#fff;color:#0f766e;font-weight:800;cursor:pointer">💰 پیکج کے ریٹ (ہر مہینہ) — بدلیں</button>';
+    anchor.parentNode.insertBefore(b, anchor);
+  }
+  setInterval(() => { try{ devBox(); }catch(e){} }, 1500);
+  let DEV = null;
+  const _pcr = window.parseCodeRequestPaste;
+  if(typeof _pcr === 'function') window.parseCodeRequestPaste = parseCodeRequestPaste = function(){
+    const t = (document.getElementById('giftCodePasteInput') || {}).value || '';
+    const m = String(t).toUpperCase().match(/\b(NB|SB)\s*-?\s*(\d{6})\b/);
+    if(m){
+      const inp = document.getElementById('drcDevIn'), msg = document.getElementById('giftCodePasteMsg');
+      if(inp){ inp.value = m[1] + '-' + m[2]; drcDevGo(); try{ document.getElementById('drcDevBox').scrollIntoView({ behavior: 'smooth', block: 'start' }); }catch(e){} }
+      if(msg){ msg.style.color = '#166534'; msg.textContent = '✅ کوڈ ' + m[1] + '-' + m[2] + ' ملا — اوپر سبز ڈبے میں کارڈ کھل گیا: پیسے مل گئے ہوں تو «✅ پیسے وصول» دبائیں'; }
+      return;
+    }
+    return _pcr.apply(this, arguments);
+  };
+  window.drcDevGo = async function(){
+    const code = (document.getElementById('drcDevIn').value || '').replace(/\D/g, '').slice(-6), card = document.getElementById('drcDevCard');
+    if(code.length !== 6){ alert('6 ہندسوں کا کوڈ لکھیں'); return; }
+    card.innerHTML = '<div style="padding:8px;text-align:center">⏳ …</div>';
+    let j = null; try{ j = await smc({ op: 'get', code }, true); }catch(e){}
+    if(!j || !j.ok){ card.innerHTML = '<div style="padding:8px;color:#b91c1c;font-weight:800">❌ ' + (j && j.reason === 'expired' ? 'کوڈ پرانا ہو گیا' : j && j.reason === 'wait' ? 'بہت زیادہ کوششیں — 15 منٹ بعد' : j && j.reason === 'dev_only' ? 'ڈویلپر لاگ اِن ختم — پینل بند کر کے دوبارہ پاس ورڈ سے کھولیں' : 'کوڈ نہیں ملا') + '</div>'; return; }
+    const d = JSON.parse(j.data || '{}'); DEV = { code, kind: j.kind, d, st: j.st };
+    const row = (k, v) => v ? '<div><span style="color:#64748b">' + k + ':</span> <b>' + v + '</b></div>' : '';
+    card.innerHTML = '<div style="background:#fff;border:1.5px solid #86efac;border-radius:10px;padding:8px;margin-top:6px;font-size:13.5px;line-height:1.9">'
+      + '<div style="font-weight:900;font-size:15px;color:' + (j.kind === 'SB' ? '#1d4ed8' : '#065f46') + '">' + (j.kind === 'SB' ? '🔄 تجدید' : '🧾 نیا پیکج') + ' — ' + j.kind + '-' + code + (j.st !== 'new' ? ' <span style="color:#b91c1c">(' + (j.st === 'done' ? '✅ جاری ہو چکا' : j.st) + ')</span>' : '') + '</div>'
+      + row('🏪 دکان', esc(d.shop)) + row('📱 موبائل', '<span dir="ltr">' + esc(d.mobile) + '</span>')
+      + row('📦 پیکج', esc(pShort(d.plan || 'P1')) + ' (' + (DEVN[d.plan] || 1) + ' فون)') + row('⏱️ مدت', esc(mLabel(Number(d.m))) + ' (' + d.days + ' دن)')
+      + row('💰 رقم', '<span dir="ltr" style="font-size:17px;color:#065f46">Rs ' + fmt(d.amt) + '</span>')
+      + (j.kind === 'SB' ? row('📅 موجودہ', (d.exp ? formatDateDMY(d.exp) : '—') + ' • ' + esc(d.curPlan || '') + ' • ' + esc(d.cur || '')) : '')
+      + row('🆔 UID', '<span dir="ltr" style="font-size:11px">' + esc(d.uid || '') + '</span>')
+      + (d.tid ? row('🧾 TID', '<span dir="ltr">' + esc(d.tid) + '</span>') : '')
+      + (d.shot ? '<img src="' + d.shot + '" style="max-width:100%;border-radius:8px;margin-top:4px">' : (d.tid ? '' : '<div style="color:#b45309">ثبوت ابھی نہیں آیا — رقم خود چیک کریں</div>'))
+      + (j.st === 'new' ? '<div style="display:flex;gap:6px;margin-top:6px"><button type="button" onclick="drcDevIssue()" style="flex:2;padding:9px;border:none;border-radius:8px;background:#16a34a;color:#fff;font-weight:900;cursor:pointer">✅ پیسے وصول — کوڈ جاری کریں</button><button type="button" onclick="drcDevNo()" style="flex:1;padding:9px;border:none;border-radius:8px;background:#fee2e2;color:#b91c1c;font-weight:900;cursor:pointer">❌ رد</button></div>' : '')
+      + '</div>';
+  };
+  window.drcDevNo = async function(){ if(!DEV || !confirm('یہ درخواست رد کریں؟')) return; try{ await smc({ op: 'set', code: DEV.code, st: 'no' }, true); }catch(e){} document.getElementById('drcDevCard').innerHTML = '<div style="padding:8px;font-weight:800">❌ رد کر دی</div>'; DEV = null; };
+  window.drcDevIssue = async function(){
+    if(!DEV) return; const d = DEV.d;
+    if(!confirm('🔑 ' + DEV.kind + '-' + DEV.code + '\n' + (d.shop || '') + ' — ' + (d.mobile || '') + '\n📦 ' + pShort(d.plan || 'P1') + ' — ' + mLabel(Number(d.m)) + '\n💰 Rs ' + fmt(d.amt) + '\n\nکیا رقم وصول ہو گئی؟ کوڈ جاری کریں؟')) return;
+    const set = (id, v) => { const el = document.getElementById(id); if(el) el.value = v; };
+    set('giftCodeNameInput', d.shop || ''); set('giftCodePhoneInput', d.mobile || ''); set('giftCodeUidInput', String(d.uid || ''));
+    set('giftCodeDaysInput', String(d.days || 30)); set('giftCodeDevicesInput', String(DEVN[d.plan] || 1));
+    set('giftCodePriceInput', String(d.amt || ''));
+    const prev = lastGeneratedGiftCode;
+    await generateGiftCode();
+    const now = lastGeneratedGiftCode;
+    if(now && now !== prev){
+      try{ await smc({ op: 'set', code: DEV.code, st: 'done', res: { lic: now } }, true); }catch(e){}
+      document.getElementById('drcDevCard').innerHTML = '<div style="padding:8px;font-weight:900;color:#15803d">✅ ' + DEV.kind + '-' + DEV.code + ' مکمل — کوڈ ' + now + ' — دکاندار کی ایپ ایک منٹ میں خود چالو (نئے دن پرانے کے اوپر)</div>';
+      DEV = null;
+    }
+  };
+  window.drcRatesEdit = async function(){
+    const R = await loadRates();
+    const html = head('💰 پیکج کے ریٹ — ہر مہینہ')
+      + '<div style="padding:12px 14px;display:flex;flex-direction:column;gap:7px" dir="rtl">'
+      + PLANS.map(p => '<label style="display:flex;align-items:center;gap:8px;font-weight:800"><span style="flex:1">' + pShort(p) + ' — ' + DEVN[p] + ' فون</span><input data-p="' + p + '" class="drcRateIn" inputmode="numeric" dir="ltr" value="' + (R[p] || 0) + '" style="width:110px;padding:7px;border:2px solid #16a34a;border-radius:10px;font-size:18px;text-align:center;font-family:Arial"></label>').join('')
+      + '<div style="font-size:12.5px;color:#475569">نیا ریٹ گاہک کی اگلی درخواست میں خود۔ سال = 10 مہینوں کی رقم (2 مہینے مفت)۔</div>'
+      + '<button type="button" onclick="drcRatesSave()" style="' + btnS('#16a34a', '#fff') + '">💾 محفوظ کریں</button>'
+      + '<button type="button" onclick="document.getElementById(\'drRatesOv\').remove()" style="' + btnS('#e2e8f0', '#334155') + '">✖ بند</button></div>';
+    ov('drRatesOv', html, true);
+  };
+  window.drcRatesSave = async function(){
+    const R = {}; document.querySelectorAll('.drcRateIn').forEach(i => { R[i.dataset.p] = Math.max(0, parseInt(String(i.value).replace(/\D/g, ''), 10) || 0); });
+    if(!R.P1){ alert('ریٹ درست لکھیں'); return; }
+    try{
+      const r = await devFirestoreFetch('licenses/__drrates?key=' + FIREBASE_API_KEY, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields: { rates: { stringValue: JSON.stringify(R) }, updatedAt: { integerValue: String(Date.now()) } } }) });
+      if(!r || !r.ok) throw new Error(r ? r.status : 'net');
+      localStorage.setItem('aioDr_rates', JSON.stringify(R)); document.getElementById('drRatesOv').remove(); toast('✅ ریٹ محفوظ ہو گئے');
+    }catch(e){ alert('❌ محفوظ نہیں ہوا — پینل دوبارہ کھولیں / انٹرنیٹ (' + e.message + ')'); }
+  };
+  setTimeout(() => { try{ loadRates(); }catch(e){} }, 8000);
 })();
 </script>
 </body>

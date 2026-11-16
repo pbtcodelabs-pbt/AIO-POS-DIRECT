@@ -3383,7 +3383,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1611MO174</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1611MO175</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -3583,7 +3583,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1611MO174</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1611MO175</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div class="subOnly" style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3741,7 +3741,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1611MO174</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1611MO175</span>
     </div>
   </div>
 
@@ -10376,7 +10376,7 @@ function renderDevDeviceSec(root){
 }
 
 let devPanelTapCount = 0, devPanelTapTimer = null;
-function handleDevPanelTap(){
+function handleDevPanelTap(){ return; /* 🔐 مالک کا حکم (16 نومبر): 7 بار دبانے سے ڈویلپر پینل ختم — صرف ہیلپ ڈیسک «🔐 ڈویلپر پینل» سے (?devpanel=1) */
   devPanelTapCount++;
   clearTimeout(devPanelTapTimer);
   devPanelTapTimer = setTimeout(() => { devPanelTapCount = 0; }, 3000);
@@ -11026,7 +11026,7 @@ async function activateFromLoginScreen(){
 const DEV_UNLOCK_SALT = 'AIO-DEV-UNLOCK-v1';
 const DEV_UNLOCK_HASH = 'ec6bf74a5d10d1524fbae3dd818a3be18c04bd13a6bc3242dd0e5d9fe6532a85';
 let _devTapCount = 0, _devTapTimer = null;
-function devConsoleBadgeTap(){
+function devConsoleBadgeTap(){ return; /* 🔐 مالک کا حکم (16 نومبر): 7 بار دبانے سے ڈویلپر پینل ختم — صرف ہیلپ ڈیسک «🔐 ڈویلپر پینل» سے (?devpanel=1) */
   _devTapCount++;
   clearTimeout(_devTapTimer);
   _devTapTimer = setTimeout(() => { _devTapCount = 0; }, 2500);
@@ -35723,9 +35723,9 @@ try{ storeHydrate(); }catch(e){ _storeHydrating = false; }
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR1611MO174'; window.APP_UPD_OLD = APP_VERSION;
+  const APP_VERSION = 'AIODR1611MO175'; window.APP_UPD_OLD = APP_VERSION;
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'One developer password for all apps — open this app\'s developer panel straight from the Help Desk';
+  const UPDATE_NOTE = 'Developer panel opens only from the Help Desk now (7-tap removed)';
   const UPD_KEY = 'aioDrUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }

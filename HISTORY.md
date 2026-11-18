@@ -95,3 +95,4 @@
 - **AIODR1811WE180 (مالک کا حکم):** ڈویلپر پینل سے «🎁 Generate Code»، «📋 Issued Codes» اور «🔑 دکاندار کا کوڈ (NB / SB)» (`#drcDevBox`) چھپے؛ Unlock ٹیب میں ایک لائن «پیکج اب ہیلپ ڈیسک سے AIO ID پر»۔ پرانے لگے کوڈ اپنی مدت تک ویسے (فون کا حساب نہیں چھیڑا)۔
 - **AIODR1811WE181 (مالک کا حکم):** AIO ID فون کی پہچان + موبائل سے (AIO جیسی) — اسی فون پر دوبارہ انسٹال پر وہی ID اور دن؛ لاگ اِن پر «🔄 Refresh» (`drAioRefresh`)۔
 - **AIODR1811WE182 (مالک کا حکم):** Direct کی نئی AIO ID = **AIODR12345** (سرور) — `normId` بھی AIODR قبول کرتا ہے۔
+- AIODR1811WE227 (18 Nov 2026): Daily Recovery ported from AIO (AIO1411SA209 + AIO1811WE222 + AIO1811WE227) — Customers two small buttons, compact screen, history, poster, reminder, 🖨️ day report; nav tile 23 + recoveryTile migration, search, staff permission key. Version serial matched with AIO (227).

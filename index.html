@@ -3423,7 +3423,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1811WE181</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1811WE182</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -3623,7 +3623,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1811WE181</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1811WE182</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div class="subOnly" style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3781,7 +3781,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1811WE181</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1811WE182</span>
     </div>
   </div>
 
@@ -35763,9 +35763,9 @@ try{ storeHydrate(); }catch(e){ _storeHydrating = false; }
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR1811WE181'; window.APP_UPD_OLD = APP_VERSION;
+  const APP_VERSION = 'AIODR1811WE182'; window.APP_UPD_OLD = APP_VERSION;
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Reinstall on the same phone gives back the same AIO ID and its days (🔄 Refresh on the login screen)';
+  const UPDATE_NOTE = 'Your AIO ID now starts with AIODR (e.g. AIODR12345) — kept apart from AIO POS';
   const UPD_KEY = 'aioDrUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
@@ -36324,7 +36324,7 @@ try{ storeHydrate(); }catch(e){ _storeHydrating = false; }
   function dev(){ const m = me(); if(!m.dev){ m.dev = 'X' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10); save(m); } return m.dev; }
   /* AIO0911MO194 (مالک کی جانچ): ایک ہی کوشش میں نیٹ کا جھٹکا = «No internet» — اب 3 کوششیں */
   async function call(b){ let last; for(let t = 0; t < 3; t++){ try{ const r = await fetch(API, {method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify(b)}); return await r.json(); }catch(e){ last = e; await new Promise(z => setTimeout(z, 1500)); } } throw last; }
-  function normId(v){ let t = String(v || '').toUpperCase().replace(/[^A-Z0-9]/g, ''); if(/^\d{5}$/.test(t)) t = 'AIO' + t; return /^AIO\d{5}$/.test(t) ? t : ''; }
+  function normId(v){ let t = String(v || '').toUpperCase().replace(/[^A-Z0-9]/g, ''); if(/^\d{5}$/.test(t)) t = (APP === 'DR' ? 'AIODR' : 'AIO') + t; return /^AIO(DR)?\d{5}$/.test(t) ? t : ''; }   /* AIO1811WE226: Direct کی ID = AIODR12345 */
   function box(html, canClose){ window._aioIdCanClose = !!canClose; document.getElementById('aioIdBox').innerHTML = html; document.getElementById('aioIdModal').classList.add('show'); }
   function shut(){ document.getElementById('aioIdModal').classList.remove('show'); }
   window.aioIdClose = shut;
@@ -37199,12 +37199,12 @@ window.pbtHubPwOk = async function(p){
 }catch(e){} })();
 </script>
 <style id="drAio178css">
-/* AIODR1811WE181 (مالک کا حکم — Direct میں کوڈ کا نظام ختم): کوڈ / ایکٹیویشن / «ڈویلپر کو تفصیل» کے سب خانے چھپے؛ پیکج AIO ID پر ہیلپ ڈیسک سے */
+/* AIODR1811WE182 (مالک کا حکم — Direct میں کوڈ کا نظام ختم): کوڈ / ایکٹیویشن / «ڈویلپر کو تفصیل» کے سب خانے چھپے؛ پیکج AIO ID پر ہیلپ ڈیسک سے */
 #loginActivationBox,.loginAcctSend,button[onclick^="openRequestCodeModal"],a[onclick^="toggleLoginActivationBox"],#subGateCodeInput,#subscribeNowModal,#subGateMsg{display:none !important}
 .loginHint:has(> a[onclick^="toggleLoginActivationBox"]){display:none !important}
 #subscriptionGateScreen .subOnly:has(#subGateCodeInput){display:none !important}
 #subscriptionGateScreen .subOnly:has(#subGateUid){display:none !important}
-/* AIODR1811WE181 (مالک کا حکم): ڈویلپر پینل سے پرانے کوڈ بنانے / فہرست / NB-SB ڈبے ختم — پیکج صرف ہیلپ ڈیسک سے AIO ID پر؛ پرانے لگے کوڈ اپنی مدت تک ویسے */
+/* AIODR1811WE182 (مالک کا حکم): ڈویلپر پینل سے پرانے کوڈ بنانے / فہرست / NB-SB ڈبے ختم — پیکج صرف ہیلپ ڈیسک سے AIO ID پر؛ پرانے لگے کوڈ اپنی مدت تک ویسے */
 .devTab[data-sec="gen"],.devTab[data-sec="codes"],.devSec[data-sec="gen"],.devSec[data-sec="codes"],#drcDevBox{display:none !important}
 .drDevNew{margin:8px 0;padding:10px 12px;border-radius:12px;background:#ecfeff;border:1.5px solid #0e7490;color:#0f172a;font-weight:700;font-size:13px;line-height:1.5}
 #drAioGate{margin:12px auto 8px;max-width:340px;background:#ecfeff;border:1.5px solid #0e7490;border-radius:14px;padding:12px;text-align:center;font-weight:800;color:#0f172a}
@@ -37222,7 +37222,7 @@ window.pbtHubPwOk = async function(p){
 #drPkgOv .g{background:#0e7490;color:#fff}#drPkgOv .w{background:#e2e8f0;color:#0f172a}#drPkgOv .k{background:#16a34a;color:#fff}
 </style>
 <script id="drAio178">
-/* AIODR1811WE181 (مالک کا حکم): AIO Direct — پیکج اب صرف AIO ID پر (ہیلپ ڈیسک «✅ Activate package»)؛ یہ فون سرور سے خود پوچھتا ہے:
+/* AIODR1811WE182 (مالک کا حکم): AIO Direct — پیکج اب صرف AIO ID پر (ہیلپ ڈیسک «✅ Activate package»)؛ یہ فون سرور سے خود پوچھتا ہے:
    /entclaim app DR kind a → چالو ہوتے ہی مبارکباد (پرانا 🎉 پاپ اپ) + ہوم کی تاریخیں (شروع، ختم، باقی دن)؛ معطل ہو تو بند۔ کوئی کوڈ نہیں۔ */
 (function(){
   if(typeof STORAGE_PREFIX === 'undefined' || STORAGE_PREFIX !== 'aioDr_') return;
@@ -37231,7 +37231,7 @@ window.pbtHubPwOk = async function(p){
   function aio(){ try{ return JSON.parse(localStorage.getItem(STORAGE_PREFIX + 'aioId') || 'null') || {}; }catch(e){ return {}; } }
   const PKGS = [['3 Months', '90 days'], ['6 Months', '180 days'], ['1 Year', '365 days'], ['Lifetime', 'one time']];
   function sendText(){ const m = aio(); return 'AIO POS Direct — my AIO ID: ' + (m.id || '') + (m.name ? '\nName: ' + m.name : '') + (m.mobile ? '\nMobile: ' + m.mobile : '') + '\nI want a package.'; }
-  /* AIODR1811WE181 (مالک کا حکم): ID بھیجنے کا کوئی بٹن نہیں — مالک ہیلپ ڈیسک میں سرور سے سب IDs دیکھتا ہے؛ یہ فنکشن اب کہیں نہیں جڑا۔ پرانا: «Send ID» سیدھا مالک کی واٹس ایپ چیٹ (getDeveloperContact) — پیغام پہلے سے لکھا؛ نمبر نہ ملے تو عام شیئر */
+  /* AIODR1811WE182 (مالک کا حکم): ID بھیجنے کا کوئی بٹن نہیں — مالک ہیلپ ڈیسک میں سرور سے سب IDs دیکھتا ہے؛ یہ فنکشن اب کہیں نہیں جڑا۔ پرانا: «Send ID» سیدھا مالک کی واٹس ایپ چیٹ (getDeveloperContact) — پیغام پہلے سے لکھا؛ نمبر نہ ملے تو عام شیئر */
   window.drAioSend = function(){ const t = sendText(); let n = ''; try{ n = String((getDeveloperContact() || {}).whatsapp || '').replace(/\D/g, ''); }catch(e){} if(n.indexOf('0') === 0) n = '92' + n.slice(1);
     if(n.length >= 11){ window.open('https://wa.me/' + n + '?text=' + encodeURIComponent(t), '_blank'); return; }
     try{ if(navigator.share){ navigator.share({ text: t }).catch(() => {}); return; } }catch(e){} window.open('https://wa.me/?text=' + encodeURIComponent(t), '_blank'); };
@@ -37301,9 +37301,9 @@ window.pbtHubPwOk = async function(p){
     }catch(e){}
     busy = false;
   }
-  /* AIODR1811WE181: ڈویلپر پینل میں نئے نظام کی ایک لائن */
+  /* AIODR1811WE182: ڈویلپر پینل میں نئے نظام کی ایک لائن */
   setInterval(() => { try{ document.querySelectorAll('.devSec[data-sec="unlock"]').forEach(sec => { if(sec.querySelector('.drDevNew')) return; const d = document.createElement('div'); d.className = 'drDevNew'; d.textContent = '📦 Packages are now given from the Help Desk on the customer\'s AIO ID (✅ Activate package → AIO Direct). Old codes keep working until their date ends.'; sec.appendChild(d); }); }catch(e){} }, 2000);
-  /* AIODR1811WE181: «🔄 Refresh» — اسی فون پر دوبارہ انسٹال کے بعد سرور سے دن ابھی واپس */
+  /* AIODR1811WE182: «🔄 Refresh» — اسی فون پر دوبارہ انسٹال کے بعد سرور سے دن ابھی واپس */
   window.drAioRefresh = function(){ last = 0; check(true).then(() => { try{ showNavToast('🔄 ' + (isSubscriptionActive() ? daysLeftInSubscription() + ' day(s) left — till ' + formatDateDMY(AppState.settings.subscriptionExpiry) : 'Checked')); }catch(e){} }); };
   window.drAioCheck = check;
   document.addEventListener('DOMContentLoaded', () => { setTimeout(() => { check(true); paint(); }, 3000); });

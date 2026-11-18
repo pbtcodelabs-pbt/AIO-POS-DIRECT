@@ -3423,7 +3423,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1811WE178</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR1811WE179</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -3623,7 +3623,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1811WE178</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR1811WE179</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div class="subOnly" style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3781,7 +3781,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1811WE178</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR1811WE179</span>
     </div>
   </div>
 
@@ -35763,9 +35763,9 @@ try{ storeHydrate(); }catch(e){ _storeHydrating = false; }
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR1811WE178'; window.APP_UPD_OLD = APP_VERSION;
+  const APP_VERSION = 'AIODR1811WE179'; window.APP_UPD_OLD = APP_VERSION;
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'No activation codes: send your AIO ID (shown on the login screen) — your package switches on by itself';
+  const UPDATE_NOTE = 'No activation codes: your package is switched on on your AIO ID (shown on the login screen) — the phone turns on by itself';
   const UPD_KEY = 'aioDrUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
@@ -37195,7 +37195,7 @@ window.pbtHubPwOk = async function(p){
 }catch(e){} })();
 </script>
 <style id="drAio178css">
-/* AIODR1811WE178 (مالک کا حکم — Direct میں کوڈ کا نظام ختم): کوڈ / ایکٹیویشن / «ڈویلپر کو تفصیل» کے سب خانے چھپے؛ پیکج AIO ID پر ہیلپ ڈیسک سے */
+/* AIODR1811WE179 (مالک کا حکم — Direct میں کوڈ کا نظام ختم): کوڈ / ایکٹیویشن / «ڈویلپر کو تفصیل» کے سب خانے چھپے؛ پیکج AIO ID پر ہیلپ ڈیسک سے */
 #loginActivationBox,.loginAcctSend,button[onclick^="openRequestCodeModal"],a[onclick^="toggleLoginActivationBox"],#subGateCodeInput,#subscribeNowModal,#subGateMsg{display:none !important}
 .loginHint:has(> a[onclick^="toggleLoginActivationBox"]){display:none !important}
 #subscriptionGateScreen .subOnly:has(#subGateCodeInput){display:none !important}
@@ -37215,7 +37215,7 @@ window.pbtHubPwOk = async function(p){
 #drPkgOv .g{background:#0e7490;color:#fff}#drPkgOv .w{background:#e2e8f0;color:#0f172a}#drPkgOv .k{background:#16a34a;color:#fff}
 </style>
 <script id="drAio178">
-/* AIODR1811WE178 (مالک کا حکم): AIO Direct — پیکج اب صرف AIO ID پر (ہیلپ ڈیسک «✅ Activate package»)؛ یہ فون سرور سے خود پوچھتا ہے:
+/* AIODR1811WE179 (مالک کا حکم): AIO Direct — پیکج اب صرف AIO ID پر (ہیلپ ڈیسک «✅ Activate package»)؛ یہ فون سرور سے خود پوچھتا ہے:
    /entclaim app DR kind a → چالو ہوتے ہی مبارکباد (پرانا 🎉 پاپ اپ) + ہوم کی تاریخیں (شروع، ختم، باقی دن)؛ معطل ہو تو بند۔ کوئی کوڈ نہیں۔ */
 (function(){
   if(typeof STORAGE_PREFIX === 'undefined' || STORAGE_PREFIX !== 'aioDr_') return;
@@ -37224,7 +37224,7 @@ window.pbtHubPwOk = async function(p){
   function aio(){ try{ return JSON.parse(localStorage.getItem(STORAGE_PREFIX + 'aioId') || 'null') || {}; }catch(e){ return {}; } }
   const PKGS = [['3 Months', '90 days'], ['6 Months', '180 days'], ['1 Year', '365 days'], ['Lifetime', 'one time']];
   function sendText(){ const m = aio(); return 'AIO POS Direct — my AIO ID: ' + (m.id || '') + (m.name ? '\nName: ' + m.name : '') + (m.mobile ? '\nMobile: ' + m.mobile : '') + '\nI want a package.'; }
-  /* مالک کا حکم: Direct میں «Send ID» سیدھا مالک کی واٹس ایپ چیٹ (getDeveloperContact) — پیغام پہلے سے لکھا؛ نمبر نہ ملے تو عام شیئر */
+  /* AIODR1811WE179 (مالک کا حکم): ID بھیجنے کا کوئی بٹن نہیں — مالک ہیلپ ڈیسک میں سرور سے سب IDs دیکھتا ہے؛ یہ فنکشن اب کہیں نہیں جڑا۔ پرانا: «Send ID» سیدھا مالک کی واٹس ایپ چیٹ (getDeveloperContact) — پیغام پہلے سے لکھا؛ نمبر نہ ملے تو عام شیئر */
   window.drAioSend = function(){ const t = sendText(); let n = ''; try{ n = String((getDeveloperContact() || {}).whatsapp || '').replace(/\D/g, ''); }catch(e){} if(n.indexOf('0') === 0) n = '92' + n.slice(1);
     if(n.length >= 11){ window.open('https://wa.me/' + n + '?text=' + encodeURIComponent(t), '_blank'); return; }
     try{ if(navigator.share){ navigator.share({ text: t }).catch(() => {}); return; } }catch(e){} window.open('https://wa.me/?text=' + encodeURIComponent(t), '_blank'); };
@@ -37238,8 +37238,8 @@ window.pbtHubPwOk = async function(p){
     o.innerHTML = '<div class="bx"><h3>📦 Get a package</h3>' + (left ? '<div class="note" style="color:#15803d;font-weight:800">' + E(left) + '</div>' : '')
       + '<div style="font-weight:800;color:#64748b">🆔 Your AIO ID</div><div class="id">' + E(m.id) + '</div>'
       + PKGS.map(p => '<div class="pk"><span>' + E(p[0]) + '</span><small>' + E(p[1]) + ' · 1 phone</small></div>').join('')
-      + '<div class="note">Send your <b>AIO ID</b> to us and tell us the package you want. After payment, your package switches on <b>by itself</b> on this phone — no code needed.</div>'
-      + '<button type="button" class="w" onclick="drAioCopy()">📋 Copy ID</button><button type="button" class="k" onclick="drAioSend()">📤 Send ID</button><br><button type="button" class="g" onclick="document.getElementById(\'drPkgOv\').remove()">OK</button></div>';
+      + '<div class="note">Your package is switched on on this <b>AIO ID</b> — this phone turns on <b>by itself</b>. No code needed.</div>'
+      + '<button type="button" class="w" onclick="drAioCopy()">📋 Copy ID</button><button type="button" class="g" onclick="document.getElementById(\'drPkgOv\').remove()">OK</button></div>';
     o.addEventListener('click', ev => { if(ev.target === o) o.remove(); });
     document.body.appendChild(o);
     check(true);
@@ -37251,14 +37251,14 @@ window.pbtHubPwOk = async function(p){
     try{
       const m = aio(), c = document.getElementById('aioIdCard');
       if(c && m.id && m.mode !== 'staff' && !(AppState.settings || {}).syncJoined){
-        const h = '🆔 Your AIO ID<b class="id">' + E(m.id) + '</b><div class="row"><button type="button" onclick="drAioCopy()">📋 Copy</button><button type="button" class="g" onclick="drAioSend()">📤 Send ID</button></div><a href="#" onclick="event.preventDefault();aioIdMode(\'staff\')">🏪 Work in a shop?</a>';
+        const h = '🆔 Your AIO ID<b class="id">' + E(m.id) + '</b><div class="row"><button type="button" onclick="drAioCopy()">📋 Copy</button></div><a href="#" onclick="event.preventDefault();aioIdMode(\'staff\')">🏪 Work in a shop?</a>';
         if(c.dataset.dr178 !== m.id || c.className !== 'drBig'){ c.className = 'drBig'; c.innerHTML = h; c.dataset.dr178 = m.id; }
       }
       const g = document.getElementById('subscriptionGateScreen'), st = document.getElementById('subGateStatus');
       let d = document.getElementById('drAioGate');
       if(g && st && m.id){
         if(!d){ d = document.createElement('div'); d.id = 'drAioGate'; st.insertAdjacentElement('afterend', d); }
-        const h2 = '🆔 Your AIO ID<b class="id">' + E(m.id) + '</b><div style="font-size:12.5px;color:#334155;margin-bottom:6px">Send this ID to us to get a package — it switches on by itself.</div><button type="button" style="background:#e2e8f0;color:#0f172a" onclick="drAioCopy()">📋 Copy</button><button type="button" style="background:#16a34a;color:#fff" onclick="drAioSend()">📤 Send ID</button><button type="button" style="background:#0e7490;color:#fff" onclick="drAioPkgOpen()">📦 Packages</button>';
+        const h2 = '🆔 Your AIO ID<b class="id">' + E(m.id) + '</b><div style="font-size:12.5px;color:#334155;margin-bottom:6px">Your package is switched on on this AIO ID — this phone turns on by itself.</div><button type="button" style="background:#e2e8f0;color:#0f172a" onclick="drAioCopy()">📋 Copy</button><button type="button" style="background:#0e7490;color:#fff" onclick="drAioPkgOpen()">📦 Packages</button>';
         if(d.innerHTML !== h2) d.innerHTML = h2;
       }
     }catch(e){}

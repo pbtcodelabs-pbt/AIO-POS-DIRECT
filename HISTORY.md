@@ -96,3 +96,4 @@
 - **AIODR1811WE181 (مالک کا حکم):** AIO ID فون کی پہچان + موبائل سے (AIO جیسی) — اسی فون پر دوبارہ انسٹال پر وہی ID اور دن؛ لاگ اِن پر «🔄 Refresh» (`drAioRefresh`)۔
 - **AIODR1811WE182 (مالک کا حکم):** Direct کی نئی AIO ID = **AIODR12345** (سرور) — `normId` بھی AIODR قبول کرتا ہے۔
 - AIODR1811WE227 (18 Nov 2026): Daily Recovery ported from AIO (AIO1411SA209 + AIO1811WE222 + AIO1811WE227) — Customers two small buttons, compact screen, history, poster, reminder, 🖨️ day report; nav tile 23 + recoveryTile migration, search, staff permission key. Version serial matched with AIO (227).
+- 19 Nov 2026: CLAUDE.md — every reply to the owner starts with «قبلہ عالی جاہ میں آپ کی نرم گوئی اور اچھے اخلاق کا مشکور ہوں، صورتحال یہ ہے…» (owner's order).

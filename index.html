@@ -3464,7 +3464,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div class="loginLogoBadge">🧾</div>
     <h2 id="loginHeading" onclick="handleDevPanelTap()" style="cursor:default; user-select:none;">AIO POS Direct</h2>
     <!-- ---------- 🧪 لاگ ان پیج پر بھی ورژن دکھائیں — بغیر لاگ ان کیے تصدیق ہو سکے کہ لیٹسٹ فائل لائیو ہے (Home page والے بیج جیسا ہی نمبر، اپڈیٹ کرتے وقت دونوں جگہ بدلیں) ---------- -->
-    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR2311MO232</div>
+    <div id="loginVersionBadge" onclick="handleDevPanelTap()" style="cursor:default; user-select:none; -webkit-tap-highlight-color:transparent; font-size:10px; color:var(--muted,#64748b); font-weight:700; letter-spacing:.3px; margin-top:-4px; margin-bottom:6px; opacity:.75;">AIODR2611TH233</div>
 
     <!-- ---------- ہمیشہ نظر آنے والی سبسکرپشن حیثیت — مختصر ایک لائن، Trial/Subscribed دونوں یہاں ---------- -->
     <div id="loginSubStatus" class="trialEndedBadge" style="display:none;"></div>
@@ -3664,7 +3664,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <div id="subscriptionGateScreen" style="display:none; position:fixed; inset:0; z-index:3000; background:var(--bg); align-items:center; justify-content:center; flex-direction:column; padding:20px;">
   <div class="loginBox" style="max-width:340px;">
     <h2 onclick="handleDevPanelTap()" style="cursor:pointer;" title="🔒">🔒 Subscription Required</h2>
-    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR2311MO232</div>
+    <div class="verBadge" onclick="handleDevPanelTap()"><span class="verDot"></span>AIODR2611TH233</div>
     <p id="subGateStatus" style="font-size:13px; color:var(--muted); margin-bottom:14px;"></p>
     <div class="subOnly" style="background:#f1f5f9; border-radius:10px; padding:10px 12px; margin-bottom:16px;">
       <div style="font-size:11px; color:var(--muted); margin-bottom:2px;">Your Device ID (share this with your developer)</div>
@@ -3822,7 +3822,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     <div style="display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 auto; margin-left:auto;">
       <span id="connStatusBadge" class="online">Online</span>
       <!-- ---------- بہت چھوٹا بلڈ نمبر — Online بیج کے بالکل نیچے، صاف سفید رنگ میں تاکہ آسانی سے پڑھا جا سکے ---------- -->
-      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR2311MO232</span>
+      <span id="topVersionBadge" onclick="handleDevPanelTap()" style="font-size:9px; color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; cursor:default; user-select:none; -webkit-tap-highlight-color:transparent;">AIODR2611TH233</span>
     </div>
   </div>
 
@@ -7329,7 +7329,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   </div>
 </div>
 
-<!-- 📦 AIODR2311MO232 (#381): پیکج ختم ہونے کی وارننگ -->
+<!-- 📦 AIODR2611TH233 (#381): پیکج ختم ہونے کی وارننگ -->
 <div class="modalOverlay" id="pkgExpiryModal" onclick="if(event.target===this) dismissPkgExpiryModal()">
   <div class="backupConfirmBox" dir="rtl">
     <div class="backupConfirmIconWrap" id="pkgExpIconWrap" style="background:#fff7ed; color:#c2410c;"><span id="pkgExpIcon">📦</span></div>
@@ -11276,10 +11276,10 @@ function renderSubscriptionBanner(){
 
   // ---------- روزانہ صرف ایک بار: ہلکا Toast یا (آخری 2 دن میں) زیادہ نمایاں پاپ اپ — صرف Free Trial کے دوران ----------
   if(AppState.settings.isOnFreeTrial) maybeShowTrialReminder(daysLeft);
-  else maybeShowPackageExpiryWarning(daysLeft); // AIODR2311MO232 (#381): خریدے ہوئے پیکج کی میعاد ختم ہونے کی وارننگ
+  else maybeShowPackageExpiryWarning(daysLeft); // AIODR2611TH233 (#381): خریدے ہوئے پیکج کی میعاد ختم ہونے کی وارننگ
 }
 
-// ---------- AIODR2311MO232 (#381، مالک کا حکم): پیکج ختم ہونے کی وارننگ ----------
+// ---------- AIODR2611TH233 (#381، مالک کا حکم): پیکج ختم ہونے کی وارننگ ----------
 // 15 دن سے کم رہ جائیں تو صرف ایک بار؛ 7 دن سے کم پر روز ایک بار (3 دن سے کم پر بھی دن میں ایک ہی بار، زیادہ نہیں)۔
 // بٹن «📦 پیکج دوبارہ لیں»۔ نیا پیکج لیتے ہی تاریخ بدلتی ہے، تو گنتی خودبخود نئے سرے سے شروع ہو جاتی ہے۔
 function maybeShowPackageExpiryWarning(daysLeft){
@@ -12391,6 +12391,8 @@ async function buildMultiPosterCanvas(){
   return c;
 }
 
+/* ایپ شیئر = Direct کی اپنی APK کا پکا لنک (ہمیشہ تازہ) — Google Play کا لنک نہیں */
+const DR_APK_LINK = 'https://github.com/pbtcodelabs-pbt/pbtcodelabs-pbt.github.io/releases/download/apk-aioposdirect/AIOPOSDirect.apk';
 function appPosterCaption(){
   const P = APP_POSTER;
   return [
@@ -12404,17 +12406,23 @@ function appPosterCaption(){
     ...MULTI_POSTER.points.map(b=>'📲 ' + b),
     '📦 ' + MULTI_POSTER.packs,
     '',
-    '📲 *Google Play سے ڈاؤن لوڈ کریں:*',
-    P.link,
+    '📲 *موبائل ایپ ڈاؤن لوڈ کریں:*',
+    DR_APK_LINK,
     '',
-    `🔍 Google Play پر «${P.name}» سرچ کریں`
+    '✅ *انسٹال کا آسان طریقہ:*',
+    '1️⃣ لنک دبائیں — فائل ڈاؤن لوڈ ہو گی',
+    '2️⃣ ڈاؤن لوڈ مکمل ہو تو فائل کھولیں',
+    '3️⃣ «نامعلوم ایپس» کی اجازت مانگے تو اجازت دیں',
+    '4️⃣ Install دبائیں — ایپ تیار',
+    '',
+    '🌐 *کمپیوٹر / Chrome:* https://pbtcodelabs-pbt.github.io/AIO-POS-DIRECT/'
   ].filter((l,i,a)=>!(l==='' && a[i-1]==='')).join('\n');
 }
 let _posterBusy = false;
 async function shareAppPoster(customText){
   /* یکساں «ایپ شیئر»: پوسٹر کی تصویر ہر بٹن سے ساتھ جاتی ہے (واٹس ایپ، فیس بک، ٹیلی گرام…)، پیغام + پلے اسٹور لنک کاپی */
-  const caption = (customText && customText.trim()) ? `${customText.trim()}\n${APP_POSTER.link}` : appPosterCaption();
-  AppShareKit.open({title: APP_POSTER.name, caption, file: APP_POSTER.file, build: buildAppPosterCanvas, lang: 'en', playUrl: APP_POSTER.link,
+  const caption = (customText && customText.trim()) ? `${customText.trim()}\n\n📲 ${DR_APK_LINK}` : appPosterCaption();
+  AppShareKit.open({title: APP_POSTER.name, caption, file: APP_POSTER.file, build: buildAppPosterCanvas, lang: 'en', webUrl: DR_APK_LINK,
     extras: [{file: 'aio-pos-multi-device.png', build: buildMultiPosterCanvas}]}); // AIODR3110SA108: ملٹی ڈیوائس کا اعلان ساتھ
 }
 async function shareAppLink(){
@@ -36260,9 +36268,9 @@ try{ storeHydrate(); }catch(e){ _storeHydrating = false; }
   let refreshing = false;
 
   // ---------- AIO910FR005: اس فائل کا ورژن — اپڈیٹ کے بعد پرانا/نیا ورژن دکھانے کے لیے ----------
-  const APP_VERSION = 'AIODR2311MO232'; window.APP_UPD_OLD = APP_VERSION;
+  const APP_VERSION = 'AIODR2611TH233'; window.APP_UPD_OLD = APP_VERSION;
   // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-  const UPDATE_NOTE = 'Package expiry reminder: one warning under 15 days, then once a day under 7 days, with a Renew Package button';
+  const UPDATE_NOTE = 'App Share now sends the mobile app (APK) download link with simple install steps, plus the web link for computers';
   const UPD_KEY = 'aioDrUpdateFromVersion';
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
